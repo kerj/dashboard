@@ -19,14 +19,21 @@ class D3Test extends Component {
     
         
         //select the data with d3 and go wild
-        
         d3.select(this.refs.temperatures)
-            .selectAll("h2")
-            .data(temperatureData)
-            .enter()
-            .append("h2")
-            .text((datapoint) => `${datapoint} degrees`)
-            .attr("class", (datapoint) => { datapoint > 10 ? "highTempurature" : "lowTempurature" })
+        .selectAll("h2")
+        .data(temperatureData)
+        .enter()
+        .append("h2")
+        .text((datapoint) => `${datapoint} degrees`)
+        .attr("class", (datapoint) => {
+            if(datapoint > 10){
+                return "highTempurature"
+            }else { return "lowTempurature"}
+        })
+        .transition()
+        .duration(1000)
+        .style("color", "red")
+
     }
 
     render() {
