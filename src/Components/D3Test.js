@@ -19,10 +19,9 @@ class D3Test extends Component {
         axios.get(weatherQuery).then((response) => {
             const weatherResponse = response.data.consolidated_weather;
             weatherResponse.map((day) => {
-                // this.state.temperatureData.push(day.max_temp);
                 let newTemperatureData = [...this.state.temperatureData];
                 newTemperatureData.push(day.max_temp);
-                
+
                 this.setState({ temperatureData: newTemperatureData })
                 console.log(this.state.temperatureData);
 
