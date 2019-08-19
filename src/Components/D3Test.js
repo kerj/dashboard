@@ -19,15 +19,18 @@ class D3Test extends Component {
         axios.get(weatherQuery).then((response) => {
             const weatherResponse = response.data.consolidated_weather;
             weatherResponse.map((day) => {
-                this.state.temperatureData.push(day.max_temp);
+                // this.state.temperatureData.push(day.max_temp);
+                let newTemperatureData = [...this.state.temperatureData];
+                newTemperatureData.push(day.max_temp);
+                
+                this.setState({ temperatureData: newTemperatureData })
+                console.log(this.state.temperatureData);
+
             })
         })
     }
 
-    componentDidMount() {
-        //fetch data to display with d3
-        this.fetchWeatherData()
-        //select the data with d3 and go wild
+    displayText() {
         d3.select(this.refs.temperatures)
             .selectAll("h2")
             .data(this.state.temperatureData)
@@ -44,6 +47,11 @@ class D3Test extends Component {
             .delay(1000)
             .duration(1000)
             .style("color", "black")
+    }
+
+    componentDidMount() {
+        //fetch data to display with d3
+        this.fetchWeatherData()
     }
 
     render() {
