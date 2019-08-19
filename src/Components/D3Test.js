@@ -1,10 +1,29 @@
-import React from 'react';
-import * from 'd3';
+import React, { Component } from 'react';
+import * as d3 from 'd3';
 
-export default function D3Test() {
-    return (
-        <div>
-            
-        </div>
-    )
+
+
+
+
+class D3Test extends Component {
+
+    componentDidMount(){
+        const temperatureData = [8, 5, 13, 9, 12];
+        
+        d3.select(this.refs.temperatures)
+            .selectAll("h2")
+            .data(temperatureData)
+            .enter()
+                .append("h2")
+                .text("New Temperature")
+    }
+    
+    render() {
+        return (
+            <div ref="temperatures">
+                
+            </div>
+        )
+    }
 }
+export default D3Test;
