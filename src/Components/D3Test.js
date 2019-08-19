@@ -11,6 +11,9 @@ class D3Test extends Component {
         const temperatureData = [8, 5, 13, 9, 12];
         
         d3.select(this.refs.temperatures)
+            .style("color", function() {
+                return "hsl(" + Math.random() * 360 + ",100%,50%)";
+            })
             .selectAll("h2")
             .data(temperatureData)
             .enter()
