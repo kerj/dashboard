@@ -15,7 +15,7 @@ class D3Test extends Component {
             .data(temperatureData)
             .enter()
                 .append("h2")
-                .text("New Temperature")
+                .text((datapoint) => datapoint + " degrees")
     }
     
     render() {
