@@ -5,7 +5,10 @@ import PropTypes from 'prop-types';
 export default class BarChart extends Component {
 
     componentDidMount() {
-        this.drawBarChart(this.props.tempuratureDataToGraph)
+        let maxTemps = this.props.dataToGraph.map(({ fahrenheitMaxTemp }) => fahrenheitMaxTemp)
+        let minTemps = this.props.dataToGraph.map(({ fahrenheitMinTemp }) => fahrenheitMinTemp)
+        let dates = this.props.dataToGraph.map(({ date }) => date)
+        this.drawBarChart(maxTemps)
     }
 
     drawBarChart(data) {
@@ -57,5 +60,5 @@ export default class BarChart extends Component {
 }
 
 BarChart.propTypes = {
-    tempuratureDataToGraph: PropTypes.array.isRequired
+    dataToGraph: PropTypes.array.isRequired,
 }
