@@ -29,29 +29,33 @@ class D3Test extends Component {
                 this.setState({ temperatureData: newTemperatureData });
                 this.setState({ date: newDateData })
             })
-            console.log(this.state);
-
             this.displayText();
         })
     }
 
     displayText = () => {
+        let d3Data = [[],[]]
+        d3Data[0] = this.state.temperatureData;
+        d3Data[1] = this.state.date;
         d3.select(this.refs.temperatures)
             .selectAll("li")
-            .data(this.state.temperatureData)
+            .data(d3Data)
             .enter()
             .append("li")
-            .text((datapoint) => `${datapoint} degrees on `)
-            .style("color", "slategrey")
-            .attr("class", (datapoint) => {
-                if (datapoint > 79) {
-                    return "higherTempurature"
-                } else { return "lowerTempurature" }
-            })
-            .transition()
-            .delay(1000)
-            .duration(1000)
-            .style("color", "black")
+                .text((datapoint) => {
+                    //runs once for first array then again for the second
+                    return `${datapoint}`
+                })
+                .style("color", "slategrey")
+                .attr("class", (datapoint) => {
+                    if (datapoint > 79) {
+                        return "higherTempurature"
+                    } else { return "lowerTempurature" }
+                })
+                .transition()
+                .delay(1000)
+                .duration(1000)
+                .style("color", "black")
     }
 
     componentDidMount() {
