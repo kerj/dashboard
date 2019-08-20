@@ -7,7 +7,7 @@ import * as d3 from 'd3';
 function App() {
   d3.select("body")
   .transition()
-  .delay(1250)
+  .delay(1500)
   .style("background-color", "slategrey")
 
   return (

@@ -5,15 +5,13 @@ import PropTypes from 'prop-types';
 export default class BarChart extends Component {
 
     componentDidMount() {
-        setTimeout(()=>{
-            this.drawBarChart(this.props.tempuratureDataToGraph)
-        },3000)
+        this.drawBarChart(this.props.tempuratureDataToGraph)
     }
 
     drawBarChart(data) {
         const canvasHeight = 400
         const canvasWidth = 600
-        const scale = 5
+        const scale = 2
         //container for graph
         const svgCanvas = d3.select(this.refs.canvas)
             .append("svg")
@@ -27,9 +25,17 @@ export default class BarChart extends Component {
             .append("rect")
             .attr("width", 40)
             .attr("height", (datapoint) => datapoint * scale)
-            .attr("fill", "orange")
+            .attr("fill", "whitesmoke")
             .attr("x", (datapoint, iteration) => iteration * 45)
             .attr("y", (datapoint) => canvasHeight - datapoint * scale)
+            .transition()
+            .delay(750)
+            .duration(1000)
+            .attr("fill", (datapoint) => {
+                if(datapoint > 79) {
+                    return "red"
+                }else { return "blue"}
+            })
 
         //text values with the bars
         svgCanvas.selectAll("text")
@@ -45,7 +51,6 @@ export default class BarChart extends Component {
     render() {
         return (
             <div ref="canvas">
-                
             </div>
         )
     }

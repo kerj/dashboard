@@ -10,7 +10,8 @@ class D3Test extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            temperatureData: []
+            temperatureData: [],
+            date: []
         }
     }
 
@@ -18,29 +19,34 @@ class D3Test extends Component {
         let weatherQuery = "https://www.metaweather.com/api/location/2475687/";
         axios.get(weatherQuery).then((response) => {
             const weatherResponse = response.data.consolidated_weather;
+            let newTemperatureData = [...this.state.temperatureData];
+            let newDateData = [...this.state.date];
             weatherResponse.map((day) => {
-                let newTemperatureData = [...this.state.temperatureData];
-                newTemperatureData.push(day.max_temp);
-
-                this.setState({ temperatureData: newTemperatureData })
-                console.log(this.state.temperatureData);
-
+                let fahrenheitTemp = Math.floor((day.max_temp * (9 / 5)) + 32);
+                let date = day.applicable_date;
+                newDateData.push(date);
+                newTemperatureData.push(fahrenheitTemp);
+                this.setState({ temperatureData: newTemperatureData });
+                this.setState({ date: newDateData })
             })
+            console.log(this.state);
+
+            this.displayText();
         })
     }
 
-    displayText() {
+    displayText = () => {
         d3.select(this.refs.temperatures)
-            .selectAll("h2")
+            .selectAll("li")
             .data(this.state.temperatureData)
             .enter()
-            .append("h2")
-            .text((datapoint) => `${datapoint} degrees`)
+            .append("li")
+            .text((datapoint) => `${datapoint} degrees on `)
             .style("color", "slategrey")
             .attr("class", (datapoint) => {
-                if (datapoint > 10) {
-                    return "highTempurature"
-                } else { return "lowTempurature" }
+                if (datapoint > 79) {
+                    return "higherTempurature"
+                } else { return "lowerTempurature" }
             })
             .transition()
             .delay(1000)
@@ -55,8 +61,13 @@ class D3Test extends Component {
 
     render() {
         return (
-            <div ref="temperatures">
-                <BarChart tempuratureDataToGraph={this.state.temperatureData} />
+            <div>
+                {this.state.temperatureData.length <= 5
+                    ? <h1>Loading Graph</h1>
+                    : <BarChart tempuratureDataToGraph={this.state.temperatureData} />
+                }
+                <ul ref="temperatures">
+                </ul>
             </div>
         )
     }
