@@ -25,8 +25,16 @@ export default class BarChart extends Component {
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
         let stack = d3.stack()
+            // .values((d) => {
+            //     console.log(d.fahrenheitMaxTemp);
+                
+            //     return d.fahrenheitMaxTemp;
+            // })
             .keys(['fahrenheitMinTemp', 'fahrenheitMaxTemp'])
-            .offset(d3.stackOffsetDiverging)(data);
+            .offset(d3.stackOffsetDiverging)(data)
+
+            console.log(stack);
+            
         
         var colors = ['#00D7D2', '#FF4436', '#313c53'];
 
@@ -53,12 +61,13 @@ export default class BarChart extends Component {
 
         y.domain([0, d3.max(stack, (d) => {
             return d3.max(d, (d) => {
-                return d[1] + d[0];
+                return d[0] + d[1];
             });
         })])
 
         svgCanvas.append('g')
             .attr('class', 'x axis')
+            .attr("transform", "translate(0, " + canvasHeight + ")")
             .call(d3.axisBottom(x))
 
         svgCanvas.append('g')
@@ -72,7 +81,10 @@ export default class BarChart extends Component {
             .enter()
             .append('rect')
             .attr('height', (d) => {
-                return y(d[0]) - y(d[0] + d[1]);
+
+                // console.log(y(d[0]) - y((d[0] + d[1])), d[0] - d[1])
+                
+                return y(d[0]) - y((d[0] + d[1]));
             })
             .attr('y', (d) => {
                 return y(d[0] + d[1])
