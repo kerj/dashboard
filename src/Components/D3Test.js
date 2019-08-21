@@ -25,6 +25,7 @@ class D3Test extends Component {
                 let newDay = new Object();
                 newDay.fahrenheitMaxTemp = Math.floor((day.max_temp * (9 / 5)) + 32);
                 newDay.fahrenheitMinTemp = Math.floor((day.min_temp * (9 / 5)) + 32);
+                newDay.tempDifference = newDay.fahrenheitMaxTemp - newDay.fahrenheitMinTemp;
                 newDay.date = day.applicable_date;
                 days.push(newDay);
             })

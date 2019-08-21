@@ -8,8 +8,10 @@ export default class BarChart extends Component {
         // let maxTemps = this.props.dataToGraph.map(({ fahrenheitMaxTemp }) => fahrenheitMaxTemp)
         // let minTemps = this.props.dataToGraph.map(({ fahrenheitMinTemp }) => fahrenheitMinTemp)
         // let dates = this.props.dataToGraph.map(({ date }) => date)
+        console.log(this.props.dataToGraph);
         this.drawBarChart(this.props.dataToGraph)
     }
+
 
     drawBarChart(data) {
         var margin = { top: 40, right: 20, bottom: 40, left: 40 }
@@ -24,18 +26,18 @@ export default class BarChart extends Component {
             .append('g')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
-        let stack = d3.stack()
-            // .values((d) => {
-            //     console.log(d.fahrenheitMaxTemp);
-                
-            //     return d.fahrenheitMaxTemp;
-            // })
-            .keys(['fahrenheitMinTemp', 'fahrenheitMaxTemp'])
+            
+
+        let stack = d3.stack(2)
+            .keys(['fahrenheitMinTemp', 'tempDifference'])
             .offset(d3.stackOffsetDiverging)(data)
 
-            console.log(stack);
-            
-        
+
+        console.log(stack);
+
+        console.log(stack.length);
+
+
         var colors = ['#00D7D2', '#FF4436', '#313c53'];
 
         var g = d3.select('g')
@@ -53,7 +55,7 @@ export default class BarChart extends Component {
             .padding(0.1)
 
         let y = d3.scaleLinear()
-                .range([canvasHeight, 0])
+            .range([canvasHeight, 0])
 
         x.domain(data.map((d) => {
             return d.date
@@ -64,6 +66,7 @@ export default class BarChart extends Component {
                 return d[0] + d[1];
             });
         })])
+
 
         svgCanvas.append('g')
             .attr('class', 'x axis')
@@ -81,12 +84,10 @@ export default class BarChart extends Component {
             .enter()
             .append('rect')
             .attr('height', (d) => {
-
-                // console.log(y(d[0]) - y((d[0] + d[1])), d[0] - d[1])
-                
                 return y(d[0]) - y((d[0] + d[1]));
             })
             .attr('y', (d) => {
+                //plots the bars starting here
                 return y(d[0] + d[1])
             })
             .attr('x', (d, i) => {
