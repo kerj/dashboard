@@ -20,6 +20,7 @@ class D3Test extends Component {
         axios.get(weatherQuery).then((response) => {
             const weatherResponse = response.data.consolidated_weather;
             let days = [];
+            //will make new object with only required data and update state
             weatherResponse.map((day) => {
                 let newDay = new Object();
                 newDay.fahrenheitMaxTemp = Math.floor((day.max_temp * (9 / 5)) + 32);
@@ -27,19 +28,20 @@ class D3Test extends Component {
                 newDay.date = day.applicable_date;
                 days.push(newDay);
             })
+            //state updates with array of newDay{}'s
             this.setState({ weeklyWeather: days });
             this.displayText();
         })
     }
 
     displayText = () => {
+        //this shows as text what is displayed in the barchart
         d3.select(this.refs.temperatures)
             .selectAll("li")
             .data(this.state.weeklyWeather)
             .enter()
             .append("li")
-            .text((datapoint) => {
-                //runs once for first array then again for the second 
+            .text((datapoint) => { 
                 return `${datapoint.fahrenheitMaxTemp} degrees on ${datapoint.date}`
             })
             .style("color", "slategrey")
@@ -62,6 +64,7 @@ class D3Test extends Component {
     render() {
         return (
             <div>
+                {/* won't render BarChart until the the weeks weather is returned */}
                 {this.state.weeklyWeather.length <= 5
                     ? <h1>Loading Graph</h1>
                     : <BarChart dataToGraph={this.state.weeklyWeather}  />
