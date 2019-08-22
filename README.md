@@ -66,3 +66,16 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+
+### To run Locally 
+
+-clone repo.
+-In console type `npm i` and hit enter.
+-Once that finishes, `npm run start` will open the local host.
+-Ran from a free open weather API from metaweather.com 
+
+### Weather forcast for the city of Portland!
+
+- shows the daily weather and the next 5 days in a stacked bar graph.
+-blue is the low for the day, red is the high.

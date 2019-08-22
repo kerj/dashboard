@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 
-//this chart works great when the data is collective, not with say low temperature and hightemperature
-
 export default class BarChart extends Component {
 
     componentDidMount() {
@@ -52,16 +50,8 @@ export default class BarChart extends Component {
         }))
 
         y.domain([0, d3.max(stack, (d) => {
-            console.log(d[1]);
-            
             return d3.max(d, (d) => d[1])
         })])
-
-        // y.domain([0, d3.max(stack, (d) => {
-        //     return d3.max(d, (d) => {
-        //         return d[0] + d[1];
-        //     });
-        // })])
 
         //x axis
         svgCanvas.append('g')
@@ -77,16 +67,7 @@ export default class BarChart extends Component {
         //Bar Data to graph
         g.selectAll('rect')
             .data((d) => {
-                console.log(d);
                 return d;
-                // this fixes the data how it needs to be but breaks, d becomes undefined
-                // if (d[0][0] === 0) {
-                //     return d;
-                // } else {
-                //     //change top bar to display the differences 
-                   
-                //     return d;
-                // }
             })
             .enter().append('rect')
             .attr('height', (d) => {
@@ -107,15 +88,15 @@ export default class BarChart extends Component {
         //     .data(data).enter()
         //     .append("rect")
         //     .attr("width", 40)
-        //     .attr("height", (datapoint) => datapoint * scale)
+        //     .attr("height", (d) => d)
         //     .attr("fill", "whitesmoke")
-        //     .attr("x", (datapoint, iteration) => iteration * 45)
-        //     .attr("y", (datapoint) => canvasHeight - datapoint * scale)
+        //     .attr("x", (d, iteration) => iteration * 45)
+        //     .attr("y", (d) => canvasHeight - d)
         //     .transition()
         //     .delay(750)
         //     .duration(1000)
-        //     .attr("fill", (datapoint) => {
-        //         if(datapoint > 79) {
+        //     .attr("fill", (d) => {
+        //         if(d > 79) {
         //             return "red"
         //         }else { return "blue"}
         //     })
@@ -124,9 +105,9 @@ export default class BarChart extends Component {
         // svgCanvas.selectAll("text")
         //     .data(data).enter()
         //     .append("text")
-        //     .attr("x", (dataPoint, i) => i * 45 + 10)
-        //     .attr("y", (dataPoint, i) => canvasHeight - dataPoint * scale - 10)
-        //     .text(dataPoint => dataPoint) 
+        //     .attr("x", (d, i) => i * 45 + 10)
+        //     .attr("y", (d, i) => canvasHeight - d - 10)
+        //     .text(d => d) 
     }
 
     render() {
