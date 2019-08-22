@@ -25,14 +25,7 @@ export default class BarChart extends Component {
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
         let stack = d3.stack()
-            .keys(['fahrenheitMinTemp', 'fahrenheitMaxTemp'])
-            .value((d, key) => {
-                if (key === 'fahrenheitMaxTemp') {
-                    return d.tempDifference
-                }else {
-                    return d[key]
-                }
-            })
+            .keys(['fahrenheitMinTemp', 'tempDifference'])
             .offset(d3.stackOffsetDiverging)(data)
 
         var colors = ['#00D7D2', '#FF4436', '#313c53'];
