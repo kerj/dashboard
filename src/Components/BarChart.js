@@ -25,7 +25,14 @@ export default class BarChart extends Component {
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
         let stack = d3.stack()
-            .keys(['fahrenheitMinTemp', 'tempDifference'])
+            .keys(['fahrenheitMinTemp', 'fahrenheitMaxTemp'])
+            .value((d, key) => {
+                if (key === 'fahrenheitMaxTemp') {
+                    return d.tempDifference
+                }else {
+                    return d[key]
+                }
+            })
             .offset(d3.stackOffsetDiverging)(data)
 
         var colors = ['#00D7D2', '#FF4436', '#313c53'];
@@ -52,6 +59,8 @@ export default class BarChart extends Component {
         }))
 
         y.domain([0, d3.max(stack, (d) => {
+            console.log(d[1]);
+            
             return d3.max(d, (d) => d[1])
         })])
 
@@ -75,25 +84,24 @@ export default class BarChart extends Component {
         //Bar Data to graph
         g.selectAll('rect')
             .data((d) => {
-                // return d;
+                console.log(d);
+                return d;
                 // this fixes the data how it needs to be but breaks, d becomes undefined
-                if (d[0][0] === 0) {
-                    return d;
-                } else {
-                    //change top bar to display the difference
-                    d.forEach((o,i,a) => {
-                        a[i][1] = o.data.tempDifference;
-                    })
-                    return d;
-                }
+                // if (d[0][0] === 0) {
+                //     return d;
+                // } else {
+                //     //change top bar to display the differences 
+                   
+                //     return d;
+                // }
             })
             .enter().append('rect')
             .attr('height', (d) => {
-                return y(d[0]) - y((d[0] + d[1]));
+                return y(d[0]) - y(d[1]);
             })
             .attr('y', (d) => {
 
-                return y(d[0] + d[1])
+                return y(d[1])
             })
             .attr('x', (d, i) => {
                 return x(d.data.date)
