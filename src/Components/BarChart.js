@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 
+//Issues still with getting both bars to start at x = 0, this is needed for transitions in/out
+
 export default class BarChart extends Component {
 
     componentDidMount() {
@@ -24,7 +26,7 @@ export default class BarChart extends Component {
 
         let stack = d3.stack()
             .keys(['fahrenheitMinTemp', 'tempDifference'])
-            .offset(d3.stackOffsetDiverging)(data)
+            .offset(d3.stackOffsetNone)(data)
 
         var colors = ['#00D7D2', '#FF4436', '#313c53'];
 
@@ -70,44 +72,16 @@ export default class BarChart extends Component {
                 return d;
             })
             .enter().append('rect')
-            .attr('height', (d) => {
-                return y(d[0]) - y(d[1]);
-            })
-            .attr('y', (d) => {
-
-                return y(d[1])
-            })
-            .attr('x', (d, i) => {
+                .attr('x', (d, i) => {
                 return x(d.data.date)
-            })
-            .attr('width', x.bandwidth());
-
-
-        //data to display as single bars
-        // svgCanvas.selectAll("rect")
-        //     .data(data).enter()
-        //     .append("rect")
-        //     .attr("width", 40)
-        //     .attr("height", (d) => d)
-        //     .attr("fill", "whitesmoke")
-        //     .attr("x", (d, iteration) => iteration * 45)
-        //     .attr("y", (d) => canvasHeight - d)
-        //     .transition()
-        //     .delay(750)
-        //     .duration(1000)
-        //     .attr("fill", (d) => {
-        //         if(d > 79) {
-        //             return "red"
-        //         }else { return "blue"}
-        //     })
-
-        // //text values with the bars
-        // svgCanvas.selectAll("text")
-        //     .data(data).enter()
-        //     .append("text")
-        //     .attr("x", (d, i) => i * 45 + 10)
-        //     .attr("y", (d, i) => canvasHeight - d - 10)
-        //     .text(d => d) 
+                    })
+                .attr('y', (d) => {
+                return y(d[1])
+                    })
+                .attr('width', x.bandwidth())
+                .attr('height', (d) => {
+                return y(d[0]) - y(d[1]);
+                    }) 
     }
 
     render() {
