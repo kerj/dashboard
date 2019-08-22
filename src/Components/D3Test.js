@@ -14,7 +14,7 @@ class D3Test extends Component {
         }
     }
 
-    
+
     fetchWeatherData = () => {
         let weatherQuery = "https://www.metaweather.com/api/location/2475687/";
         axios.get(weatherQuery).then((response) => {
@@ -42,7 +42,7 @@ class D3Test extends Component {
             .data(this.state.weeklyWeather)
             .enter()
             .append("li")
-            .text((datapoint) => { 
+            .text((datapoint) => {
                 return `${datapoint.fahrenheitMaxTemp} degrees on ${datapoint.date}`
             })
             .style("color", "slategrey")
@@ -68,7 +68,7 @@ class D3Test extends Component {
                 {/* won't render BarChart until the the weeks weather is returned */}
                 {this.state.weeklyWeather.length <= 5
                     ? <h1>Loading Graph</h1>
-                    : <BarChart dataToGraph={this.state.weeklyWeather}  />
+                    : <BarChart dataToGraph={this.state.weeklyWeather} />
                 }
                 <ul ref="temperatures">
                 </ul>

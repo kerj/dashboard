@@ -40,7 +40,7 @@ export default class BarChart extends Component {
             .style('fill', (d, i) => {
                 return colors[i];
             });
-            
+
         let x = d3.scaleBand()
             .rangeRound([0, canvasWidth])
             .padding(0.1)
@@ -73,22 +73,25 @@ export default class BarChart extends Component {
         g.selectAll('rect')
             .data((d) => {
                 console.log(d);
-                return d;
+                // return d;
                 // this fixes the data how it needs to be but breaks, d becomes undefined
-                // if (d[0][0] === 0) {
-                //     return d;
-                // } else {
-                //     return d.map((diff) => {
-                //         diff[1] = diff.data.tempDifference;
-                //     })
-                // }
+                if (d[0][0] === 0) {
+                    return d;
+                } else {
+                    return d.map((diff) => {
+                        console.log(diff)
+                        const temps = diff[0];
+                        return [diff[0],diff.data.tempDifference]
+                        
+                    })
+                }
             })
             .enter().append('rect')
             .attr('height', (d) => {
                 return y(d[0]) - y((d[0] + d[1]));
             })
             .attr('y', (d) => {
-                //plots the bars starting here
+
                 return y(d[0] + d[1])
             })
             .attr('x', (d, i) => {
