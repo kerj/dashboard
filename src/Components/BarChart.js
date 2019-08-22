@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 
+//this chart works great when the data is collective, not with say low temperature and hightemperature
+
 export default class BarChart extends Component {
 
     componentDidMount() {
-        // let maxTemps = this.props.dataToGraph.map(({ fahrenheitMaxTemp }) => fahrenheitMaxTemp)
-        // let minTemps = this.props.dataToGraph.map(({ fahrenheitMinTemp }) => fahrenheitMinTemp)
-        // let dates = this.props.dataToGraph.map(({ date }) => date)
-        console.log(this.props.dataToGraph);
         this.drawBarChart(this.props.dataToGraph)
     }
 
@@ -26,16 +24,9 @@ export default class BarChart extends Component {
             .append('g')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
-            
-
-        let stack = d3.stack(2)
+        let stack = d3.stack()
             .keys(['fahrenheitMinTemp', 'tempDifference'])
             .offset(d3.stackOffsetDiverging)(data)
-
-
-        console.log(stack);
-
-        console.log(stack.length);
 
 
         var colors = ['#00D7D2', '#FF4436', '#313c53'];
@@ -49,7 +40,7 @@ export default class BarChart extends Component {
             .style('fill', (d, i) => {
                 return colors[i];
             });
-
+            
         let x = d3.scaleBand()
             .rangeRound([0, canvasWidth])
             .padding(0.1)
@@ -67,22 +58,32 @@ export default class BarChart extends Component {
             });
         })])
 
-
+        //x axis
         svgCanvas.append('g')
             .attr('class', 'x axis')
             .attr("transform", "translate(0, " + canvasHeight + ")")
             .call(d3.axisBottom(x))
 
+        //y axis
         svgCanvas.append('g')
             .attr('class', 'y axis')
             .call(d3.axisLeft(y))
 
+        //Bar Data to graph
         g.selectAll('rect')
             .data((d) => {
+                console.log(d);
                 return d;
+                // this fixes the data how it needs to be but breaks, d becomes undefined
+                // if (d[0][0] === 0) {
+                //     return d;
+                // } else {
+                //     return d.map((diff) => {
+                //         diff[1] = diff.data.tempDifference;
+                //     })
+                // }
             })
-            .enter()
-            .append('rect')
+            .enter().append('rect')
             .attr('height', (d) => {
                 return y(d[0]) - y((d[0] + d[1]));
             })
@@ -122,8 +123,6 @@ export default class BarChart extends Component {
         //     .attr("y", (dataPoint, i) => canvasHeight - dataPoint * scale - 10)
         //     .text(dataPoint => dataPoint) 
     }
-
-
 
     render() {
         return (
