@@ -12,7 +12,9 @@ class D3Test extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            weeklyWeather: []
+            weeklyWeather: [],
+            barX: true,
+            barY: true
         }
     }
 
@@ -62,22 +64,27 @@ class D3Test extends Component {
     componentDidMount() {
         //fetch data to display with d3
         this.fetchWeatherData()
+
     }
 
     render() {
+        const { barX } = this.state;
+        const { barY } = this.state;
+
         return (
             <div>
                 {/* won't render BarChart until the the weeks weather is returned */}
                 {this.state.weeklyWeather.length <= 5
                     ? <h1>Loading Graph</h1>
-                    : <BarChart dataToGraph={this.state.weeklyWeather} /> 
+                    : <BarChart dataToGraph={this.state.weeklyWeather} />
                 }
-                    
-                   {this.state.weeklyWeather.length <= 5
+                {this.state.weeklyWeather.length <= 5
                     ? <h1>Loading Graph</h1>
-                    : <DonutGraph dataToGraph={this.state.weeklyWeather} /> 
+                    : <DonutGraph dataToGraph={this.state.weeklyWeather} />
                 }
-               
+                <br/>
+
+
                 <ul ref="temperatures">
                 </ul>
             </div>

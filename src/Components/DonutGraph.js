@@ -7,7 +7,10 @@ export default class DonutGraph extends Component {
 
     componentDidMount() {
         this.drawDonutChart(this.props.dataToGraph)
-        // this.transition(1)
+    }
+
+    componentDidUpdate(){
+        this.drawDonutChart(this.props.dataToGraph)
     }
 
     drawDonutChart(data) {
@@ -45,6 +48,12 @@ export default class DonutGraph extends Component {
             .attr("class", "arc");
 
         arc.append("path")
+        .transition()
+            .delay((d,i) => {
+                return i * 100;
+            })
+            .duration(500)
+            .ease(d3.easeElasticIn)
             .attr("d", path)
             .attr("fill", (d, i) => {
                 return colors[i];
@@ -60,13 +69,107 @@ export default class DonutGraph extends Component {
             })
     }
 
+    // transitionInDonut0(data) {
+    //     var margin = { top: 40, right: 20, bottom: 40, left: 40 }
+    //     var canvasWidth = 400 - margin.left - margin.right
+    //     var canvasHeight = 600 - margin.top - margin.bottom
+    //     var radius = Math.min(canvasWidth, canvasHeight) / 2;
+
+    //     const PI = Math.PI;
+    //     const arcMin = 75;
+    //     const arcWidth = 15;
+    //     const arcPad = 1;
+
+    //     let data0 = [];
+    //     let data1 = [];
+    //     this.props.dataToGraph.map((day) => {
+    //         data0.push(day.fahrenheitMaxTemp);
+    //         data1.push(day.fahrenheitMinTemp);
+    //     });
+
+    //     d3.select(this.refs.canvas)
+    //         .append("svg")
+    //         .attr("width", canvasWidth)
+    //         .attr("height", canvasHeight)
+
+    //     let renderArcs = (data) => {
+    //         let vis = d3.select("svg")
+
+
+    //         let drawArc = d3.arc()
+    //             .innerRadius((d, i) => {
+    //                 return arcMin + i * (arcWidth) + arcPad;
+    //             })
+    //             .outerRadius((d, i) => {
+    //                 return arcMin + (i + 1) * (arcWidth);
+    //             })
+    //             .startAngle(0 * (PI / 180))
+    //             .endAngle((d, i) => {
+    //                 return Math.floor((d * 6(PI / 180)) * 1000) / 1000;
+    //             })
+
+
+    //         var redArcs = vis.selectAll("path.red-path")
+    //             .data(data)
+
+    //         let arc2Tween = (d, i) => {
+    //             let interp = d3.interpolate(this._current, d)
+    //             this._current = d;
+    //             return (t) => {
+    //                 let temp = interp(t);
+    //                 return drawArc(temp, i)
+    //             }
+    //         };
+
+    //         redArcs.transition()
+    //             .duration(300)
+    //             .attr("fill", (d) => {
+    //                 let red = Math.floor((1 - d / 60) * 255);
+    //                 return "rgb(" + red + ", 51, 51)";
+    //             })
+    //             .attrTween("d", arc2Tween);
+
+    //         redArcs.enter().append("svg:path")
+    //             .attr("class", "red-path")
+    //             .attr("fill", (d) => {
+    //                 let red = Math.floor((1 - d / 60) * 255);
+    //                 return "rgb(" + red + ", 51, 51)";
+    //             })
+    //             .attr("d", drawArc)
+    //             .each((d) => {
+    //                 this._current = d;
+    //             })
+
+    //     }
+    //     renderArcs()
+
+    // }
+
+
+
     // arcs(data0, data1) {
-    //     let arcs0 = d3.pie(this.props.dataToGraph),
-    //         arcs1 = d3.pie(this.props.dataToGraph),
-    //         i = -1,
-    //         arc;
+    //     data0 = [];
+    //     data1 = [];
+    //     let pie = d3.pie();
+
+    //     this.props.dataToGraph.map((day) => {
+    //         data0.push(day.fahrenheitMaxTemp);
+    //         data1.push(day.fahrenheitMinTemp);
+    //     });
+
+
+    //     let arcs0 = pie(data0);
+    //     let arcs1 = pie(data1);
+    //     let i = -1;
+    //     let arc;
+
+
     //     while (++i < 5) {
+    //         //i need the arc here
+    //         console.log(arcs0[i]);
+
     //         arc = arcs0[i];
+
     //         arc.innerRadius = innerRadius;
     //         arc.outRadius = outerRadius;
     //         arc.next = arcs1[i];

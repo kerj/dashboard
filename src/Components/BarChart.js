@@ -5,8 +5,12 @@ import PropTypes from 'prop-types';
 //Issues still with getting both bars to start at x = 0, this is needed for transitions in/out
 
 export default class BarChart extends Component {
-
+   
     componentDidMount() {
+        this.drawBarChart(this.props.dataToGraph)
+    }
+
+    componentDidUpdate(){
         this.drawBarChart(this.props.dataToGraph)
     }
 
@@ -72,9 +76,15 @@ export default class BarChart extends Component {
                 return d;
             })
             .enter().append('rect')
-                .attr('x', (d, i) => {
+            .transition()
+            .delay((d,i) => {
+                return i * 100;
+            })
+            .duration(1000)
+            .ease(d3.easeSinInOut)
+            .attr('x', (d, i) => {
                 return x(d.data.date)
-                    })
+            })
                 .attr('y', (d) => {
                 return y(d[1])
                     })
@@ -85,6 +95,7 @@ export default class BarChart extends Component {
     }
 
     render() {
+
         return (
             <div ref="canvas">
             </div>
@@ -94,4 +105,5 @@ export default class BarChart extends Component {
 
 BarChart.propTypes = {
     dataToGraph: PropTypes.array.isRequired,
+
 }
