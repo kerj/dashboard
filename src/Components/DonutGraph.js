@@ -2,72 +2,83 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 
+var width = 960,
+    height = 500,
+    outerRadius = Math.min(width, height) * .5 - 10,
+    innerRadius = outerRadius * .6,
+    displayMax = true,
+    data0 = [],
+    data1 = [];
+
+
 
 export default class DonutGraph extends Component {
 
     componentDidMount() {
-        this.drawDonutChart(this.props.dataToGraph)
+
+        this.props.dataToGraph.map((day) => {
+            data0.push(day.fahrenheitMaxTemp);
+            data1.push(day.fahrenheitMinTemp);
+        });
+        // this.drawDonutChart(this.props.dataToGraph)
+        this.phaseDonut(this.props.dataToGraph)
     }
 
-    componentDidUpdate(){
-        this.drawDonutChart(this.props.dataToGraph)
+    componentDidUpdate() {
+        console.log("it updated!");
+
+        // this.drawDonutChart(this.props.dataToGraph)
     }
 
-    drawDonutChart(data) {
-        //boiler plate canvas
-        var margin = { top: 40, right: 20, bottom: 40, left: 40 }
-        var canvasWidth = 400 - margin.left - margin.right
-        var canvasHeight = 600 - margin.top - margin.bottom
-        var radius = Math.min(canvasWidth, canvasHeight) / 2;
+    // drawDonutChart(data) {
+    //     //boiler plate canvas
+    //     var margin = { top: 40, right: 20, bottom: 40, left: 40 }
+    //     var canvasWidth = 400 - margin.left - margin.right
+    //     var canvasHeight = 600 - margin.top - margin.bottom
+    //     var radius = Math.min(canvasWidth, canvasHeight) / 2;
 
-        const svgCanvas = d3.select(this.refs.canvas)
-            .append("svg")
-            .attr("width", canvasWidth + margin.left + margin.right)
-            .attr("height", canvasHeight + margin.top + margin.bottom)
-            .append('g')
-            .attr('transform', 'translate(' + canvasWidth / 2 + ',' + canvasHeight / 2 + ')')
+    //     const svgCanvas = d3.select(this.refs.canvas)
+    //         .append("svg")
+    //         .attr("width", canvasWidth + margin.left + margin.right)
+    //         .attr("height", canvasHeight + margin.top + margin.bottom)
+    //         .append('g')
+    //         .attr('transform', 'translate(' + canvasWidth / 2 + ',' + canvasHeight / 2 + ')')
 
-        let colors = ['#00D7D2', '#FF4436', '#313c53', '#e77f18', '#1880E7', '#1de2ca', '#E21D35'];
+    //     let colors = ['#00D7D2', '#FF4436', '#313c53', '#e77f18', '#1880E7', '#1de2ca', '#E21D35'];
 
-        let pie = d3.pie()
-            .sort(null)
-            .value((d) => {
-                return d.fahrenheitMinTemp;
-            })
-        let path = d3.arc()
-            .outerRadius(radius - 10)
-            .innerRadius(radius - 70);
+    //     let pie = d3.pie()
+    //         .sort(null)
+    //         .value((d) => {
+    //             return d.fahrenheitMinTemp;
+    //         })
+    //     let path = d3.arc()
+    //         .outerRadius(radius - 10)
+    //         .innerRadius(radius - 70);
 
-        let label = d3.arc()
-            .outerRadius(radius - 40)
-            .innerRadius(radius - 40);
+    //     let label = d3.arc()
+    //         .outerRadius(radius - 40)
+    //         .innerRadius(radius - 40);
 
-        let arc = svgCanvas.selectAll(".arc")
-            .data(pie(data))
-            .enter().append("g")
-            .attr("class", "arc");
+    //     let arc = svgCanvas.selectAll(".arc")
+    //         .data(pie(data))
+    //         .enter().append("g")
+    //         .attr("class", "arc");
 
-        arc.append("path")
-        .transition()
-            .delay((d,i) => {
-                return i * 100;
-            })
-            .duration(500)
-            .ease(d3.easeElasticIn)
-            .attr("d", path)
-            .attr("fill", (d, i) => {
-                return colors[i];
-            });
+    //     arc.append("path")
+    //         .attr("d", path)
+    //         .attr("fill", (d, i) => {
+    //             return colors[i];
+    //         });
 
-        arc.append("text")
-            .attr("transform", (d) => {
-                return "translate(" + label.centroid(d) + ")";
-            })
-            .attr("dy", "0.35em")
-            .text((d) => {
-                return d.data.fahrenheitMinTemp;
-            })
-    }
+    //     arc.append("text")
+    //         .attr("transform", (d) => {
+    //             return "translate(" + label.centroid(d) + ")";
+    //         })
+    //         .attr("dy", "0.35em")
+    //         .text((d) => {
+    //             return d.data.fahrenheitMinTemp;
+    //         })
+    // }
 
     // transitionInDonut0(data) {
     //     var margin = { top: 40, right: 20, bottom: 40, left: 40 }
@@ -224,7 +235,173 @@ export default class DonutGraph extends Component {
     //         }));
     // }
 
+    arcs(currentData, nextData) {
+        let pie = d3.pie()
+            .sort(null);
+        let arcs0 = pie(currentData),
+            arcs1 = pie(nextData),
+            i = -1,
+            currentArc;
+        while (++i < 6) {
+            currentArc = arcs0[i];
+            currentArc.innerRadius = innerRadius;
+            currentArc.outerRadius = outerRadius;
+            currentArc.next = arcs1[i];
+        }
+        return arcs0
+    }
+
+    phaseDonut(data) {
+        let data0 = []
+        let data1 = []
+        data.map((day) => {
+            data0.push(day.fahrenheitMaxTemp);
+            data1.push(day.fahrenheitMinTemp);
+        });
+        // let width = 960,
+        //     height = 500,
+        //     outerRadius = Math.min(width, height) * .5 - 10,
+        //     innerRadius = outerRadius * .6;
+
+        let arc = d3.arc()
+
+        let colors = ['#00D7D2', '#FF4436', '#313c53', '#e77f18', '#1880E7', '#1de2ca', '#E21D35'];
+
+        let svg = d3.select("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        svg.selectAll(".arc")
+            .data(this.arcs(data0, data1))
+            .enter().append("g")
+            .attr("class", "arc")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+            .append("path")
+            .attr("fill", (d, i) => {
+                return colors[i];
+            })
+            .attr("d", arc);
+    }
+    //
+    tweenArc(b) {
+        console.log(b);
+        
+        let arc = d3.arc();
+
+        return (a, i) => {
+            let d = b.call(this, a, i)
+            let interp = d3.interpolate(a, d);
+            for (let k in d) {
+                a[k] = d[k];  
+            }//update data
+            return (t) => {
+                //t is a decimal to turn into an arc via interpolate and arc
+                let tempval = interp(t);
+                console.log(tempval);
+                //temp val is an object that has inner and outerRadius values, I want arc to add the start and endAngle.. however it goes to nan,nan,nan
+                return arc(tempval);
+            };
+        }
+    }
+
+    transition(displayMax, innerRadius, outerRadius) {
+        let path = d3.selectAll(".arc > path")
+            .data(displayMax ? this.arcs(data0, data1) : this.arcs(data1, data0));
+
+        console.log(path);
+
+        //Wedges Split into two rings
+        let t0 = () => {
+            path.transition()
+                .duration(1000)
+                .attrTween("d", this.tweenArc((d, i) => {
+                    return {
+                        innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
+                        outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
+                    };
+                }));
+        }
+        t0()
+        //wedges to be centered on final position
+        let t1 = () => {
+            path.transition()
+                .attrTween("d", this.tweenArc((d, i) => {
+                    let a0 = d.next.startAngle + d.next.endAngle,
+                        a1 = d.startAngle - d.endAngle;
+                    return {
+                        startAngle: (a0 + a1) / 2,
+                        endAngle: (a0 - a1) / 2
+                    };
+                }));
+        }
+      
+        //wedges then update values, change size
+        let t2 = () => {
+            path.transition()
+                .attrTween("d", this.tweenArc((d, i) => {
+                    return {
+                        startAngle: d.next.startAngle,
+                        endAngle: d.next.endAngle
+                    };
+                }));
+        }
+   
+        //wedges reunite into a singel ring
+        let t3 = () => {
+            path.transition()
+                .attrTween("d", this.tweenArc((d, i) => {
+                    return {
+                        innerRadius: innerRadius,
+                        outerRadius: outerRadius
+                    }
+                }))
+        }
+    
+        setTimeout(() => {
+            displayMax = !displayMax
+            this.transition(displayMax,innerRadius, outerRadius)
+        }, 5000);
+
+
+    }
+
+
+
+
+    // g.append("path")
+    //     .datum({ endAngle: (2 * (Math.PI)) })
+    //     .style("fill", "#ddd")
+    //     .attr("d", arc);
+
+    // let foreground = g.append("path")
+    //     .datum({ endAngle: 0.127 * (2 * (Math.PI)) })
+    //     .style("fill", "orange")
+    //     .attr("d", arc);
+
+    // let arcTween = (newAngle) => {
+    //     d3.interval(() => {
+    //         foreground.transition()
+    //             .duration(1000)
+    //             .attrTween("d", arcTween(Math.random() * Math.PI));
+    //     }, 3500)
+    //     return (d) => {
+    //         let interpolate = d3.interpolate(d.endAngle, newAngle)
+    //         return (t) => {
+    //             d.endAngle = interpolate(t);
+    //             return arc(d);
+    //         }
+    //     }
+    // }
+    // arcTween(arc)
+    // }
+
+
     render() {
+        setTimeout(() => {
+
+
+            this.transition(displayMax, innerRadius, outerRadius);
+        }, 5000)
         return (
             <div ref="canvas">
             </div>
