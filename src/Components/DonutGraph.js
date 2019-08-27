@@ -247,7 +247,11 @@ export default class DonutGraph extends Component {
             currentArc.innerRadius = innerRadius;
             currentArc.outerRadius = outerRadius;
             currentArc.next = arcs1[i];
+            console.log(currentArc);
+
         }
+        console.log(arcs0);
+
         return arcs0
     }
 
@@ -262,8 +266,6 @@ export default class DonutGraph extends Component {
         //     height = 500,
         //     outerRadius = Math.min(width, height) * .5 - 10,
         //     innerRadius = outerRadius * .6;
-
-        let arc = d3.arc()
 
         let colors = ['#00D7D2', '#FF4436', '#313c53', '#e77f18', '#1880E7', '#1de2ca', '#E21D35'];
 
@@ -280,133 +282,151 @@ export default class DonutGraph extends Component {
             .attr("fill", (d, i) => {
                 return colors[i];
             })
-            .attr("d", arc);
+            .attr("d", d3.arc());
     }
     //
     tweenArc(b) {
-        console.log(b);
-        
-        let arc = d3.arc();
-
         return (a, i) => {
             let d = b.call(this, a, i)
-            let interp = d3.interpolate(a, d);
+            let interp = d3.interpolateObject(a, d);
             for (let k in d) {
-                a[k] = d[k];  
+                a[k] = d[k];
             }//update data
             return (t) => {
                 //t is a decimal to turn into an arc via interpolate and arc
                 let tempval = interp(t);
-                console.log(tempval);
+                let arc = d3.arc()
+                console.log(a);
+                
                 //temp val is an object that has inner and outerRadius values, I want arc to add the start and endAngle.. however it goes to nan,nan,nan
-                return arc(tempval);
+                return arc({
+                  innerRadius: tempval.innerRadius,
+                  outerRadius: tempval.outerRadius,
+                  startAngle: a.startAngle,
+                  endAngle: a.endAngle
+                })
             };
         }
     }
 
-    transition(displayMax, innerRadius, outerRadius) {
-        let path = d3.selectAll(".arc > path")
-            .data(displayMax ? this.arcs(data0, data1) : this.arcs(data1, data0));
-
-        console.log(path);
-
-        //Wedges Split into two rings
-        let t0 = () => {
-            path.transition()
-                .duration(1000)
-                .attrTween("d", this.tweenArc((d, i) => {
-                    return {
-                        innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
-                        outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
-                    };
-                }));
-        }
-        t0()
-        //wedges to be centered on final position
-        let t1 = () => {
-            path.transition()
-                .attrTween("d", this.tweenArc((d, i) => {
-                    let a0 = d.next.startAngle + d.next.endAngle,
-                        a1 = d.startAngle - d.endAngle;
-                    return {
-                        startAngle: (a0 + a1) / 2,
-                        endAngle: (a0 - a1) / 2
-                    };
-                }));
-        }
-      
-        //wedges then update values, change size
-        let t2 = () => {
-            path.transition()
-                .attrTween("d", this.tweenArc((d, i) => {
-                    return {
-                        startAngle: d.next.startAngle,
-                        endAngle: d.next.endAngle
-                    };
-                }));
-        }
-   
-        //wedges reunite into a singel ring
-        let t3 = () => {
-            path.transition()
-                .attrTween("d", this.tweenArc((d, i) => {
-                    return {
-                        innerRadius: innerRadius,
-                        outerRadius: outerRadius
-                    }
-                }))
-        }
-    
-        setTimeout(() => {
-            displayMax = !displayMax
-            this.transition(displayMax,innerRadius, outerRadius)
-        }, 5000);
+//     function tweenArc(b) {
+//     return function (a, i) {
+//         var d = b.call(this, a, i);
+//         var i = d3.interpolate(a, d);
+//         for (var k in d) {
+//             a[k] = d[k]
+//         }; // update data
+//         return function (t) {
+//             return arc(i(t));
+//         };
+//     };
+// }
 
 
-    }
+transition(displayMax, innerRadius, outerRadius) {
+    let path = d3.selectAll(".arc > path")
+        .data(displayMax ? this.arcs(data0, data1) : this.arcs(data1, data0));
+
+    console.log("path", path);
+
+    //Wedges Split into two rings
+    let t0 =
+        path.transition()
+            .duration(1000)
+            .attrTween("d", this.tweenArc((d, i) => {
+                console.log("data passed to t0", d);
+
+                return {
+                    innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
+                    outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
+                };
+            }));
+
+    //wedges to be centered on final position
+    let t1 =
+        t0.transition()
+            .attrTween("d", this.tweenArc((d, i) => {
+                console.log(d);
+
+                let a0 = d.next.startAngle + d.next.endAngle,
+                    a1 = d.startAngle - d.endAngle;
+                return {
+                    startAngle: (a0 + a1) / 2,
+                    endAngle: (a0 - a1) / 2
+                };
+            }));
+
+    //wedges then update values, change size
+    let t2 =
+        t1.transition()
+            .attrTween("d", this.tweenArc((d, i) => {
+                console.log(d);
+
+                return {
+                    startAngle: d.next.startAngle,
+                    endAngle: d.next.endAngle
+                };
+            }));
+
+    //wedges reunite into a singel ring
+    let t3 =
+        t2.transition()
+            .attrTween("d", this.tweenArc((d, i) => {
+                return {
+                    innerRadius: innerRadius,
+                    outerRadius: outerRadius
+                }
+            }))
+
+
+    setTimeout(() => {
+        displayMax = !displayMax
+        this.transition(displayMax, innerRadius, outerRadius)
+    }, 5000);
+
+
+}
 
 
 
 
-    // g.append("path")
-    //     .datum({ endAngle: (2 * (Math.PI)) })
-    //     .style("fill", "#ddd")
-    //     .attr("d", arc);
+// g.append("path")
+//     .datum({ endAngle: (2 * (Math.PI)) })
+//     .style("fill", "#ddd")
+//     .attr("d", arc);
 
-    // let foreground = g.append("path")
-    //     .datum({ endAngle: 0.127 * (2 * (Math.PI)) })
-    //     .style("fill", "orange")
-    //     .attr("d", arc);
+// let foreground = g.append("path")
+//     .datum({ endAngle: 0.127 * (2 * (Math.PI)) })
+//     .style("fill", "orange")
+//     .attr("d", arc);
 
-    // let arcTween = (newAngle) => {
-    //     d3.interval(() => {
-    //         foreground.transition()
-    //             .duration(1000)
-    //             .attrTween("d", arcTween(Math.random() * Math.PI));
-    //     }, 3500)
-    //     return (d) => {
-    //         let interpolate = d3.interpolate(d.endAngle, newAngle)
-    //         return (t) => {
-    //             d.endAngle = interpolate(t);
-    //             return arc(d);
-    //         }
-    //     }
-    // }
-    // arcTween(arc)
-    // }
-
-
-    render() {
-        setTimeout(() => {
+// let arcTween = (newAngle) => {
+//     d3.interval(() => {
+//         foreground.transition()
+//             .duration(1000)
+//             .attrTween("d", arcTween(Math.random() * Math.PI));
+//     }, 3500)
+//     return (d) => {
+//         let interpolate = d3.interpolate(d.endAngle, newAngle)
+//         return (t) => {
+//             d.endAngle = interpolate(t);
+//             return arc(d);
+//         }
+//     }
+// }
+// arcTween(arc)
+// }
 
 
-            this.transition(displayMax, innerRadius, outerRadius);
-        }, 5000)
-        return (
-            <div ref="canvas">
-            </div>
-        )
-    }
+render() {
+    setTimeout(() => {
+        this.transition(displayMax, innerRadius, outerRadius);
+    }, 5000)
+    return (
+        <div ref="canvas">
+        </div>
+    )
+}
 }
 
 DonutGraph.propTypes = {
