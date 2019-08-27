@@ -297,8 +297,6 @@ export default class DonutGraph extends Component {
                 let tempval = interp(t);
                 let arc = d3.arc()
                 console.log(a);
-                
-                //temp val is an object that has inner and outerRadius values, I want arc to add the start and endAngle.. however it goes to nan,nan,nan
                 return arc({
                   innerRadius: tempval.innerRadius,
                   outerRadius: tempval.outerRadius,
