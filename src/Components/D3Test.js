@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import BarChart from './BarChart';
 import DonutGraph from './DonutGraph';
-import Transitions from './Transitions';
 const axios = require('axios');
 
 
@@ -74,6 +73,8 @@ class D3Test extends Component {
         return (
             <div>
                 {/* won't render BarChart until the the weeks weather is returned */}
+                <ul ref="temperatures">
+                </ul>
                 {this.state.weeklyWeather.length <= 5
                     ? <h1>Loading Graph</h1>
                     : <BarChart dataToGraph={this.state.weeklyWeather} />
@@ -82,11 +83,6 @@ class D3Test extends Component {
                     ? <h1>Loading Graph</h1>
                     : <DonutGraph dataToGraph={this.state.weeklyWeather} />
                 }
-                <br/>
-
-
-                <ul ref="temperatures">
-                </ul>
             </div>
         )
     }

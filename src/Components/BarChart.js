@@ -21,8 +21,9 @@ export default class BarChart extends Component {
         var canvasHeight = 600 - margin.top - margin.bottom
 
         //container for graph
-        const svgCanvas = d3.select(this.refs.canvas)
+        const svgCanvas = d3.select(this.refs.barCanvas)
             .append("svg")
+            .attr("class", "barchart")
             .attr("width", canvasWidth + margin.left + margin.right)
             .attr("height", canvasHeight + margin.top + margin.bottom)
             .append('g')
@@ -39,6 +40,7 @@ export default class BarChart extends Component {
             .data(stack)
             .enter()
             .append('g')
+
             .classed('addColor', true)
             .style('fill', (d, i) => {
                 return colors[i];
@@ -97,7 +99,7 @@ export default class BarChart extends Component {
     render() {
 
         return (
-            <div ref="canvas">
+            <div ref="barCanvas">
             </div>
         )
     }
