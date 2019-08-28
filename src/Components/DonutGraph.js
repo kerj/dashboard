@@ -8,14 +8,14 @@ var width = 960,
     innerRadius = outerRadius * .6,
     displayMax = true,
     data0 = [],
-    data1 = [23, 12, 100, 45, 67, 55];
+    data1 = [];
 
 export default class DonutGraph extends Component {
 
     componentDidMount() {
         this.props.dataToGraph.map((data) => {
             data0.push(data.fahrenheitMaxTemp);
-            // data1.push(data.fahrenheitMinTemp);
+            data1.push(data.fahrenheitMinTemp);
         });
         // this.drawDonutChart(this.props.dataToGraph)
         this.phaseDonut()
@@ -24,7 +24,7 @@ export default class DonutGraph extends Component {
     componentWillUnmount() {
         //empty data for next render
         data0.length = 0
-        // data1.length = 0
+        data1.length = 0
     }
 
     arcs(currentData, nextData) {
@@ -160,7 +160,7 @@ DonutGraph.propTypes = {
     dataToGraph: PropTypes.array.isRequired
 }
 
-
+//basic donut
  // drawDonutChart(data) {
     //     //boiler plate canvas
     //     var margin = { top: 40, right: 20, bottom: 40, left: 40 }

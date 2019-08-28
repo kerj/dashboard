@@ -32,8 +32,9 @@ export default class BarChart extends Component {
             //moves info inside of canvas
             .attr('transform', 'translate(60,' + margin.top + ')')
 
+        //get the data to stack bars keys need to become variable
         let stack = d3.stack()
-            .keys(['fahrenheitMinTemp', 'tempDifference'])
+            .keys(['fahrenheitMaxTemp', 'fahrenheitMinTemp'])
             .offset(d3.stackOffsetNone)(data)
 
         var colors = ['#00D7D2', '#FF4436', '#313c53'];
@@ -50,13 +51,10 @@ export default class BarChart extends Component {
 
         let x = d3.scaleLinear()
             .rangeRound([0, canvasWidth - 20])
-            // .padding(0.1)
             .domain([0, d3.max(stack, (d) => {
                 return d3.max(d, (d) => d[1])
             })])
-        // .domain(data.map((d) => {
-        //     return d.date
-        // }))
+      
 
         let y = d3.scaleBand()
             .range([canvasHeight, 0])
@@ -64,10 +62,6 @@ export default class BarChart extends Component {
             .domain(data.map((d) => {
                 return d.date
             }))
-        // .domain([0, d3.max(stack, (d) => {
-        //     return d3.max(d, (d) => d[1])
-        // })])
-
 
         //x axis
         svgCanvas.append('g')
@@ -92,36 +86,19 @@ export default class BarChart extends Component {
             })
             .duration(1000)
             .ease(d3.easeSinInOut)
-
-            // .attr('x', (d, i) => {
-            //     return x(d.data.date)
-            // })
-            // .attr('y', (d) => {
-            //     return y(d[1])
-            // })
-            // .attr('width', x.bandwidth())
-            // .attr('height', (d) => {
-            //     return y(d[0]) - y(d[1]);
-            // })
-
             .attr('x', (d, i) => {
                 return x(d[0])
             })
             .attr('y', (d) => {
                 return y(d.data.date)
             })
-            .attr('width', (d) => { 
-                
-                console.log(x(d[1] - (d[1] - d[0])));
-                
-                
-                return x((d[1] - d[0])) 
+            .attr('width', (d) => {
+                return x((d[1] - d[0]))
             })
             .attr('height', y.bandwidth())
     }
 
     render() {
-
         return (
             <div ref="barCanvas">
             </div>
@@ -134,14 +111,30 @@ BarChart.propTypes = {
 
 }
 
+// x and y for vertical charts
 
-// .attr('x', (d, i) => {
-//     return x(d.data.date)
-// })
-//     .attr('y', (d) => {
-//     return y(d[1])
-//         })
-//     .attr('width', x.bandwidth())
-//     .attr('height', (d) => {
-//     return y(d[0]) - y(d[1]);
-//         }) 
+// let x = d3.scaleBand()
+//     .rangeRound([0, canvasWidth - 20])
+//     .padding(0.1)
+//     .domain(data.map((d) => {
+//         return d.date
+//     }))
+
+// let y = d3.scaleLinear()
+//     .range([canvasHeight, 0])
+//     .domain([0, d3.max(stack, (d) => {
+//         return d3.max(d, (d) => d[1])
+//     })])
+
+// x, y, width, height to replace under .ease method inside of g.selectAll
+
+    // .attr('x', (d, i) => {
+    //     return x(d.data.date)
+    // })
+    // .attr('y', (d) => {
+    // return y(d[1])
+    //     })
+    // .attr('width', x.bandwidth())
+    // .attr('height', (d) => {
+    // return y(d[0]) - y(d[1]);
+    //     }) 

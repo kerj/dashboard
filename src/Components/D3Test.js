@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-import BarChart from './BarChart';
-import DonutGraph from './DonutGraph';
+import RouteManager from './RouteManager';
 const axios = require('axios');
 
 
@@ -14,25 +13,26 @@ class D3Test extends Component {
             weeklyWeather: [],
             routes: [
                 'barChart',
-                'donutGraph'
+                'donutGraph',
+                'singleBar'
             ],
             currentRoute: 'barChart'
         }
     }
 
+    //routes change every 15 seconds
     changeCurrentRoute = () => {
         let i = 0;
         setInterval(() => {
-            if (i >= this.state.routes.length-1) {
+            if (i >= this.state.routes.length - 1) {
                 i = 0
-            }else {i++}
+            } else { i++ }
 
             this.setState({
                 currentRoute: this.state.routes[i]
             })
         }, 15000);
     }
-
 
     fetchWeatherData = () => {
         let weatherQuery = "https://www.metaweather.com/api/location/2475687/";
@@ -75,6 +75,7 @@ class D3Test extends Component {
             .duration(1000)
             .style("color", "black")
     }
+
     componentDidMount() {
         //fetch data to display with d3
         this.fetchWeatherData()
@@ -82,37 +83,13 @@ class D3Test extends Component {
     }
 
     render() {
-        function routeManager(route, propsToPass) {
-            const ROUTES = {
-                barChart : <BarChart dataToGraph={propsToPass} />,
-                donutGraph: <DonutGraph dataToGraph={propsToPass} />,
-            };
-            return (
-                <div>
-                    {ROUTES[route]}
-                </div>
-            );
-        }
         return (
             <div>
-                 {/* {this.state.weeklyWeather.length <= 5
-                    ? <h1>Loading Graph</h1>
-                    :  routeManager(this.state.currentRoute,this.state.weeklyWeather)
-                } */}
 
-
-              
-                {/* won't render BarChart until the the weeks weather is returned */}
-                <ul ref="temperatures">
-                </ul>
                 {this.state.weeklyWeather.length <= 5
                     ? <h1>Loading Graph</h1>
-                    : <BarChart dataToGraph={this.state.weeklyWeather} />
+                    : <RouteManager stateHelper={this.state} />
                 }
-                {/* {this.state.weeklyWeather.length <= 5
-                    ? <h1>Loading Graph</h1>
-                    : <DonutGraph dataToGraph={this.state.weeklyWeather} />
-                } */}
             </div>
         )
     }
