@@ -7,14 +7,23 @@ import PropTypes from 'prop-types';
 export default class BarChart extends Component {
 
     componentDidMount() {
-        console.log(this.props.dataToGraph);
-        
-        this.drawBarChart(this.props.dataToGraph)
+        if(this.checkBarType(this.props.dataToGraph, 'dataSet1') === 0) {
+             this.drawBarChart(this.props.dataToGraph)
+        }else {
+            this.drawBarChart(this.props.dataToGraph)
+        }
     }
 
     componentDidUpdate() {
         // this.drawBarChart(this.props.dataToGraph)
     }
+
+    //adds all prop of the data together 
+    checkBarType(data, prop){
+      return data.reduce((a,b) => {
+          return b[prop] == 0 ? a : a + b[prop];
+      }, 0);
+    };
 
 
     drawBarChart(data) {
@@ -62,8 +71,6 @@ export default class BarChart extends Component {
             .range([canvasHeight, 0])
             .padding(0.1)
             .domain(data.map((d) => {
-                console.log(d);
-                
                 return d.labels
             }))
 
