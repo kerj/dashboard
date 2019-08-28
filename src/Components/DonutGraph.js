@@ -14,8 +14,8 @@ export default class DonutGraph extends Component {
 
     componentDidMount() {
         this.props.dataToGraph.map((data) => {
-            data0.push(data.fahrenheitMaxTemp);
-            data1.push(data.fahrenheitMinTemp);
+            data0.push(data.dataSet0);
+            data1.push(data.dataSet1);
         });
         // this.drawDonutChart(this.props.dataToGraph)
         this.phaseDonut()

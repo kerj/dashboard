@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 export default class BarChart extends Component {
 
     componentDidMount() {
+        console.log(this.props.dataToGraph);
+        
         this.drawBarChart(this.props.dataToGraph)
     }
 
@@ -34,7 +36,7 @@ export default class BarChart extends Component {
 
         //get the data to stack bars keys need to become variable
         let stack = d3.stack()
-            .keys(['fahrenheitMaxTemp', 'fahrenheitMinTemp'])
+            .keys(['dataSet0', 'dataSet1'])
             .offset(d3.stackOffsetNone)(data)
 
         var colors = ['#00D7D2', '#FF4436', '#313c53'];
@@ -60,7 +62,9 @@ export default class BarChart extends Component {
             .range([canvasHeight, 0])
             .padding(0.1)
             .domain(data.map((d) => {
-                return d.date
+                console.log(d);
+                
+                return d.labels
             }))
 
         //x axis
@@ -90,7 +94,7 @@ export default class BarChart extends Component {
                 return x(d[0])
             })
             .attr('y', (d) => {
-                return y(d.data.date)
+                return y(d.data.labels)
             })
             .attr('width', (d) => {
                 return x((d[1] - d[0]))
