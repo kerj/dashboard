@@ -7,30 +7,13 @@ import PropTypes from 'prop-types';
 export default class BarChart extends Component {
 
     componentDidMount() {
-        if(this.checkBarType(this.props.dataToGraph, 'dataSet1') === 0) {
-             this.drawBarChart(this.props.dataToGraph)
-        }else {
-            this.drawBarChart(this.props.dataToGraph)
-        }
+        this.drawBarChart(this.props.dataToGraph)
     }
-
-    componentDidUpdate() {
-        // this.drawBarChart(this.props.dataToGraph)
-    }
-
-    //adds all prop of the data together 
-    checkBarType(data, prop){
-      return data.reduce((a,b) => {
-          return b[prop] == 0 ? a : a + b[prop];
-      }, 0);
-    };
-
 
     drawBarChart(data) {
         var margin = { top: 40, right: 20, bottom: 40, left: 40 }
         var canvasWidth = 400 - margin.left - margin.right
         var canvasHeight = 600 - margin.top - margin.bottom
-
         //container for graph
         const svgCanvas = d3.select(this.refs.barCanvas)
             .append("svg")
@@ -65,7 +48,7 @@ export default class BarChart extends Component {
             .domain([0, d3.max(stack, (d) => {
                 return d3.max(d, (d) => d[1])
             })])
-      
+
 
         let y = d3.scaleBand()
             .range([canvasHeight, 0])
@@ -119,33 +102,4 @@ export default class BarChart extends Component {
 
 BarChart.propTypes = {
     dataToGraph: PropTypes.array.isRequired,
-
 }
-
-// x and y for vertical charts
-
-// let x = d3.scaleBand()
-//     .rangeRound([0, canvasWidth - 20])
-//     .padding(0.1)
-//     .domain(data.map((d) => {
-//         return d.date
-//     }))
-
-// let y = d3.scaleLinear()
-//     .range([canvasHeight, 0])
-//     .domain([0, d3.max(stack, (d) => {
-//         return d3.max(d, (d) => d[1])
-//     })])
-
-// x, y, width, height to replace under .ease method inside of g.selectAll
-
-    // .attr('x', (d, i) => {
-    //     return x(d.data.date)
-    // })
-    // .attr('y', (d) => {
-    // return y(d[1])
-    //     })
-    // .attr('width', x.bandwidth())
-    // .attr('height', (d) => {
-    // return y(d[0]) - y(d[1]);
-    //     }) 

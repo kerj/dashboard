@@ -33,12 +33,12 @@ export default class EmojiList extends Component {
     render() {
         return (
             <div ref="list">
-                
+
             </div>
         )
     }
 }
 
 EmojiList.propTypes = {
-
+    dataToGraph: PropTypes.array.isRequired,
 }

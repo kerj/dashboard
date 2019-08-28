@@ -45,7 +45,6 @@ export default class DonutGraph extends Component {
 
     phaseDonut() {
         let colors = ['#bc2add', '#FF4436', '#4bdd2a', '#e77f18', '#1880E7', '#1de2ca', '#E21H35'];
-
         let svg = d3.select(this.refs.donutCanvas)
             .append("svg")
             .attr("width", width)
@@ -62,21 +61,20 @@ export default class DonutGraph extends Component {
             })
             .attr("d", d3.arc());
 
+        //TODO add legend    
         svg.selectAll(".legend")
             .data()
+        //TODO add logos for center of Donut
     }
-    //
+
     tweenArc(b) {
         return (a, i) => {
             let d = b.call(this, a, i)
             let interp = d3.interpolateObject(a, d);
             for (let k in d) {
                 a[k] = d[k];
-                // console.log(a[k], k)
             }//update data
             return (t) => {
-                //if k is an angle do this, else k is a radius do that
-                //tempProps is angles || radi properties dependent on the t# that called it 
                 let tempProps = interp(t);
                 let arc = d3.arc()
                 if (tempProps.innerRadius) {
@@ -101,8 +99,6 @@ export default class DonutGraph extends Component {
     transition(displayMax) {
         let path = d3.selectAll(".arc > path")
             .data(displayMax ? this.arcs(data0, data1) : this.arcs(data1, data0));
-            console.log(displayMax);
-            
         //Wedges Split into two rings
         let t0 =
             path.transition()
@@ -142,8 +138,9 @@ export default class DonutGraph extends Component {
                         outerRadius: outerRadius
                     }
                 }))
-                displayMax = !displayMax;
+        displayMax = !displayMax;
     }
+
     render() {
         setTimeout(() => {
             this.transition(displayMax)
@@ -159,54 +156,3 @@ export default class DonutGraph extends Component {
 DonutGraph.propTypes = {
     dataToGraph: PropTypes.array.isRequired
 }
-
-//basic donut
- // drawDonutChart(data) {
-    //     //boiler plate canvas
-    //     var margin = { top: 40, right: 20, bottom: 40, left: 40 }
-    //     var canvasWidth = 400 - margin.left - margin.right
-    //     var canvasHeight = 600 - margin.top - margin.bottom
-    //     var radius = Math.min(canvasWidth, canvasHeight) / 2;
-
-    //     const svgCanvas = d3.select(this.refs.canvas)
-    //         .append("svg")
-    //         .attr("width", canvasWidth + margin.left + margin.right)
-    //         .attr("height", canvasHeight + margin.top + margin.bottom)
-    //         .append('g')
-    //         .attr('transform', 'translate(' + canvasWidth / 2 + ',' + canvasHeight / 2 + ')')
-
-    //     let colors = ['#00D7D2', '#FF4436', '#313c53', '#e77f18', '#1880E7', '#1de2ca', '#E21D35'];
-
-    //     let pie = d3.pie()
-    //         .sort(null)
-    //         .value((d) => {
-    //             return d.fahrenheitMinTemp;
-    //         })
-    //     let path = d3.arc()
-    //         .outerRadius(radius - 10)
-    //         .innerRadius(radius - 70);
-
-    //     let label = d3.arc()
-    //         .outerRadius(radius - 40)
-    //         .innerRadius(radius - 40);
-
-    //     let arc = svgCanvas.selectAll(".arc")
-    //         .data(pie(data))
-    //         .enter().append("g")
-    //         .attr("class", "arc");
-
-    //     arc.append("path")
-    //         .attr("d", path)
-    //         .attr("fill", (d, i) => {
-    //             return colors[i];
-    //         });
-
-    //     arc.append("text")
-    //         .attr("transform", (d) => {
-    //             return "translate(" + label.centroid(d) + ")";
-    //         })
-    //         .attr("dy", "0.35em")
-    //         .text((d) => {
-    //             return d.data.fahrenheitMinTemp;
-    //         })
-    // }

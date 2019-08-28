@@ -36,7 +36,7 @@ class D3Test extends Component {
         axios.get(weatherQuery).then((response) => {
             const weatherResponse = response.data.consolidated_weather;
             this.setState({ weeklyWeather: weatherResponse });
-     
+
         })
     }
 
