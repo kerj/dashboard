@@ -8,19 +8,25 @@ var width = 960,
     innerRadius = outerRadius * .6,
     displayMax = true,
     data0 = [],
-    data1 = [];
+    data1 = [23, 12, 100, 45, 67, 55];
 
 export default class DonutGraph extends Component {
 
     componentDidMount() {
-        this.props.dataToGraph.map((day) => {
-            data0.push(day.fahrenheitMaxTemp);
-            data1.push(day.fahrenheitMinTemp);
+        this.props.dataToGraph.map((data) => {
+            data0.push(data.fahrenheitMaxTemp);
+            // data1.push(data.fahrenheitMinTemp);
         });
         // this.drawDonutChart(this.props.dataToGraph)
-        this.phaseDonut(this.props.dataToGraph)
+        this.phaseDonut()
     }
-   
+
+    componentWillUnmount() {
+        //empty data for next render
+        data0.length = 0
+        // data1.length = 0
+    }
+
     arcs(currentData, nextData) {
         let pie = d3.pie()
             .sort(null);
@@ -37,20 +43,13 @@ export default class DonutGraph extends Component {
         return arcs0
     }
 
-    phaseDonut(data) {
-        let data0 = []
-        let data1 = []
-        data.map((day) => {
-            data0.push(day.fahrenheitMaxTemp);
-            data1.push(day.fahrenheitMinTemp);
-        });
-
-        let colors = ['#00D7D2', '#FF4436', '#313c53', '#e77f18', '#1880E7', '#1de2ca', '#E21D35'];
+    phaseDonut() {
+        let colors = ['#bc2add', '#FF4436', '#4bdd2a', '#e77f18', '#1880E7', '#1de2ca', '#E21H35'];
 
         let svg = d3.select(this.refs.donutCanvas)
             .append("svg")
             .attr("width", width)
-            .attr("height", height);
+            .attr("height", height)
 
         svg.selectAll(".arc")
             .data(this.arcs(data0, data1))
@@ -62,11 +61,12 @@ export default class DonutGraph extends Component {
                 return colors[i];
             })
             .attr("d", d3.arc());
+
+        svg.selectAll(".legend")
+            .data()
     }
     //
     tweenArc(b) {
-        console.log("tweenArc");
-
         return (a, i) => {
             let d = b.call(this, a, i)
             let interp = d3.interpolateObject(a, d);
@@ -86,7 +86,6 @@ export default class DonutGraph extends Component {
                         startAngle: a.startAngle,
                         endAngle: a.endAngle
                     })
-
                 } else {
                     return arc({
                         innerRadius: a.innerRadius,
@@ -99,23 +98,21 @@ export default class DonutGraph extends Component {
         }
     }
 
-
     transition(displayMax) {
         let path = d3.selectAll(".arc > path")
             .data(displayMax ? this.arcs(data0, data1) : this.arcs(data1, data0));
-        console.log(displayMax);
-
+            console.log(displayMax);
+            
         //Wedges Split into two rings
         let t0 =
             path.transition()
-                .duration(1000)
+                .duration(500)
                 .attrTween("d", this.tweenArc((d, i) => {
                     return {
                         innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
                         outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
                     };
                 }));
-
         //wedges to be centered on final position
         let t1 =
             t0.transition()
@@ -127,7 +124,6 @@ export default class DonutGraph extends Component {
                         endAngle: (a0 - a1) / 2
                     };
                 }));
-
         //wedges then update values, change size
         let t2 =
             t1.transition()
@@ -137,8 +133,7 @@ export default class DonutGraph extends Component {
                         endAngle: d.next.endAngle
                     };
                 }));
-
-        //wedges reunite into a singel ring
+        //wedges reunite into a single ring
         let t3 =
             t2.transition()
                 .attrTween("d", this.tweenArc((d, i) => {
@@ -147,18 +142,13 @@ export default class DonutGraph extends Component {
                         outerRadius: outerRadius
                     }
                 }))
-
-        setTimeout(() => {
-            displayMax = !displayMax
-            this.transition(displayMax)
-        }, 5000);
-
-
+                displayMax = !displayMax;
     }
     render() {
         setTimeout(() => {
-            this.transition(displayMax);
-        }, 5000)
+            this.transition(displayMax)
+        }, 8000);
+
         return (
             <div ref="donutCanvas">
             </div>

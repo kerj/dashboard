@@ -12,9 +12,25 @@ class D3Test extends Component {
         super(props)
         this.state = {
             weeklyWeather: [],
-            barX: true,
-            barY: true
+            routes: [
+                'barChart',
+                'donutGraph'
+            ],
+            currentRoute: 'barChart'
         }
+    }
+
+    changeCurrentRoute = () => {
+        let i = 0;
+        setInterval(() => {
+            if (i >= this.state.routes.length-1) {
+                i = 0
+            }else {i++}
+
+            this.setState({
+                currentRoute: this.state.routes[i]
+            })
+        }, 15000);
     }
 
 
@@ -59,19 +75,33 @@ class D3Test extends Component {
             .duration(1000)
             .style("color", "black")
     }
-
     componentDidMount() {
         //fetch data to display with d3
         this.fetchWeatherData()
-
+        this.changeCurrentRoute()
     }
 
     render() {
-        const { barX } = this.state;
-        const { barY } = this.state;
-
+        function routeManager(route, propsToPass) {
+            const ROUTES = {
+                barChart : <BarChart dataToGraph={propsToPass} />,
+                donutGraph: <DonutGraph dataToGraph={propsToPass} />,
+            };
+            return (
+                <div>
+                    {ROUTES[route]}
+                </div>
+            );
+        }
         return (
             <div>
+                 {/* {this.state.weeklyWeather.length <= 5
+                    ? <h1>Loading Graph</h1>
+                    :  routeManager(this.state.currentRoute,this.state.weeklyWeather)
+                } */}
+
+
+              
                 {/* won't render BarChart until the the weeks weather is returned */}
                 <ul ref="temperatures">
                 </ul>
@@ -79,10 +109,10 @@ class D3Test extends Component {
                     ? <h1>Loading Graph</h1>
                     : <BarChart dataToGraph={this.state.weeklyWeather} />
                 }
-                {this.state.weeklyWeather.length <= 5
+                {/* {this.state.weeklyWeather.length <= 5
                     ? <h1>Loading Graph</h1>
                     : <DonutGraph dataToGraph={this.state.weeklyWeather} />
-                }
+                } */}
             </div>
         )
     }
