@@ -59,7 +59,9 @@ export default class DonutGraph extends Component {
             .attr("fill", (d, i) => {
                 return colors[i];
             })
-            .attr("d", d3.arc());
+            .attr("d", d3.arc())
+    
+            
 
         //TODO add legend    
         svg.selectAll(".legend")
@@ -82,14 +84,14 @@ export default class DonutGraph extends Component {
                         innerRadius: tempProps.innerRadius,
                         outerRadius: tempProps.outerRadius,
                         startAngle: a.startAngle,
-                        endAngle: a.endAngle
+                        endAngle: a.endAngle,
                     })
                 } else {
                     return arc({
                         innerRadius: a.innerRadius,
                         outerRadius: a.outerRadius,
                         startAngle: tempProps.startAngle,
-                        endAngle: tempProps.endAngle
+                        endAngle: tempProps.endAngle,
                     })
                 }
             };
