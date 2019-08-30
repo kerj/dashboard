@@ -19,8 +19,8 @@ class D3Test extends Component {
             },
             dailyWeather: {
                 routes: [
-                    'singleBar',
-                    'stackedBar'
+                    'stackedBar',
+                    'singleBar'
                 ]
             },
         }
@@ -33,15 +33,12 @@ class D3Test extends Component {
             this.setState({
                 data: weatherResponse,
             });
-
-
         })
     }
 
     componentDidMount() {
         this.fetchWeatherData()
     }
-
     
     render() {
         return (
