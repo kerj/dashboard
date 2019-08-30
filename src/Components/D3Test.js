@@ -40,7 +40,6 @@ class D3Test extends Component {
 
     componentDidMount() {
         this.fetchWeatherData()
-
     }
 
     
