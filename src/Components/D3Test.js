@@ -31,14 +31,14 @@ class D3Test extends Component {
             this.setState({
                 data: weatherResponse,
             });
-            let farWeatherQuery = "https://www.metaweather.com/api/location/44418/";
-            axios.get(farWeatherQuery).then((response) => {
-                const farWeatherResponse = response.data.consolidated_weather;
-                this.setState({
-                    data: this.state.data.concat(farWeatherResponse),
-                });
+            // let farWeatherQuery = "https://www.metaweather.com/api/location/44418/";
+            // axios.get(farWeatherQuery).then((response) => {
+            //     const farWeatherResponse = response.data.consolidated_weather;
+            //     this.setState({
+            //         data: this.state.data.concat(farWeatherResponse),
+            //     });
 
-            })  
+            // })  
         })
         
     }
@@ -65,7 +65,7 @@ class D3Test extends Component {
                 return(
             <div>
             {
-                this.state.data.length >= 11
+                this.state.data.length >= 6
                     ? <h1>Loading Graph</h1>
                     : <RouteManager stateHelper={this.state} />
             }

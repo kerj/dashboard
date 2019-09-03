@@ -5,11 +5,15 @@ import DonutGraph from './DonutGraph';
 import EmojiList from './EmojiList';
 
 export default function RouteManager(props) {
+    console.log(props.stateHelper);
+    
     let dataToCycle = Object.keys(props.stateHelper).slice(1);
     let [dataRoute, setDataRoute] = useState({ routeIterator: 0, datasetIterator: 0 })
     let currentKey = dataToCycle[dataRoute.datasetIterator];
     let routesAvailable = props.stateHelper[`${dataToCycle[dataRoute.datasetIterator]}`].routes;
-    let [route, setRoute] = useState(props.stateHelper[`${dataToCycle[dataRoute.datasetIterator]}`].routes[`${routesAvailable[dataRoute.routeIterator]}`]);
+    let [route, setRoute] = useState(props.stateHelper[`${currentKey}`].routes[dataRoute.routeIterator]);
+    console.log(route);
+    
     let propsToPass = [];
 
     const dataSet = props.stateHelper.data;
@@ -47,6 +51,7 @@ export default function RouteManager(props) {
     }
 
     function setPropsToPass() {
+        propsToPass.splice(0)
         console.log(route, currentKey);
         //route = key : currentKey = value ....ie, 'stackedBar' : 'weeklyWeather'
         const ROUTES = {
@@ -55,7 +60,6 @@ export default function RouteManager(props) {
             singleBar: <BarChart dataToGraph={propsToPass} />,
             emojiList: <EmojiList dataToGraph={propsToPass} />,
         }
-
         if (currentKey === 'weeklyWeather') {
             let weeklyData = dataSet.slice(0,6);
             weeklyData.map((d) => {
@@ -64,10 +68,8 @@ export default function RouteManager(props) {
                 propToPass.dataSet0 = `${dataSet0}`
                 propToPass.dataSet1 = `${dataSet1}`
                 propToPass.labels = `${labels}`
-                propsToPass.splice(0,propToPass);
-            })
-            console.log(propsToPass);
-            
+                propsToPass.push(propToPass);
+            }) 
         }else if (currentKey === 'farAwayWeather'){
             let farAwayData = dataSet.slice(6,12);
             farAwayData.map((d) => {
@@ -76,9 +78,8 @@ export default function RouteManager(props) {
                 propToPass.dataSet0 = `${dataSet0}`
                 propToPass.dataSet1 = `${dataSet1}`
                 propToPass.labels = `${labels}`
-                propsToPass.splice(0,propToPass);
-            })
-            console.log(propsToPass); 
+                propsToPass.push(propToPass);
+            }) 
         }
         return (
             <div>
