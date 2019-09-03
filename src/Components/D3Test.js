@@ -11,20 +11,20 @@ class D3Test extends Component {
             currentRoute: 0,
             currentKey: 'weeklyWeather',
             weeklyWeather: {
+                routes: [     
+                    'emojiList',
+                    'stackedBar',
+                ]
+            },
+            farAwayWeather: {
                 routes: [
                     'stackedBar',
                     'donutGraph',
-                    'emojiList'
-                ]
-            },
-            dailyWeather: {
-                routes: [
-                    'stackedBar',
-                    'singleBar'
                 ]
             },
         }
     }
+
 
     fetchWeatherData = () => {
         let weatherQuery = "https://www.metaweather.com/api/location/2475687/";
@@ -36,8 +36,22 @@ class D3Test extends Component {
         })
     }
 
+    // fetchFarWeatherData = () => {
+    //     let weatherQuery = "https://www.metaweather.com/api/location/44418/";
+    //     axios.get(weatherQuery).then((response) => {
+    //         const weatherResponse = response.data.consolidated_weather;
+            
+    //         this.setState({
+    //             data: this.state.data.concat(weatherResponse),
+    //         });
+    //         console.log(this.state.data);
+    //     })
+        
+    // }
+
     componentDidMount() {
         this.fetchWeatherData()
+        // this.fetchFarWeatherData()
     }
 
     render() {
