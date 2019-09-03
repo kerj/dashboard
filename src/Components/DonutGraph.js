@@ -8,29 +8,26 @@ var width = 960,
     innerRadius = outerRadius * .6,
     displayMax = true,
     data0 = [],
-    data1 = [];
+    data = [0, 0, 0, 0, 0, 0];
 
 export default class DonutGraph extends Component {
 
     componentDidMount() {
         this.props.dataToGraph.map((data) => {
             data0.push(data.dataSet0);
-            data1.push(data.dataSet1);
         });
         this.phaseDonut()
-        this.transition(displayMax)
     }
 
     componentWillUnmount() {
         data0.length = 0
-        data1.length = 0
     }
 
-    arcs(data0, data1) {
+    arcs(data, data0) {
         let pie = d3.pie()
             .sort(null);
-        let arcs0 = pie(data0),
-            arcs1 = pie(data1),
+        let arcs0 = pie(data),
+            arcs1 = pie(data0),
             i = -1,
             currentArc;
         while (++i < 6) {
@@ -50,7 +47,7 @@ export default class DonutGraph extends Component {
             .attr("height", height)
 
         svg.selectAll(".arc")
-            .data(this.arcs(data0, data1))
+            .data(this.arcs(data, data0))
             .enter().append("g")
             .attr("class", "arc")
             .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
@@ -59,11 +56,37 @@ export default class DonutGraph extends Component {
                 return colors[i];
             })
             .attr("d", d3.arc())
-    
+
         //TODO add legend    
-        svg.selectAll(".legend")
-            .data()
+        let legendSvg = svg.selectAll(".legend")
+            .data(this.arcs(data0, data))
+            .enter().append("g")
+            .attr("transform", (d,i) => {
+                return "translate(" + (width - 110) + "," + (i * 15 + 20) + ")";
+            })
+            .attr("class", "legend")
+
+        legendSvg.append("rect")
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("fill", (d,i) => {
+            return colors[i]
+        })
+
+        legendSvg.append("text")
+        .text((d) => {
+            if (displayMax) {
+                return d.value
+            }else {
+                return d.next.value
+            }
+        })
+        .style("font-size", 12)
+        .attr("y", 10)
+        .attr("x", 11);
         //TODO add logos for center of Donut
+
+        this.transition(displayMax)
     }
 
     tweenArc(b) {
@@ -97,7 +120,7 @@ export default class DonutGraph extends Component {
 
     transition(displayMax) {
         let path = d3.selectAll(".arc > path")
-            .data(displayMax ? this.arcs(data0, data1) : this.arcs(data1, data0));
+            .data(displayMax ? this.arcs(data, data0) : this.arcs(data0, data));
         //Wedges Split into two rings
         let t0 =
             path.transition()
@@ -139,6 +162,8 @@ export default class DonutGraph extends Component {
                 }))
         displayMax = !displayMax;
     }
+
+
 
     render() {
 
