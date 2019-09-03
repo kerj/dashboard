@@ -17,21 +17,20 @@ export default class DonutGraph extends Component {
             data0.push(data.dataSet0);
             data1.push(data.dataSet1);
         });
-        // this.drawDonutChart(this.props.dataToGraph)
         this.phaseDonut()
+        this.transition(displayMax)
     }
 
     componentWillUnmount() {
-        //empty data for next render
         data0.length = 0
         data1.length = 0
     }
 
-    arcs(currentData, nextData) {
+    arcs(data0, data1) {
         let pie = d3.pie()
             .sort(null);
-        let arcs0 = pie(currentData),
-            arcs1 = pie(nextData),
+        let arcs0 = pie(data0),
+            arcs1 = pie(data1),
             i = -1,
             currentArc;
         while (++i < 6) {
@@ -61,8 +60,6 @@ export default class DonutGraph extends Component {
             })
             .attr("d", d3.arc())
     
-            
-
         //TODO add legend    
         svg.selectAll(".legend")
             .data()
@@ -104,7 +101,7 @@ export default class DonutGraph extends Component {
         //Wedges Split into two rings
         let t0 =
             path.transition()
-                .duration(500)
+                .duration(750)
                 .attrTween("d", this.tweenArc((d, i) => {
                     return {
                         innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
@@ -144,9 +141,6 @@ export default class DonutGraph extends Component {
     }
 
     render() {
-        setTimeout(() => {
-            this.transition(displayMax)
-        }, 8000);
 
         return (
             <div ref="donutCanvas">
