@@ -6,17 +6,14 @@ import EmojiList from './EmojiList';
 
 export default function RouteManager(props) {
     //the route list needs to be dynamic here~~ something like dataToCycle[]
-    let [route, setRoute] = useState(props.stateHelper[`${props.stateHelper.currentKey}`].routes[`${props.stateHelper.currentRoute}`]);
-    let [routeIterator, setRouteIterator] = useState(0);
-    let [datasetIterator, setDatasetIterator] = useState(0);
-
     let dataToCycle = Object.keys(props.stateHelper).slice(3);
-    
-    
-    let routesAvailable = props.stateHelper[`${dataToCycle[datasetIterator]}`].routes;
-    console.log(props.stateHelper[`${props.stateHelper.currentKey}`]);
-    
-    
+    let [dataRoute, setDataRoute ] = useState({
+        routeIterator: 0,
+        datasetIterator: 0
+    })
+    let routesAvailable = props.stateHelper[`${dataToCycle[dataRoute.datasetIterator]}`].routes;
+    let [route, setRoute] = useState(props.stateHelper[`${dataToCycle[dataRoute.datasetIterator]}`].routes[`${routesAvailable[dataRoute.routeIterator]}`]);
+
     let propsToPass = [];
     const dataSet = props.stateHelper.data;
     
@@ -29,8 +26,9 @@ export default function RouteManager(props) {
 
     //routes change every 15 seconds
     useInterval(() => {
-        updateRoute()
-    }, 3000)
+        setPropsToPass();
+        updateRoute();
+    }, 6000)
 
     function useInterval(callback, delay) {
         const savedCallback = useRef();
@@ -49,20 +47,26 @@ export default function RouteManager(props) {
     }
 
     function updateRoute() {
-        if (routeIterator + 1 > routesAvailable.length - 1 || routesAvailable.length === 2) {
-            if (datasetIterator + 1 > dataToCycle.length - 1) {
-                setDatasetIterator(datasetIterator = 0)
-                setRouteIterator(routeIterator = 0)
-                setRoute(props.stateHelper[`${dataToCycle[datasetIterator]}`].routes[routeIterator]);
+        // console.log("data keys", dataToCycle.length,"routes within current dataKey", routesAvailable.length);
+        if (dataRoute.routeIterator + 1 > routesAvailable.length - 1 || !routesAvailable.length === 2) {
+            if (dataRoute.datasetIterator + 1 > dataToCycle.length -1) {
+                setDataRoute({
+                    routeIterator: 0,
+                    datasetIterator: 0
+                })
             } else {
-                setDatasetIterator(datasetIterator + 1)
-                setRouteIterator(routeIterator = 0) 
-                setRoute(props.stateHelper[`${dataToCycle[datasetIterator]}`].routes[0]);
+                setDataRoute({
+                    routeIterator: 0,
+                    datasetIterator: dataRoute.datasetIterator + 1
+                })
             }
         } else {
-            setRouteIterator(routeIterator + 1)
-            setRoute(props.stateHelper[`${dataToCycle[datasetIterator]}`].routes[routeIterator]);  
-        }
+            setDataRoute({
+                routeIterator: dataRoute.routeIterator + 1,
+                datasetIterator: dataRoute.datasetIterator
+            })
+        };
+        setRoute(props.stateHelper[`${dataToCycle[dataRoute.datasetIterator]}`].routes[dataRoute.routeIterator]);
     }
 
     function setPropsToPass() {
@@ -74,7 +78,6 @@ export default function RouteManager(props) {
             propToPass.labels = `${labels}`
             propsToPass.push(propToPass);
         })
-        
         return (
             <div>
                 {ROUTES[route]}
