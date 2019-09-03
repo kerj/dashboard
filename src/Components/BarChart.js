@@ -47,7 +47,6 @@ export default class BarChart extends Component {
                 return d3.max(d, (d) => d[1])
             })])
 
-
         let y = d3.scaleBand()
             .range([canvasHeight, 0])
             .padding(0.1)

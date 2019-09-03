@@ -8,8 +8,6 @@ class D3Test extends Component {
         super(props)
         this.state = {
             data: [],
-            currentRoute: 0,
-            currentKey: 'weeklyWeather',
             weeklyWeather: {
                 routes: [     
                     'emojiList',

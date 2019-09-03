@@ -6,7 +6,7 @@ import EmojiList from './EmojiList';
 
 export default function RouteManager(props) {
     //the route list needs to be dynamic here~~ something like dataToCycle[]
-    let dataToCycle = Object.keys(props.stateHelper).slice(3);
+    let dataToCycle = Object.keys(props.stateHelper).slice(1);
     let [dataRoute, setDataRoute] = useState({
         routeIterator: 0,
         datasetIterator: 0
