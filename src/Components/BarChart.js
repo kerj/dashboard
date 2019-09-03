@@ -14,6 +14,7 @@ export default class BarChart extends Component {
         var margin = { top: 40, right: 20, bottom: 40, left: 40 }
         var canvasWidth = 400 - margin.left - margin.right
         var canvasHeight = 600 - margin.top - margin.bottom
+        var colors = ['#00D7D2', '#FF4436', '#313c53'];
         //container for graph
         const svgCanvas = d3.select(this.refs.barCanvas)
             .append("svg")
@@ -25,13 +26,10 @@ export default class BarChart extends Component {
             .append('g')
             //moves info inside of canvas
             .attr('transform', 'translate(60,' + margin.top + ')')
-
         //get the data to stack bars keys need to become variable
         let stack = d3.stack()
             .keys(['dataSet0', 'dataSet1'])
             .offset(d3.stackOffsetNone)(data)
-
-        var colors = ['#00D7D2', '#FF4436', '#313c53'];
 
         var g = d3.select('g')
             .selectAll('g.addColor')
@@ -56,18 +54,15 @@ export default class BarChart extends Component {
             .domain(data.map((d) => {
                 return d.labels
             }))
-
         //x axis
         svgCanvas.append('g')
             .attr('class', 'x axis')
             .attr("transform", "translate(0, " + canvasHeight + ")")
             .call(d3.axisBottom(x))
-
         //y axis
         svgCanvas.append('g')
             .attr('class', 'y axis')
             .call(d3.axisLeft(y))
-
         //Bar Data to graph
         g.selectAll('rect')
             .data((d) => {
