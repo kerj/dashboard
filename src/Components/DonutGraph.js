@@ -7,20 +7,17 @@ var width = 960,
     outerRadius = Math.min(width, height) * .5 - 10,
     innerRadius = outerRadius * .6,
     displayMax = true,
-    data0 = [],
+    data0 = [20,30,4,60,32,68],
     data = [0, 0, 0, 0, 0, 0];
 
 export default class DonutGraph extends Component {
 
     componentDidMount() {
         this.props.dataToGraph.map((data) => {
-            data0.push(data.dataSet0);
+            data0.splice(0,data.dataSet0);
+            data.splice(0,data.dataSet1);
         });
         this.phaseDonut()
-    }
-
-    componentWillUnmount() {
-        data0.length = 0
     }
 
     arcs(data, data0) {
@@ -30,6 +27,8 @@ export default class DonutGraph extends Component {
             arcs1 = pie(data0),
             i = -1,
             currentArc;
+            console.log(arcs0);
+            
         while (++i < 6) {
             currentArc = arcs0[i];
             currentArc.innerRadius = innerRadius;
@@ -84,7 +83,7 @@ export default class DonutGraph extends Component {
         .style("font-size", 12)
         .attr("y", 10)
         .attr("x", 11);
-        //TODO add logos for center of Donut
+        // //TODO add logos for center of Donut
 
         this.transition(displayMax)
     }
