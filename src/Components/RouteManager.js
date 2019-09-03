@@ -7,7 +7,7 @@ import EmojiList from './EmojiList';
 export default function RouteManager(props) {
     //the route list needs to be dynamic here~~ something like dataToCycle[]
     let dataToCycle = Object.keys(props.stateHelper).slice(3);
-    let [dataRoute, setDataRoute ] = useState({
+    let [dataRoute, setDataRoute] = useState({
         routeIterator: 0,
         datasetIterator: 0
     })
@@ -16,19 +16,18 @@ export default function RouteManager(props) {
 
     let propsToPass = [];
     const dataSet = props.stateHelper.data;
-    
+
     const ROUTES = {
         stackedBar: <BarChart dataToGraph={propsToPass} />,
         donutGraph: <DonutGraph dataToGraph={propsToPass} />,
         singleBar: <BarChart dataToGraph={propsToPass} />,
         emojiList: <EmojiList dataToGraph={propsToPass} />,
     }
-
     //routes change every 15 seconds
     useInterval(() => {
         setPropsToPass();
         updateRoute();
-    }, 6000)
+    }, 15000)
 
     function useInterval(callback, delay) {
         const savedCallback = useRef();
@@ -45,27 +44,14 @@ export default function RouteManager(props) {
             }
         }, [delay])
     }
-
+    //cycles through each route then change to next dataset and repeats
     function updateRoute() {
-        // console.log("data keys", dataToCycle.length,"routes within current dataKey", routesAvailable.length);
-        if (dataRoute.routeIterator + 1 > routesAvailable.length - 1 || !routesAvailable.length === 2) {
-            if (dataRoute.datasetIterator + 1 > dataToCycle.length -1) {
-                setDataRoute({
-                    routeIterator: 0,
-                    datasetIterator: 0
-                })
-            } else {
-                setDataRoute({
-                    routeIterator: 0,
-                    datasetIterator: dataRoute.datasetIterator + 1
-                })
-            }
-        } else {
-            setDataRoute({
-                routeIterator: dataRoute.routeIterator + 1,
-                datasetIterator: dataRoute.datasetIterator
-            })
-        };
+        dataRoute.routeIterator + 1 > routesAvailable.length - 1 || !routesAvailable.length === 2 ?
+        dataRoute.datasetIterator + 1 > dataToCycle.length - 1 ?
+            setDataRoute({routeIterator: 0, datasetIterator: 0}) 
+            : setDataRoute({routeIterator: 0, datasetIterator: dataRoute.datasetIterator + 1}) 
+        : setDataRoute({routeIterator: dataRoute.routeIterator + 1, datasetIterator: dataRoute.datasetIterator})
+
         setRoute(props.stateHelper[`${dataToCycle[dataRoute.datasetIterator]}`].routes[dataRoute.routeIterator]);
     }
 
