@@ -65,7 +65,8 @@ class D3Test extends Component {
             //     const daily = (omhof['kiosks-today'].length = 100);
 
                  
-            //     console.log(omhof);
+            //  
+               console.log(omhof);
                 
             //     this.setState({
             //         data: this.state.data.concat(omhof),
