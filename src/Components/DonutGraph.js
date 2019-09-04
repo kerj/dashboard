@@ -26,9 +26,7 @@ export default class DonutGraph extends Component {
         let arcs0 = pie(data),
             arcs1 = pie(data0),
             i = -1,
-            currentArc;
-            console.log(arcs0);
-            
+            currentArc;  
         while (++i < 6) {
             currentArc = arcs0[i];
             currentArc.innerRadius = innerRadius;
@@ -159,10 +157,9 @@ export default class DonutGraph extends Component {
                         outerRadius: outerRadius
                     }
                 }))
+                //this could be used as an exit transition with another call to run
         displayMax = !displayMax;
     }
-
-
 
     render() {
 

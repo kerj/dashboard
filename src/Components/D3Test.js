@@ -8,34 +8,67 @@ class D3Test extends Component {
         super(props)
         this.state = {
             data: [],
-            weeklyWeather: {
+            ohsGames: {
                 routes: [
-                    'stackedBar',
-                    'donutGraph',
-                    'emojiList'
+                    'stackedBarChutes',
+                    'stackedBarFletcher',
+                    'stackedBarMarie',
+                    'stackedBarVortex',
+                    'stackedBarDorian',
                 ]
             },
-            farAwayWeather: {
+            ohsStories: { 
                 routes: [
-                    'donutGraph',
-                    'stackedBar',
+                    'listMostCompleted',
+                    'listMostStarted'
                 ]
             },
+            omhof: {
+                routes: [
+                    'listWeekAwards',
+                    'awardOfTheDay',
+                ]
+            },
+            timbers: {
+                routes: [
+                    'listWeekTopEmojis',
+                    'stackedBarNewVReturn',
+                    'mostPopularEmoji',
+                    'mobileIosVsAndroid'
+                ]
+            }
         }
     }
 
     fetchWeatherData = () => {
-        let weatherQuery = "https://www.metaweather.com/api/location/2475687/";
-        axios.get(weatherQuery).then((response) => {
-            const weatherResponse = response.data.consolidated_weather;
+        let ohsQuery = ;
+        axios.get(ohsQuery).then((response) => {
+            console.log(response)
+            let ohsGames = [];
+            let ohsStories = [];
+            // ohsGames needs to be a array of object filled with day, started, finished porperties
+            // ohsStories needs to be a array of object filled with day, started, finished porperties
+            const ohs = response.data; // {{[]},{[]},{[]}}
+            const ohsKeys = Object.keys(ohs); // array of key names
+            console.log(gamesOhs)
+            console.log(ohs);
+            
             this.setState({
-                data: weatherResponse,
+                data: ohsGames.concat(ohsStories)
             });
-            // let farWeatherQuery = "https://www.metaweather.com/api/location/44418/";
-            // axios.get(farWeatherQuery).then((response) => {
-            //     const farWeatherResponse = response.data.consolidated_weather;
+            // let omhofQuery = ;
+            // axios.get(omhofQuery).then((response) => {
+            //     console.log(response);
+            //     const omhof = response.data;
+            //     if (omhof )
+            //     const weekly = (omhof['kiosks-7day'].length = 100);
+            //     const daily = (omhof['kiosks-today'].length = 100);
+
+                 
+            //     console.log(omhof);
+                
             //     this.setState({
-            //         data: this.state.data.concat(farWeatherResponse),
+            //         data: this.state.data.concat(omhof),
             //     });
 
             // })  
