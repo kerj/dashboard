@@ -42,11 +42,9 @@ class D3Test extends Component {
     }
 
     fetchWeatherData = () => {
-        let omoQuery = 
+        let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
         axios.get(omoQuery).then((response) => {
             console.log(response)
-            let ohsGames = [];
-            let ohsStories = [];
         
             const omo = response.data; // {{[0],[1],[day]},{[0],[1],[day]},{[0],[1],[day]}} = [{[0],[1],[day]}...]
             //     ohsKeys = Object.keys(ohs); // array of key names

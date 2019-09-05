@@ -8,16 +8,12 @@ export default function RouteManager(props) {
     let dataToCycle = Object.keys(props.stateHelper).slice(2);
     let [dataRoute, setDataRoute] = useState({ routeIterator: 0, datasetIterator: 0 })
     let routesAvailable = props.stateHelper[`${dataToCycle[dataRoute.datasetIterator]}`].routes;
-    let [route, setRoute] = useState({route: 0});
+    let [route, setRoute] = useState({route: routesAvailable[dataRoute.routeIterator]});
     let currentKey = dataToCycle[dataRoute.datasetIterator];
-
-    
-    
-  
 
     let propsToPass = [];
 
-    const dataSet = props.stateHelper.data;
+    const [dataSet, setDataset] = useState(props.stateHelper.data);
     //routes change every 15 seconds
     useInterval(() => {
         updateRoute();
@@ -41,6 +37,8 @@ export default function RouteManager(props) {
     }
     //cycles through each route then change to next dataset and repeats
     function updateRoute() {
+        console.log(1);
+        
         setRoute(props.stateHelper[`${dataToCycle[dataRoute.datasetIterator]}`].routes[dataRoute.routeIterator]);  
 
         dataRoute.routeIterator + 1 > routesAvailable.length - 1 || !routesAvailable.length === 2 ?
@@ -48,10 +46,10 @@ export default function RouteManager(props) {
             setDataRoute({ routeIterator: 0, datasetIterator: 0 }) : 
                 setDataRoute({ routeIterator: 0, datasetIterator: dataRoute.datasetIterator + 1 }): 
             setDataRoute({ routeIterator: dataRoute.routeIterator + 1, datasetIterator: dataRoute.datasetIterator })
-            
     }
 
     function setPropsToPass() {
+        console.log(2);      
         // console.log(currentKey, route); this is the log to troubleshoot if needed
         propsToPass.length = 0;
         //route = key : currentKey = value ....ie, 'stackedBar' : 'weeklyWeather'
@@ -65,13 +63,14 @@ export default function RouteManager(props) {
             listMostCompleted: <EmojiList dataToGraph={propsToPass} title={route}/>,
             listMostStarted: <EmojiList dataToGraph={propsToPass} title={route} />
         }
+
+    
+        
         
         let weeklyData = Object.values(dataSet);
         if (currentKey === 'omoGames') {
-            let gameProps = weeklyData[dataRoute.routeIterator].finishedGames;
-            
-            // console.log(gameProps, storyProps);
-            
+            let gameProps = weeklyData[dataRoute.routeIterator].finishedGames;   
+            // console.log(gameProps, storyProps); 
             //if json response has different key names you will not have to slice the response here
             //will likely destructure the first data response also...
             gameProps.map((d) => {
@@ -94,7 +93,8 @@ export default function RouteManager(props) {
             })
         }
         // console.log(currentKey, route);
-        console.log(propsToPass);
+        console.log(route ,propsToPass);
+        console.log(ROUTES[route])
         
         return (
             <div>
