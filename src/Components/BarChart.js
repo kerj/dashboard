@@ -10,6 +10,11 @@ export default class BarChart extends Component {
         this.drawBarChart(this.props.dataToGraph)
     }
 
+    // componentDidUpdate(){
+    //     this.drawBarChart(this.props.dataToGraph)
+    // }
+
+
     drawBarChart(data) {
         var margin = { top: 40, right: 20, bottom: 40, left: 40 }
         var canvasWidth = 400 - margin.left - margin.right
@@ -27,6 +32,7 @@ export default class BarChart extends Component {
             //moves info inside of canvas
             .attr('transform', 'translate(60,' + margin.top + ')')
         //get the data to stack bars keys need to become variable
+
         let stack = d3.stack()
             .keys(['dataSet0', 'dataSet1'])
             .offset(d3.stackOffsetNone)(data)
@@ -53,6 +59,16 @@ export default class BarChart extends Component {
             .domain(data.map((d) => {
                 return d.labels
             }))
+
+        svgCanvas.append('g')
+            .attr("class", "x axis")
+            .call(x)
+            .append("text")
+            .attr("x", 200)
+            .attr("dx", ".71em")
+            .attr("transform", "rotate(-360)")
+            .style("text-anchor", "end")
+            .text(`${this.props.title}`)
         //x axis
         svgCanvas.append('g')
             .attr('class', 'x axis')
@@ -96,4 +112,5 @@ export default class BarChart extends Component {
 
 BarChart.propTypes = {
     dataToGraph: PropTypes.array.isRequired,
+    title: PropTypes.string.isRequired
 }

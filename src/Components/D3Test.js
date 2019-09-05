@@ -7,55 +7,64 @@ class D3Test extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            loaded: false,
             data: [],
-            ohsGames: {
+            omoGames: {
                 routes: [
                     'stackedBarChutes',
                     'stackedBarFletcher',
-                    'stackedBarMarie',
                     'stackedBarVortex',
-                    'stackedBarDorian',
+                    'stackedBarMarie',
+                    // 'stackedBarDorian',
                 ]
             },
-            ohsStories: { 
+            omoStories: { 
                 routes: [
                     'listMostCompleted',
                     'listMostStarted'
                 ]
             },
-            omhof: {
-                routes: [
-                    'listWeekAwards',
-                    'awardOfTheDay',
-                ]
-            },
-            timbers: {
-                routes: [
-                    'listWeekTopEmojis',
-                    'stackedBarNewVReturn',
-                    'mostPopularEmoji',
-                    'mobileIosVsAndroid'
-                ]
-            }
+            // omhof: {
+            //     routes: [
+            //         'listWeekAwards',
+            //         'awardOfTheDay',
+            //     ]
+            // },
+            // timbers: {
+            //     routes: [
+            //         'listWeekTopEmojis',
+            //         'stackedBarNewVReturn',
+            //         'mostPopularEmoji',
+            //         'mobileIosVsAndroid'
+            //     ]
+            // }
         }
     }
 
     fetchWeatherData = () => {
-        let ohsQuery = ;
-        axios.get(ohsQuery).then((response) => {
+        let omoQuery = 
+        axios.get(omoQuery).then((response) => {
             console.log(response)
             let ohsGames = [];
             let ohsStories = [];
-            // ohsGames needs to be a array of object filled with day, started, finished porperties
-            // ohsStories needs to be a array of object filled with day, started, finished porperties
-            const ohs = response.data; // {{[]},{[]},{[]}}
-            const ohsKeys = Object.keys(ohs); // array of key names
-            console.log(gamesOhs)
-            console.log(ohs);
+        
+            const omo = response.data; // {{[0],[1],[day]},{[0],[1],[day]},{[0],[1],[day]}} = [{[0],[1],[day]}...]
+            //     ohsKeys = Object.keys(ohs); // array of key names
+                
+            // ohsKeys.map((o,i,a) => {
+            //     o[i]['']
+            // })
+
+            // console.log(gamesOhs)
+            // console.log(ohs);
             
             this.setState({
-                data: ohsGames.concat(ohsStories)
+                // data: ohsGames.concat(ohsStories)
+                data: omo
             });
+            this.setState({ loaded : true})
+            console.log(this.state.data);
+            
             // let omhofQuery = ;
             // axios.get(omhofQuery).then((response) => {
             //     console.log(response);
@@ -66,7 +75,7 @@ class D3Test extends Component {
 
                  
             //  
-               console.log(omhof);
+            //    console.log(omhof);
                 
             //     this.setState({
             //         data: this.state.data.concat(omhof),
@@ -99,9 +108,7 @@ class D3Test extends Component {
                 return(
             <div>
             {
-                this.state.data.length >= 6
-                    ? <h1>Loading Graph</h1>
-                    : <RouteManager stateHelper={this.state} />
+                this.state.loaded ? <RouteManager stateHelper={this.state} /> : <h1>Loading Graph</h1>
             }
             </div >
         )
