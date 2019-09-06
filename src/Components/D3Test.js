@@ -50,6 +50,9 @@ class D3Test extends Component {
     }
 
     updateRoute = () => {
+        this.setState({
+            
+        })
         setRoute(props.stateHelper[`${dataToCycle[this.props.dataKey]}`].routes[this.props.currentRoute]);
 
         this.props.currentRoute + 1 > routesAvailable.length - 1 || !routesAvailable.length === 2 ?
