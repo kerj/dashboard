@@ -8,7 +8,7 @@ class D3Test extends Component {
         super(props)
         this.state = {
             loaded: false,
-            data: [],
+            data: {},
             omoGames: {
                 routes: [
                     'stackedBarChutes',
@@ -18,18 +18,22 @@ class D3Test extends Component {
                     // 'stackedBarDorian',
                 ]
             },
-            omoStories: { 
+            omoStories: {
                 routes: [
                     'listMostCompleted',
                     'listMostStarted'
                 ]
             },
-            // omhof: {
-            //     routes: [
-            //         'listWeekAwards',
-            //         'awardOfTheDay',
-            //     ]
-            // },
+            omhofWeekly: {
+                routes: [
+                    'listWeekAwards',
+                ]
+            },
+            omhofDaily: {
+                routes: [
+                    'awardOfTheDay',
+                ]
+            },
             // timbers: {
             //     routes: [
             //         'listWeekTopEmojis',
@@ -44,44 +48,33 @@ class D3Test extends Component {
     fetchWeatherData = () => {
         let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
         axios.get(omoQuery).then((response) => {
-            console.log(response)
-        
-            const omo = response.data; // {{[0],[1],[day]},{[0],[1],[day]},{[0],[1],[day]}} = [{[0],[1],[day]}...]
-            //     ohsKeys = Object.keys(ohs); // array of key names
+            const omo = response.data;  
+            let omhofQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omhof';
+            axios.get(omhofQuery).then((response) => {  
+                const omhof = response.data;
+                let omhofRawWeeklyData = {}
+                    omhofRawWeeklyData.weekly = new Object(omhof['kiosks-7day'])
+
+                let omhofRawDailyData = {}
+                    omhofRawDailyData.daily = new Object(omhof['kiosks-today'])
+
+                let objectContainer = {}
+                    objectContainer.weekly = omhofRawWeeklyData;
+                    objectContainer.daily = omhofRawDailyData;
+
+
+
+                const weeklyData = Object.values(omo);
+                console.log(weeklyData);
                 
-            // ohsKeys.map((o,i,a) => {
-            //     o[i]['']
-            // })
-
-            // console.log(gamesOhs)
-            // console.log(ohs);
-            
-            this.setState({
-                // data: ohsGames.concat(ohsStories)
-                data: omo
-            });
-            this.setState({ loaded : true})
-            console.log(this.state.data);
-            
-            // let omhofQuery = ;
-            // axios.get(omhofQuery).then((response) => {
-            //     console.log(response);
-            //     const omhof = response.data;
-            //     if (omhof )
-            //     const weekly = (omhof['kiosks-7day'].length = 100);
-            //     const daily = (omhof['kiosks-today'].length = 100);
-
-                 
-            //  
-            //    console.log(omhof);
-                
-            //     this.setState({
-            //         data: this.state.data.concat(omhof),
-            //     });
-
-            // })  
+                this.setState({
+                    data: Object.assign(weeklyData[0], omhofRawWeeklyData),
+                    data: Object.assign(weeklyData[0], omhofRawDailyData),
+                    data: weeklyData
+                });
+                this.setState({ loaded: true })
+            })
         })
-        
     }
 
     // fetchFarWeatherData = () => {
@@ -98,16 +91,16 @@ class D3Test extends Component {
     // }
 
     componentDidMount() {
-                this.fetchWeatherData()
-                // this.fetchFarWeatherData()
-            }
+        this.fetchWeatherData()
+        // this.fetchFarWeatherData()
+    }
 
     render() {
-                return(
+        return (
             <div>
-            {
-                this.state.loaded ? <RouteManager stateHelper={this.state} /> : <h1>Loading Graph</h1>
-            }
+                {
+                    this.state.loaded ? <RouteManager stateHelper={this.state} /> : <h1>Loading Graph</h1>
+                }
             </div >
         )
     }

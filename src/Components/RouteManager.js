@@ -14,6 +14,13 @@ export default function RouteManager(props) {
     let propsToPass = [];
 
     const dataSet = props.stateHelper.data;
+    const weeklyData = Object.values(dataSet);
+    console.log(dataSet);
+    console.log(weeklyData);
+    
+    
+    
+    
     //routes change every 15 seconds
     useInterval(() => {
         updateRoute();
@@ -58,15 +65,14 @@ export default function RouteManager(props) {
             donutGraph: <DonutGraph dataToGraph={propsToPass} />,
             singleBar: <BarChart dataToGraph={propsToPass} />,
             listMostCompleted: <EmojiList dataToGraph={propsToPass} title={route} />,
-            listMostStarted: <EmojiList dataToGraph={propsToPass} title={route} />
+            listMostStarted: <EmojiList dataToGraph={propsToPass} title={route} />,
+            listWeekAwards:  <EmojiList dataToGraph={propsToPass} title={route} />,
+            awardOfTheDay:  <EmojiList dataToGraph={propsToPass} title={route} />
         }
-
-        let weeklyData = Object.values(dataSet);
+        
+        
         if (currentKey === 'omoGames') {
             let gameProps = weeklyData[dataRoute.routeIterator].finishedGames;
-            // console.log(gameProps, storyProps); 
-            //if json response has different key names you will not have to slice the response here
-            //will likely destructure the first data response also...
             gameProps.map((d) => {
                 let propToPass = {};
                 let { finished: dataSet0, started: dataSet1 = 0, day: labels } = d
@@ -85,8 +91,28 @@ export default function RouteManager(props) {
                 propToPass.labels = `${labels}`
                 propsToPass.push(propToPass);
             })
+        }   else if ( currentKey === 'omhofWeekly'){
+            let omhofWeeklyProps = weeklyData[dataRoute.routeIterator].weekly;
+            omhofWeeklyProps.map((d) => {
+                let propToPass = {};
+                let { page_path: dataSet0, count: dataSet1 = 0, page_title: labels } = d
+                propToPass.dataSet0 = `${dataSet0}`
+                propToPass.dataSet1 = `${dataSet1}`
+                propToPass.labels = `${labels}`
+                propsToPass.push(propToPass);
+            })
+        }   else if ( currentKey === 'omhofDaily'){
+            let omhofDailyProps = weeklyData[dataRoute.routeIterator].daily;
+            omhofDailyProps.map((d) => {
+                let propToPass = {};
+                let { page_path: dataSet0, count: dataSet1 = 0, page_title: labels } = d
+                propToPass.dataSet0 = `${dataSet0}`
+                propToPass.dataSet1 = `${dataSet1}`
+                propToPass.labels = `${labels}`
+                propsToPass.push(propToPass);
+            })
         }
-
+        
         return (
             <div key={route}>
                 {ROUTES[route]}
@@ -98,7 +124,7 @@ export default function RouteManager(props) {
         <div>
             {setPropsToPass()}
         </div>
-    )
+        )
 }
 
 RouteManager.propTypes = {
