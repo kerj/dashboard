@@ -11,6 +11,7 @@ class D3Test extends Component {
 
     constructor(props) {
         super(props)
+        this.lastUpdateDate = new Date();
         this.state = {
             currentRoute: 0,
             dataKey: 0,
@@ -50,70 +51,63 @@ class D3Test extends Component {
     }
 
     updateRoute = () => {
-        this.setState({
-            
-        })
-        setRoute(props.stateHelper[`${dataToCycle[this.props.dataKey]}`].routes[this.props.currentRoute]);
+        let dataToCycle = Object.keys(this.state).slice(5)
+        
+        let dataSetName = dataToCycle[this.state.dataKey]
 
-        this.props.currentRoute + 1 > routesAvailable.length - 1 || !routesAvailable.length === 2 ?
-            this.props.dataKey + 1 > dataToCycle.length - 1 ?
-                this.setState({
-                    currentRoute: 0,
-                    dataKey: 0
-                }) :
-                this.setState({
-                    currentRoute: 0,
-                    dataKey: this.state.dataKey + 1
-                }) :
-            this.setState({
-                currentRoute: this.state.currentRoute + 1,
-            })
+        let routesAvailable = this.state[`${dataSetName}`].routes
+        // setRoute(props.stateHelper[`${dataToCycle[this.props.dataKey]}`].routes[this.props.currentRoute]);
+     
+        
+        this.state.currentRoute + 1 > routesAvailable.length - 1 || !routesAvailable.length === 2 ?
+            this.state.dataKey + 1 > dataToCycle.length - 1 ? 
+            this.setState({ currentRoute: 0, dataKey: 0 }) : this.setState({ currentRoute: 0, dataKey: this.state.dataKey + 1})
+        : this.setState({ currentRoute: this.state.currentRoute + 1, dataKey: this.state.dataKey})
+
     }
 
 
 
-    setPropsToPass = (route) => {
-        // console.log(currentKey, route); this is the log to troubleshoot if needed
+    setPropsToPass = () => {
+        let dataToCycle = Object.keys(this.state).slice(5)
+        let dataSet = this.state.data,
+            dataSetKeys = Object.keys(dataSet);
+        
         let propsToPass = []
-        //route = key : currentKey = value ....ie, 'stackedBar' : 'weeklyWeather'
+        let dataSetName = dataToCycle[this.state.dataKey]
         const ROUTES = {
-            stackedBarChutes: <BarChart dataToGraph={this.state.chartData} title={route} />,
-            stackedBarFletcher: <BarChart dataToGraph={this.state.chartData} title={route} />,
-            stackedBarVortex: <BarChart dataToGraph={this.state.chartData} title={route} />,
-            stackedBarMarie: <BarChart dataToGraph={this.state.chartData} title={route} />,
+            stackedBarChutes: <BarChart dataToGraph={propsToPass} title={dataSetName + " " + dataSetKeys[this.state.currentRoute]} />,
+            stackedBarFletcher: <BarChart dataToGraph={propsToPass} title={dataSetName + " " + dataSetKeys[this.state.currentRoute]} />,
+            stackedBarVortex: <BarChart dataToGraph={propsToPass} title={dataSetName + " " + dataSetKeys[this.state.currentRoute]} />,
+            stackedBarMarie: <BarChart dataToGraph={propsToPass} title={dataSetName + " " + dataSetKeys[this.state.currentRoute]} />,
             // donutGraph: <DonutGraph dataToGraph={propsToPass} />,
             // singleBar: <BarChart dataToGraph={propsToPass} />,
-            // listMostCompleted: <EmojiList dataToGraph={propsToPass} title={route}/>,
-            // listMostStarted: <EmojiList dataToGraph={propsToPass} title={route} />
+            // listMostCompleted: <EmojiList dataToGraph={propsToPass} title={dataSetName + " " + dataSetKeys[this.state.currentRoute]}/>,
+            // listMostStarted: <EmojiList dataToGraph={propsToPass} title={dataSetName + " " + dataSetKeys[this.state.currentRoute]} />
         }
 
 
         // let weeklyData = Object.values(this.state.chartData);
         // if (currentKey === 'omoGames') {
-        let dataSet = this.state.data;
-        console.log(dataSet);
-        console.log(route);
-
-
-        let gameProps = dataSet.chutes.finishedGames
-        console.log(gameProps);
-
-
-
+            
+        if (dataSetName === 'omoGames'){
+            dataSet[dataSetKeys[this.state.currentRoute]].finishedGames.map((d) => {
+                let propToPass = {};
+                let { finished: dataSet0, started: dataSet1 = 0, day: labels } = d
+                propToPass.dataSet0 = `${dataSet0}`
+                propToPass.dataSet1 = `${dataSet1}`
+                propToPass.labels = `${labels}`
+                propsToPass.push(propToPass);
+            })
+            this.setState({
+                chartData: propsToPass
+            }) 
+            console.log(dataSetName, this.state.chartData );
+            
+        }
         // console.log(gameProps, storyProps); 
         //if json response has different key names you will not have to slice the response here
         //will likely destructure the first data response also...
-        gameProps.map((d) => {
-            let propToPass = {};
-            let { finished: dataSet0, started: dataSet1 = 0, day: labels } = d
-            propToPass.dataSet0 = `${dataSet0}`
-            propToPass.dataSet1 = `${dataSet1}`
-            propToPass.labels = `${labels}`
-            propsToPass.push(propToPass);
-        })
-        this.setState({
-            chartData: propsToPass
-        })
         // } else if (currentKey === 'omoStories') {
         //     let storyProps = weeklyData[dataRoute.routeIterator].stories;
         //     storyProps.map((d) => {
@@ -127,11 +121,12 @@ class D3Test extends Component {
         // }
 
         //setState for the d3componet here
-        // console.log(currentKey, route);
-
+        // console.log(currentKey, route);   
+        console.log(this.state[`${dataToCycle[this.state.dataKey]}`].routes[this.state.currentRoute]);
+        
         return (
-            <div>
-                {ROUTES[route]}
+            <div key={this.state.currentRoute}>
+                {ROUTES[this.state[`${dataToCycle[this.state.dataKey]}`].routes[this.state.currentRoute]]}
             </div>
         )
     }
@@ -140,6 +135,8 @@ class D3Test extends Component {
 
 
     fetchWeatherData = () => {
+        console.log("fetch");
+        
         let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
         axios.get(omoQuery).then((response) => {
 
@@ -157,9 +154,8 @@ class D3Test extends Component {
                 // data: ohsGames.concat(ohsStories)
                 data: omo
             });
-            this.setState({ loaded: true })
-            console.log(this.state.data);
 
+            this.setState({ loaded: true })
             // let omhofQuery = ;
             // axios.get(omhofQuery).then((response) => {
             //     console.log(response);
@@ -177,6 +173,9 @@ class D3Test extends Component {
             //     });
 
             // })  
+            setInterval(() => {
+                this.updateRoute()
+            }, 6000);
 
         })
 
@@ -195,10 +194,27 @@ class D3Test extends Component {
 
     // }
 
+  
+
     componentDidMount() {
-        this.fetchWeatherData()
+        this.state.loaded ? console.log("remount") : this.fetchWeatherData()
         // this.fetchFarWeatherData()
     }
+
+    shouldComponentUpdate() {
+        if(this.state.chartData.length === 0) {
+            return true
+        }else {
+            const now = new Date();
+            let seconds = (now.getTime() - this.lastUpdateDate.getTime()) / 1000;
+            return seconds >= 5;
+        }
+    }
+
+    componentDidUpdate() {
+        this.lastUpdateDate = new Date(); 
+    }
+
 
     render() {
         return (

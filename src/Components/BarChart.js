@@ -8,21 +8,23 @@ export default class BarChart extends Component {
 
     componentDidMount() {
         this.drawBarChart(this.props.dataToGraph)
-        console.log('mounted', this.props.dataToGraph)
+    }
+
+    componentDidUpdate(){
+
+        // this.drawBarChart(this.props.dataToGraph)
+        console.log(this.props.dataToGraph);
+        
     }
 
 
     drawBarChart(data) {
-
-        let barChart = <div ref='canvas'>
-        </div>
-
         var margin = { top: 40, right: 20, bottom: 40, left: 40 }
         var canvasWidth = 400 - margin.left - margin.right
         var canvasHeight = 600 - margin.top - margin.bottom
         var colors = ['#00D7D2', '#FF4436', '#313c53'];
         //container for graph
-        let svgCanvas = d3.select(this.refs.canvas)
+        const svgCanvas = d3.select(this.refs.barCanvas)
             .append("svg")
             .attr("class", "barchart")
             .attr("width", canvasWidth + margin.left + margin.right)
@@ -101,15 +103,11 @@ export default class BarChart extends Component {
                 return x((d[1] - d[0]))
             })
             .attr('height', y.bandwidth())
-
-
-            return barChart
     }
 
     render() {
         return (
-            <div>
-                {this.drawBarChart(this.props.dataToGraph)}
+            <div key={this.props.title} ref="barCanvas">
             </div>
         )
     }
@@ -117,5 +115,5 @@ export default class BarChart extends Component {
 
 BarChart.propTypes = {
     dataToGraph: PropTypes.array.isRequired,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired
 }
