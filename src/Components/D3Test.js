@@ -9,72 +9,73 @@ class D3Test extends Component {
         this.state = {
             loaded: false,
             data: {},
-            omoGames: {
-                routes: [
-                    'stackedBarChutes',
-                    'stackedBarFletcher',
-                    'stackedBarVortex',
-                    'stackedBarMarie',
-                    // 'stackedBarDorian',
-                ]
-            },
-            omoStories: {
-                routes: [
-                    'listMostCompleted',
-                    'listMostStarted'
-                ]
-            },
-            omhofWeekly: {
-                routes: [
-                    'listWeekAwards',
-                ]
-            },
-            omhofDaily: {
-                routes: [
-                    'awardOfTheDay',
-                ]
-            },
-            // timbers: {
+            // omoGames: {
             //     routes: [
-            //         'listWeekTopEmojis',
-            //         'stackedBarNewVReturn',
-            //         'mostPopularEmoji',
-            //         'mobileIosVsAndroid'
+            //         'stackedBarChutes',
+            //         'stackedBarFletcher',
+            //         'stackedBarVortex',
+            //         'stackedBarMarie',
+            //         // 'stackedBarDorian',
             //     ]
-            // }
+            // },
+            // omoStories: {
+            //     routes: [
+            //         'listMostCompleted',
+            //         'listMostStarted'
+            //     ]
+            // },
+            // omhofWeekly: {
+            //     routes: [
+            //         'listWeekAwards',
+            //     ]
+            // },
+            // omhofDaily: {
+            //     routes: [
+            //         'awardOfTheDay',
+            //     ]
+            // },
+            timbers: {
+                routes: [
+                    'listWeekTopEmojis',
+                    'stackedBarNewVReturn',
+                    'mostPopularEmoji',
+                    'mobileIosVsAndroid'
+                ]
+            }
         }
     }
 
     fetchWeatherData = () => {
-        let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
-        axios.get(omoQuery).then((response) => {
-            const omo = response.data;  
-            let omhofQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omhof';
-            axios.get(omhofQuery).then((response) => {  
-                const omhof = response.data;
-                let omhofRawWeeklyData = {}
-                    omhofRawWeeklyData.weekly = new Object(omhof['kiosks-7day'])
+        // let timbersQuery = 'http://sticky-data.local:8888/projects-dash/?project=timbers';
+        // axios.get(timbersQuery).then((response) => {
+            //different objects need passed for each timbers view dependent on the order they are listed in the routes slice
+        //     console.log(response.data);
+            
+        // })
+        // let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
+        // axios.get(omoQuery).then((response) => {
+        //     const omo = response.data;
 
-                let omhofRawDailyData = {}
-                    omhofRawDailyData.daily = new Object(omhof['kiosks-today'])
-
-                let objectContainer = {}
-                    objectContainer.weekly = omhofRawWeeklyData;
-                    objectContainer.daily = omhofRawDailyData;
-
-
-
-                const weeklyData = Object.values(omo);
-                console.log(weeklyData);
+        //     let omhofQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omhof';
+        //     axios.get(omhofQuery).then((response) => {  
+        //         const omhof = response.data;
+        //         let omhofRawWeeklyData = {}
+        //             omhofRawWeeklyData.weekly = new Object(omhof['kiosks-7day'])
+        //         let omhofRawDailyData = {}
+        //             omhofRawDailyData.daily = new Object(omhof['kiosks-today'])
+        //         const weeklyData = Object.values(omo);
+        //         console.log(weeklyData);
                 
-                this.setState({
-                    data: Object.assign(weeklyData[0], omhofRawWeeklyData),
-                    data: Object.assign(weeklyData[0], omhofRawDailyData),
-                    data: weeklyData
-                });
-                this.setState({ loaded: true })
-            })
-        })
+        //         //weeklyData[x] happens for each route position 
+        //         //since omhof routes each only have 1 route they only need to live inside the 0 position in the prop data to routemanager
+        //         this.setState({
+        //             data: Object.assign(weeklyData[0], omhofRawWeeklyData),
+        //             data: Object.assign(weeklyData[0], omhofRawDailyData),
+        //             data: weeklyData
+        //         });
+        //         this.setState({ loaded: true })
+        //     })
+        // })
     }
 
     // fetchFarWeatherData = () => {

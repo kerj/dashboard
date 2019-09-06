@@ -18,9 +18,6 @@ export default function RouteManager(props) {
     console.log(dataSet);
     console.log(weeklyData);
     
-    
-    
-    
     //routes change every 15 seconds
     useInterval(() => {
         updateRoute();
@@ -58,16 +55,22 @@ export default function RouteManager(props) {
         propsToPass.length = 0;
         //route = key : currentKey = value ....ie, 'stackedBar' : 'weeklyWeather'
         const ROUTES = {
+            //omoGames
             stackedBarChutes: <BarChart dataToGraph={propsToPass} title={route} />,
             stackedBarFletcher: <BarChart dataToGraph={propsToPass} title={route} />,
             stackedBarVortex: <BarChart dataToGraph={propsToPass} title={route} />,
             stackedBarMarie: <BarChart dataToGraph={propsToPass} title={route} />,
-            donutGraph: <DonutGraph dataToGraph={propsToPass} />,
-            singleBar: <BarChart dataToGraph={propsToPass} />,
+            //omoStories
             listMostCompleted: <EmojiList dataToGraph={propsToPass} title={route} />,
             listMostStarted: <EmojiList dataToGraph={propsToPass} title={route} />,
+            //omhof
             listWeekAwards:  <EmojiList dataToGraph={propsToPass} title={route} />,
-            awardOfTheDay:  <EmojiList dataToGraph={propsToPass} title={route} />
+            awardOfTheDay:  <EmojiList dataToGraph={propsToPass} title={route} />,
+            //timbers
+            listWeekTopEmojis: <EmojiList dataToGraph={propsToPass} title={route} />,
+            stackedBarNewVReturn: <BarChart dataToGraph={propsToPass} title={route} />,
+            mostPopularEmoji: <EmojiList dataToGraph={propsToPass} title={route} />,
+            mobileIosVsAndroid: <DonutGraph dataToGraph={propsToPass} />,
         }
         
         
@@ -75,13 +78,14 @@ export default function RouteManager(props) {
             let gameProps = weeklyData[dataRoute.routeIterator].finishedGames;
             gameProps.map((d) => {
                 let propToPass = {};
-                let { finished: dataSet0, started: dataSet1 = 0, day: labels } = d
+                let { finished: dataSet1, started: dataSet0 = 0, day: labels } = d
                 propToPass.dataSet0 = `${dataSet0}`
                 propToPass.dataSet1 = `${dataSet1}`
                 propToPass.labels = `${labels}`
                 propsToPass.push(propToPass);
             })
         } else if (currentKey === 'omoStories') {
+            //need to find the story with the highest counts most read for the day then  
             let storyProps = weeklyData[dataRoute.routeIterator].stories;
             storyProps.map((d) => {
                 let propToPass = {};
@@ -110,6 +114,12 @@ export default function RouteManager(props) {
                 propToPass.dataSet1 = `${dataSet1}`
                 propToPass.labels = `${labels}`
                 propsToPass.push(propToPass);
+            })
+        }   else if ( currentKey === 'timbers') {
+            let timberProps = weeklyData[dataRoute.routeIterator].timberData;
+            timberProps.map((d) => {
+                let propToPass = {};
+                let {emojiName: dataSet0, emojiCount: dataSet1, emojiImage: labels} = d
             })
         }
         
