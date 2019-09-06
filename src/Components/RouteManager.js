@@ -8,12 +8,12 @@ export default function RouteManager(props) {
     let dataToCycle = Object.keys(props.stateHelper).slice(2);
     let [dataRoute, setDataRoute] = useState({ routeIterator: 0, datasetIterator: 0 })
     let routesAvailable = props.stateHelper[`${dataToCycle[dataRoute.datasetIterator]}`].routes;
-    let [route, setRoute] = useState({route: routesAvailable[dataRoute.routeIterator]});
+    let [route, setRoute] = useState({ route: routesAvailable[dataRoute.routeIterator] });
     let currentKey = dataToCycle[dataRoute.datasetIterator];
 
     let propsToPass = [];
 
-    const [dataSet, setDataset] = useState(props.stateHelper.data);
+    const dataSet = props.stateHelper.data;
     //routes change every 15 seconds
     useInterval(() => {
         updateRoute();
@@ -37,39 +37,33 @@ export default function RouteManager(props) {
     }
     //cycles through each route then change to next dataset and repeats
     function updateRoute() {
-        console.log(1);
-        
-        setRoute(props.stateHelper[`${dataToCycle[dataRoute.datasetIterator]}`].routes[dataRoute.routeIterator]);  
+        setRoute(props.stateHelper[`${dataToCycle[dataRoute.datasetIterator]}`].routes[dataRoute.routeIterator]);
 
         dataRoute.routeIterator + 1 > routesAvailable.length - 1 || !routesAvailable.length === 2 ?
-            dataRoute.datasetIterator + 1 > dataToCycle.length - 1 ? 
-            setDataRoute({ routeIterator: 0, datasetIterator: 0 }) : 
-                setDataRoute({ routeIterator: 0, datasetIterator: dataRoute.datasetIterator + 1 }): 
+            dataRoute.datasetIterator + 1 > dataToCycle.length - 1 ?
+                setDataRoute({ routeIterator: 0, datasetIterator: 0 }) :
+                setDataRoute({ routeIterator: 0, datasetIterator: dataRoute.datasetIterator + 1 }) :
             setDataRoute({ routeIterator: dataRoute.routeIterator + 1, datasetIterator: dataRoute.datasetIterator })
     }
 
     function setPropsToPass() {
-        console.log(2);      
         // console.log(currentKey, route); this is the log to troubleshoot if needed
         propsToPass.length = 0;
         //route = key : currentKey = value ....ie, 'stackedBar' : 'weeklyWeather'
         const ROUTES = {
             stackedBarChutes: <BarChart dataToGraph={propsToPass} title={route} />,
-            stackedBarFletcher: <BarChart dataToGraph={propsToPass} title={route}/>,
-            stackedBarVortex: <BarChart dataToGraph={propsToPass} title={route}/>,
-            stackedBarMarie: <BarChart dataToGraph={propsToPass} title={route}/>,
+            stackedBarFletcher: <BarChart dataToGraph={propsToPass} title={route} />,
+            stackedBarVortex: <BarChart dataToGraph={propsToPass} title={route} />,
+            stackedBarMarie: <BarChart dataToGraph={propsToPass} title={route} />,
             donutGraph: <DonutGraph dataToGraph={propsToPass} />,
             singleBar: <BarChart dataToGraph={propsToPass} />,
-            listMostCompleted: <EmojiList dataToGraph={propsToPass} title={route}/>,
+            listMostCompleted: <EmojiList dataToGraph={propsToPass} title={route} />,
             listMostStarted: <EmojiList dataToGraph={propsToPass} title={route} />
         }
 
-    
-        
-        
         let weeklyData = Object.values(dataSet);
         if (currentKey === 'omoGames') {
-            let gameProps = weeklyData[dataRoute.routeIterator].finishedGames;   
+            let gameProps = weeklyData[dataRoute.routeIterator].finishedGames;
             // console.log(gameProps, storyProps); 
             //if json response has different key names you will not have to slice the response here
             //will likely destructure the first data response also...
@@ -80,7 +74,7 @@ export default function RouteManager(props) {
                 propToPass.dataSet1 = `${dataSet1}`
                 propToPass.labels = `${labels}`
                 propsToPass.push(propToPass);
-            }) 
+            })
         } else if (currentKey === 'omoStories') {
             let storyProps = weeklyData[dataRoute.routeIterator].stories;
             storyProps.map((d) => {
@@ -92,17 +86,14 @@ export default function RouteManager(props) {
                 propsToPass.push(propToPass);
             })
         }
-        // console.log(currentKey, route);
-        console.log(route ,propsToPass);
-        console.log(ROUTES[route])
-        
+
         return (
-            <div>
+            <div key={route}>
                 {ROUTES[route]}
             </div>
         )
     }
-    
+
     return (
         <div>
             {setPropsToPass()}

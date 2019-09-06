@@ -8,15 +8,9 @@ export default class BarChart extends Component {
 
     componentDidMount() {
         this.drawBarChart(this.props.dataToGraph)
-        console.log('mounted', this.props.dataToGraph)
     }
 
-
     drawBarChart(data) {
-
-        let barChart = <div ref='canvas'>
-        </div>
-
         var margin = { top: 40, right: 20, bottom: 40, left: 40 }
         var canvasWidth = 400 - margin.left - margin.right
         var canvasHeight = 600 - margin.top - margin.bottom
@@ -101,15 +95,11 @@ export default class BarChart extends Component {
                 return x((d[1] - d[0]))
             })
             .attr('height', y.bandwidth())
-
-
-            return barChart
     }
 
     render() {
         return (
-            <div>
-                {this.drawBarChart(this.props.dataToGraph)}
+            <div ref='canvas'>
             </div>
         )
     }
