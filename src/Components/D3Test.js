@@ -50,24 +50,46 @@ class D3Test extends Component {
         let timbersQuery = 'http://sticky-data.local:8888/projects-dash/?project=timbers';
         axios.get(timbersQuery).then((response) => {
             console.log(response.data)
-            let timbersKeys = Object.keys(response.data);
-            let data = timbersKeys.map((c, o, a) => {
-                let currentSet = response.data[`${c}`].rows;
-                let currentKey = response.data[`${c}`].cols;
-                currentKey.map((c, i) => {
-                    let temp = {}
-                    a[c + o] = []
-                    for (let j = 0; j <= currentSet.length - 1; j++) {
-                        let iterationSet = [...currentSet[j]];
-                        a[c + o].push(iterationSet[i]);
-                        temp[a[c+o]] = a[c+o];
+            let allKeys = Object.keys(response.data);
+            let data = allKeys.map((c, i, a) => {
+                let currentKeys = response.data[allKeys[i]].cols;
+                let currentDataset = response.data[allKeys[i]].rows;
+                console.log(currentKeys);//ga:
+                console.log(currentDataset);//array of raw data
+                let timberObj = {}
+                for (let i = 0, j = 0; i < currentDataset.length || !j === ; i++) {
+                    currentKey = currentKeys[j]
+                    currentData = response.data[currentKeys].rows[i];
+                    timberObj = {
+                        currentKey: []
                     }
-                    return temp
-                })
-                //get data table by rows and columns as arrays
-                return a
+                    if (i === currentData.length) {
+                        j++
+                        i = 0
+                    }
+                    console.log(timberObj);//{response-op-sys:}
+                    timberObj[currentKeys].push(currentData)
+                }
+                return timberObj
             })
             console.log(data)
+            // let data = timbersKeys.map((c, i, a) => {
+            //     let currentSet = response.data[`${c}`].rows;
+            //     let currentKey = response.data[`${c}`].cols;
+            //     let temp = {};
+            //     currentKey.map((k, o) => {
+            //         a[k + i] = []
+            //         for (let j = 0; j <= currentSet.length - 1; j++) {
+            //             let iterationSet = [...currentSet[j]];
+            //             a[k + i].push(iterationSet[o]);
+            //             temp[a[k+i]] = a[k+i];
+            //         }
+            //         return temp
+            //     })
+            //     //get data table by rows and columns as arrays
+            //     return a
+            // })
+            // console.log(data)
         })
         // let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
         // axios.get(omoQuery).then((response) => {
