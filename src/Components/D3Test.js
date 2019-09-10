@@ -49,23 +49,25 @@ class D3Test extends Component {
     fetchWeatherData = () => {
         let timbersQuery = 'http://sticky-data.local:8888/projects-dash/?project=timbers';
         axios.get(timbersQuery).then((response) => {
-            // different objects need passed for each timbers view dependent on the order they are listed in the routes slice
-            console.log(response.data);
+            console.log(response.data)
             let timbersKeys = Object.keys(response.data);
-            //needs to map through the cols inside of the data slice 
-            // option to for loop through the timberKeys then map through the cols inside that  
-            let data = timbersKeys.map((c, i, a) => {
-                let currentSet = response.data[`${c}`].rows
-                let currentKey = response.data[`${c}`].cols[i]
-                a = {
-                    [currentKey] : [],
-                };
-                for (let j = 0; j <= currentSet.length-1; j++) { 
-                    a[currentKey].push(currentSet[j][i]);
-                }
+            let data = timbersKeys.map((c, o, a) => {
+                let currentSet = response.data[`${c}`].rows;
+                let currentKey = response.data[`${c}`].cols;
+                currentKey.map((c, i) => {
+                    let temp = {}
+                    a[c + o] = []
+                    for (let j = 0; j <= currentSet.length - 1; j++) {
+                        let iterationSet = [...currentSet[j]];
+                        a[c + o].push(iterationSet[i]);
+                        temp[a[c+o]] = a[c+o];
+                    }
+                    return temp
+                })
+                //get data table by rows and columns as arrays
                 return a
             })
-            console.log(data);
+            console.log(data)
         })
         // let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
         // axios.get(omoQuery).then((response) => {
