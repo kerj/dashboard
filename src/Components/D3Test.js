@@ -52,16 +52,17 @@ class D3Test extends Component {
             // different objects need passed for each timbers view dependent on the order they are listed in the routes slice
             console.log(response.data);
             let timbersKeys = Object.keys(response.data);
+            //needs to map through the cols inside of the data slice 
+            // option to for loop through the timberKeys then map through the cols inside that  
             let data = timbersKeys.map((c, i, a) => {
-                let currentKey = response.data[`${c}`].cols
                 let currentSet = response.data[`${c}`].rows
-                a[i] = {
+                let currentKey = response.data[`${c}`].cols[i]
+                a = {
                     [currentKey] : [],
                 };
-                for (let j = 0; j <= currentSet.length-1; j++) {
-                    a[i][currentKey].push(currentSet[j][i]);
+                for (let j = 0; j <= currentSet.length-1; j++) { 
+                    a[currentKey].push(currentSet[j][i]);
                 }
-                console.log(a);
                 return a
             })
             console.log(data);
@@ -108,7 +109,6 @@ class D3Test extends Component {
         this.fetchWeatherData()
         // this.fetchFarWeatherData()
     }
-
     render() {
         return (
             <div>
@@ -119,5 +119,4 @@ class D3Test extends Component {
         )
     }
 }
-
 export default D3Test;
