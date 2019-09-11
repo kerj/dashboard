@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import RouteManager from './RouteManager';
-import { tsMethodSignature } from '@babel/types';
 const axios = require('axios');
 
 class D3Test extends Component {
@@ -51,26 +50,19 @@ class D3Test extends Component {
         axios.get(timbersQuery).then((response) => {
             console.log(response.data)
             let allKeys = Object.keys(response.data);
-            let data = allKeys.map((c, i, a) => {
-                let currentKeys = response.data[allKeys[i]].cols;
-                let currentDataset = response.data[allKeys[i]].rows;
-                console.log(currentKeys);//ga:
-                console.log(currentDataset);//array of raw data
-                let timberObj = {}
-                for (let i = 0, j = 0; i < currentDataset.length || !j === ; i++) {
-                    currentKey = currentKeys[j]
-                    currentData = response.data[currentKeys].rows[i];
-                    timberObj = {
-                        currentKey: []
+            let data = allKeys.map((c) => {
+                let timberData = {}
+                let currentRows = response.data[`${c}`].rows;
+                let currentCols = response.data[`${c}`].cols;
+                console.log(currentRows, currentCols); 
+                currentCols.forEach((curr, i) => {
+                    timberData[curr] = []; 
+                    for (let j = 0; j <= currentRows.length-1; j++){
+                        timberData[curr].push(currentRows[j][i])
                     }
-                    if (i === currentData.length) {
-                        j++
-                        i = 0
-                    }
-                    console.log(timberObj);//{response-op-sys:}
-                    timberObj[currentKeys].push(currentData)
-                }
-                return timberObj
+                    return timberData
+                })
+                return timberData
             })
             console.log(data)
             // let data = timbersKeys.map((c, i, a) => {
