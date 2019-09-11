@@ -50,14 +50,14 @@ class D3Test extends Component {
         axios.get(timbersQuery).then((response) => {
             console.log(response.data)
             let allKeys = Object.keys(response.data);
+            //dataset as {{cols:[keys],rows:[values]}} to [{key:[values]},]
             let data = allKeys.map((c) => {
                 let timberData = {}
                 let currentRows = response.data[`${c}`].rows;
                 let currentCols = response.data[`${c}`].cols;
-                console.log(currentRows, currentCols); 
                 currentCols.forEach((curr, i) => {
-                    timberData[curr] = []; 
-                    for (let j = 0; j <= currentRows.length-1; j++){
+                    timberData[curr] = [];
+                    for (let j = 0; j <= currentRows.length - 1; j++) {
                         timberData[curr].push(currentRows[j][i])
                     }
                     return timberData
@@ -65,37 +65,20 @@ class D3Test extends Component {
                 return timberData
             })
             console.log(data)
-            // let data = timbersKeys.map((c, i, a) => {
-            //     let currentSet = response.data[`${c}`].rows;
-            //     let currentKey = response.data[`${c}`].cols;
-            //     let temp = {};
-            //     currentKey.map((k, o) => {
-            //         a[k + i] = []
-            //         for (let j = 0; j <= currentSet.length - 1; j++) {
-            //             let iterationSet = [...currentSet[j]];
-            //             a[k + i].push(iterationSet[o]);
-            //             temp[a[k+i]] = a[k+i];
-            //         }
-            //         return temp
-            //     })
-            //     //get data table by rows and columns as arrays
-            //     return a
-            // })
-            // console.log(data)
         })
         // let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
         // axios.get(omoQuery).then((response) => {
         //     const omo = response.data;
+        //     console.log(omo);
         //     let omhofQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omhof';
         //     axios.get(omhofQuery).then((response) => {
         //         const omhof = response.data;
+        //         console.log(omhof);
         //         let omhofRawWeeklyData = {}
         //         omhofRawWeeklyData.weekly = new Object(omhof['kiosks-7day'])
         //         let omhofRawDailyData = {}
         //         omhofRawDailyData.daily = new Object(omhof['kiosks-today'])
         //         const weeklyData = Object.values(omo);
-        //         console.log(weeklyData);
-
         //         //weeklyData[x] happens for each route position 
         //         //since omhof routes each only have 1 route they only need to live inside the 0 position in the prop data to routemanager
         //         this.setState({
