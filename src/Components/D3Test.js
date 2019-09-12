@@ -45,19 +45,37 @@ class D3Test extends Component {
         }
     }
 
-    makeTimberGraphReady = (data) => {
+    // makeTimberGraphReady = (data) => {
+    //   data.map((c,i,a) => {
+    //       let currentKeys = Object.keys(c) //keys[i] = ga:
+    //       currentKeys.forEach((curr, j) => {
+    //           let currentDataArray = data[i][curr];
+    //           console.log(currentDataArray);
+    //         for (let k = 0; k < currentDataArray.length; k++) {
+    //            console.log(currentDataArray[k]);
+    //         } 
+    //       })
+    //   })
+    // }
+
+    makeTimberGraphable = (data) => {
         let timberData = [];
-        let allKeys = Object.keys(data)
-       console.log(data)
-       for ( let i = 0; i < allKeys.length; i++){ //runs 4 times
-           let dataProps = Object.keys(data[i])
-           console.log(dataProps);
-           let timberDataset = {}
-           for( let j = 0; j < dataProps.length; j++) { //runs 4 times then 2 when j goes to 1
-            timberDataset[dataProps[j]] = 0
-            console.log(timberDataset);
-           }
-       }
+        data.map((c,i,a) => { 
+            let currentKeys = Object.keys(c); // length = 4
+            let objsToMake = data[i][currentKeys[0]].length; 
+            for (let k = 0; k < objsToMake; k++) {
+                let timberDataObj = {};
+                currentKeys.forEach((curr, j) => {
+                    timberDataObj[curr] = c[curr][k]
+                    console.log(timberDataObj);
+                })
+                //push timberObj to timberdata
+            }
+            
+           
+            
+            // for (let k = 0;  )
+        })
     }
 
 
@@ -81,7 +99,7 @@ class D3Test extends Component {
                 })
                 return timberData
             })
-           this.makeTimberGraphReady(cleanData);
+           this.makeTimberGraphable(cleanData);
         })
         let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
         axios.get(omoQuery).then((response) => {
