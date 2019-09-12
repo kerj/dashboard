@@ -15,9 +15,7 @@ export default function RouteManager(props) {
 
     const dataSet = props.stateHelper.data;
     const weeklyData = Object.values(dataSet);
-    console.log(dataSet);
-    console.log(weeklyData);
-    
+
     //routes change every 15 seconds
     useInterval(() => {
         updateRoute();
@@ -64,16 +62,16 @@ export default function RouteManager(props) {
             listMostCompleted: <EmojiList dataToGraph={propsToPass} title={route} />,
             listMostStarted: <EmojiList dataToGraph={propsToPass} title={route} />,
             //omhof
-            listWeekAwards:  <EmojiList dataToGraph={propsToPass} title={route} />,
-            awardOfTheDay:  <EmojiList dataToGraph={propsToPass} title={route} />,
+            listWeekAwards: <EmojiList dataToGraph={propsToPass} title={route} />,
+            awardOfTheDay: <EmojiList dataToGraph={propsToPass} title={route} />,
             //timbers
             listWeekTopEmojis: <EmojiList dataToGraph={propsToPass} title={route} />,
             stackedBarNewVReturn: <BarChart dataToGraph={propsToPass} title={route} />,
             mostPopularEmoji: <EmojiList dataToGraph={propsToPass} title={route} />,
-            mobileIosVsAndroid: <DonutGraph dataToGraph={propsToPass} />,
+            mobileIosVsAndroid: <DonutGraph dataToGraph={propsToPass} title={route} />,
         }
-        
-        
+
+
         if (currentKey === 'omoGames') {
             let gameProps = weeklyData[dataRoute.routeIterator].finishedGames;
             gameProps.map((d) => {
@@ -95,7 +93,7 @@ export default function RouteManager(props) {
                 propToPass.labels = `${labels}`
                 propsToPass.push(propToPass);
             })
-        }   else if ( currentKey === 'omhofWeekly'){
+        } else if (currentKey === 'omhofWeekly') {
             let omhofWeeklyProps = weeklyData[dataRoute.routeIterator].weekly;
             omhofWeeklyProps.map((d) => {
                 let propToPass = {};
@@ -105,7 +103,7 @@ export default function RouteManager(props) {
                 propToPass.labels = `${labels}`
                 propsToPass.push(propToPass);
             })
-        }   else if ( currentKey === 'omhofDaily'){
+        } else if (currentKey === 'omhofDaily') {
             let omhofDailyProps = weeklyData[dataRoute.routeIterator].daily;
             omhofDailyProps.map((d) => {
                 let propToPass = {};
@@ -115,14 +113,51 @@ export default function RouteManager(props) {
                 propToPass.labels = `${labels}`
                 propsToPass.push(propToPass);
             })
-        }   else if ( currentKey === 'timbers') {
+        } else if (currentKey === 'timbers') {
             let timberProps = weeklyData[dataRoute.routeIterator].timberData;
-            timberProps.map((d) => {
-                let propToPass = {};
-                let {emojiName: dataSet0, emojiCount: dataSet1, emojiImage: labels} = d
-            })
+            if (dataRoute.routeIterator === 0) {
+                timberProps.top5Emoji.map((d) => {
+                    let propToPass = {};
+                    let { 'ga:eventLabel1': dataSet0, 'ga:totalEvents1': dataSet1, 'ga:totalEvents1': labels = ':D' } = d
+                    propToPass.dataSet0 = `${dataSet0}`
+                    propToPass.dataSet1 = `${dataSet1}`
+                    propToPass.labels = `${labels}`
+                    propsToPass.push(propToPass);
+                })
+            } else if (dataRoute.routeIterator === 1) {
+                console.log(timberProps.user.length)
+                timberProps.user.map((d) => {
+                    let propToPass = {};
+                    let { 'ga:sessions0': dataSet0, 'ga:sessions0': dataSet1, 'ga:dayOfWeekName0': labels } = d
+                    propToPass.dataSet0 = `${dataSet0}`
+                    propToPass.dataSet1 = `${dataSet1}`
+                    propToPass.labels = `${labels}`
+                    propsToPass.push(propToPass);
+                })
+            } else if (dataRoute.routeIterator === 2) {
+                console.log(timberProps.mostPopEmoji.length)
+                timberProps.mostPopEmoji.map((d) => {
+                    let propToPass = {};
+                    let { 'ga:eventLabel2': dataSet0, 'ga:totalEvents2': dataSet1, 'ga:totalEvents2': labels = ':D' } = d
+                    propToPass.dataSet0 = `${dataSet0}`
+                    propToPass.dataSet1 = `${dataSet1}`
+                    propToPass.labels = `${labels}`
+                    propsToPass.push(propToPass);
+                })
+            } else if (dataRoute.routeIterator === 3) {
+                console.log(timberProps.operatingSystem.length)
+                timberProps.operatingSystem.map((d) => {
+                    let propToPass = {};
+                    let { 'ga:sessions3': dataSet0, 'ga:sessions3': dataSet1, 'ga:operatingSystemVersion3': labels } = d
+                    propToPass.dataSet0 = `${dataSet0}`
+                    propToPass.dataSet1 = `${dataSet1}`
+                    propToPass.labels = `${labels}`
+                    propsToPass.push(propToPass);
+                })
+            }
         }
-        
+
+
         return (
             <div key={route}>
                 {ROUTES[route]}
@@ -134,7 +169,7 @@ export default function RouteManager(props) {
         <div>
             {setPropsToPass()}
         </div>
-        )
+    )
 }
 
 RouteManager.propTypes = {

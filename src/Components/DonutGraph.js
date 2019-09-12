@@ -7,17 +7,24 @@ var width = 960,
     outerRadius = Math.min(width, height) * .5 - 10,
     innerRadius = outerRadius * .6,
     displayMax = true,
-    data0 = [20,30,4,60,32,68],
-    data = [0, 0, 0, 0, 0, 0];
+    data0 = [],
+    data = [];
 
 export default class DonutGraph extends Component {
 
     componentDidMount() {
-        this.props.dataToGraph.map((data) => {
-            data0.splice(0,data.dataSet0);
-            data.splice(0,data.dataSet1);
+        this.props.dataToGraph.map((data1) => {
+            data0.push(data1.dataSet0);
+            data.push(data1.dataSet1);
         });
+        data0.splice(6, data0.length);
+        data.splice(6, data.length);
         this.phaseDonut()
+    }
+
+    componentWillUnmount() {
+        data0 = []
+        data = []
     }
 
     arcs(data, data0) {
@@ -26,7 +33,8 @@ export default class DonutGraph extends Component {
         let arcs0 = pie(data),
             arcs1 = pie(data0),
             i = -1,
-            currentArc;  
+            currentArc;
+        console.log(arcs0)
         while (++i < 6) {
             currentArc = arcs0[i];
             currentArc.innerRadius = innerRadius;
@@ -37,7 +45,7 @@ export default class DonutGraph extends Component {
     }
 
     phaseDonut() {
-        let colors = ['#bc2add', '#FF4436', '#4bdd2a', '#e77f18', '#1880E7', '#1de2ca', '#E21H35'];
+        let colors = ['#bc2add', '#FF4436', '#4bdd2a', '#e77f18', '#1880E7', '#1de2ca', '#E21H35', '#E23I86', '#fg77R2', '#3Wg487'];
         let svg = d3.select(this.refs.donutCanvas)
             .append("svg")
             .attr("width", width)
@@ -58,29 +66,29 @@ export default class DonutGraph extends Component {
         let legendSvg = svg.selectAll(".legend")
             .data(this.arcs(data0, data))
             .enter().append("g")
-            .attr("transform", (d,i) => {
+            .attr("transform", (d, i) => {
                 return "translate(" + (width - 110) + "," + (i * 15 + 20) + ")";
             })
             .attr("class", "legend")
 
         legendSvg.append("rect")
-        .attr("width", 10)
-        .attr("height", 10)
-        .attr("fill", (d,i) => {
-            return colors[i]
-        })
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("fill", (d, i) => {
+                return colors[i]
+            })
 
         legendSvg.append("text")
-        .text((d) => {
-            if (displayMax) {
-                return d.value
-            }else {
-                return d.next.value
-            }
-        })
-        .style("font-size", 12)
-        .attr("y", 10)
-        .attr("x", 11);
+            .text((d) => {
+                if (displayMax) {
+                    return d.value
+                } else {
+                    return d.next.value
+                }
+            })
+            .style("font-size", 12)
+            .attr("y", 10)
+            .attr("x", 11);
         // //TODO add logos for center of Donut
 
         this.transition(displayMax)
@@ -132,6 +140,7 @@ export default class DonutGraph extends Component {
         let t1 =
             t0.transition()
                 .attrTween("d", this.tweenArc((d, i) => {
+                    console.log(d)
                     let a0 = d.next.startAngle + d.next.endAngle,
                         a1 = d.startAngle - d.endAngle;
                     return {
@@ -157,7 +166,7 @@ export default class DonutGraph extends Component {
                         outerRadius: outerRadius
                     }
                 }))
-                //this could be used as an exit transition with another call to run
+        //this could be used as an exit transition with another call to run
         displayMax = !displayMax;
     }
 

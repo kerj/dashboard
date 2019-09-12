@@ -9,31 +9,31 @@ class D3Test extends Component {
         this.state = {
             loaded: false,
             data: {},
-            // omoGames: {
-            //     routes: [
-            //         'stackedBarChutes',
-            //         'stackedBarFletcher',
-            //         'stackedBarVortex',
-            //         'stackedBarMarie',
-            //         // 'stackedBarDorian',
-            //     ]
-            // },
-            // omoStories: {
-            //     routes: [
-            //         'listMostCompleted',
-            //         'listMostStarted'
-            //     ]
-            // },
-            // omhofWeekly: {
-            //     routes: [
-            //         'listWeekAwards',
-            //     ]
-            // },
-            // omhofDaily: {
-            //     routes: [
-            //         'awardOfTheDay',
-            //     ]
-            // },
+            omoGames: {
+                routes: [
+                    'stackedBarChutes',
+                    'stackedBarFletcher',
+                    'stackedBarVortex',
+                    'stackedBarMarie',
+                    // 'stackedBarDorian',
+                ]
+            },
+            omoStories: {
+                routes: [
+                    'listMostCompleted',
+                    'listMostStarted'
+                ]
+            },
+            omhofWeekly: {
+                routes: [
+                    'listWeekAwards',
+                ]
+            },
+            omhofDaily: {
+                routes: [
+                    'awardOfTheDay',
+                ]
+            },
             timbers: {
                 routes: [
                     'listWeekTopEmojis',
@@ -44,8 +44,6 @@ class D3Test extends Component {
             }
         }
     }
-
-  
 
     makeTimberGraphable = (cleanedData) => {
         let timberDataObj = {}
@@ -63,30 +61,26 @@ class D3Test extends Component {
             }
             return timberData
         })
-        console.log(timberData);
-        
         //make 4 arrays for each ending number
         let timberUser = []
         let timberTop5Emoji = []
         let timberMostPopular = []
         let timberOS = []
 
-        timberUser = timberData.slice(0,14)
-        timberTop5Emoji = timberData.slice(14,19)
-        timberMostPopular = timberData.slice(19,20)
+        timberUser = timberData.slice(0, 14)
+        timberTop5Emoji = timberData.slice(14, 19)
+        timberMostPopular = timberData.slice(19, 20)
         timberOS = timberData.slice(20, 29)
-        
+
         timberDataObj.user = timberUser
         timberDataObj.top5Emoji = timberTop5Emoji
         timberDataObj.mostPopEmoji = timberMostPopular
-        timberDataObj.operatingStstem = timberOS
+        timberDataObj.operatingSystem = timberOS
 
         return timberDataObj;
     }
 
-
-
-    fetchWeatherData = () => {
+    fetchGraphData = () => {
         let timbersQuery = 'http://sticky-data.local:8888/projects-dash/?project=timbers';
         axios.get(timbersQuery).then((response) => {
             let allKeys = Object.keys(response.data);
@@ -104,7 +98,43 @@ class D3Test extends Component {
                 return timberData
             })
 
-            console.log(this.makeTimberGraphable(cleanData))
+            let timberData = (cleanData) => {
+                let finalTimberData = {}
+                let timberDataObj = {}
+                let timberData = [];
+                cleanData.map((c, i) => {
+                    let currentKeys = Object.keys(c);
+                    let objsToMake = cleanData[i][currentKeys[0]].length;
+                    for (let k = 0; k < objsToMake; k++) {
+                        let timberDataObj = {};
+                        currentKeys.forEach((curr) => {
+                            //adds i for cases where names are the same 
+                            timberDataObj[curr + i] = c[curr][k]
+                        })
+                        timberData.push(timberDataObj);
+                    }
+                    return timberData
+                })
+                //make 4 arrays for each ending number
+                let timberUser = []
+                let timberTop5Emoji = []
+                let timberMostPopular = []
+                let timberOS = []
+
+                timberUser = timberData.slice(0, 14)
+                timberTop5Emoji = timberData.slice(14, 19)
+                timberMostPopular = timberData.slice(19, 20)
+                timberOS = timberData.slice(20, 29)
+
+                timberDataObj.user = timberUser
+                timberDataObj.top5Emoji = timberTop5Emoji
+                timberDataObj.mostPopEmoji = timberMostPopular
+                timberDataObj.operatingSystem = timberOS
+
+                finalTimberData.timberData = timberDataObj
+
+                return finalTimberData;
+            }
             let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
             axios.get(omoQuery).then((response) => {
                 const omo = response.data;
@@ -123,6 +153,10 @@ class D3Test extends Component {
                     this.setState({
                         data: Object.assign(weeklyData[0], omhofRawWeeklyData),
                         data: Object.assign(weeklyData[0], omhofRawDailyData),
+                        data: Object.assign(weeklyData[0], timberData(cleanData)),
+                        data: Object.assign(weeklyData[1], timberData(cleanData)),
+                        data: Object.assign(weeklyData[2], timberData(cleanData)),
+                        data: Object.assign(weeklyData[3], timberData(cleanData)),
                         data: weeklyData
                     });
                     console.log(this.state.data);
@@ -134,7 +168,7 @@ class D3Test extends Component {
     }
 
     componentDidMount() {
-        this.fetchWeatherData()
+        this.fetchGraphData()
     }
     render() {
         return (

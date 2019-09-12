@@ -96,7 +96,6 @@ export default class BarChart extends Component {
             })
             .attr('height', y.bandwidth())
     }
-
     render() {
         return (
             <div ref='canvas'>
