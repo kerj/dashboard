@@ -45,37 +45,43 @@ class D3Test extends Component {
         }
     }
 
-    // makeTimberGraphReady = (data) => {
-    //   data.map((c,i,a) => {
-    //       let currentKeys = Object.keys(c) //keys[i] = ga:
-    //       currentKeys.forEach((curr, j) => {
-    //           let currentDataArray = data[i][curr];
-    //           console.log(currentDataArray);
-    //         for (let k = 0; k < currentDataArray.length; k++) {
-    //            console.log(currentDataArray[k]);
-    //         } 
-    //       })
-    //   })
-    // }
+  
 
-    makeTimberGraphable = (data) => {
+    makeTimberGraphable = (cleanedData) => {
+        let timberDataObj = {}
         let timberData = [];
-        data.map((c,i,a) => { 
-            let currentKeys = Object.keys(c); // length = 4
-            let objsToMake = data[i][currentKeys[0]].length; 
+        cleanedData.map((c, i) => {
+            let currentKeys = Object.keys(c);
+            let objsToMake = cleanedData[i][currentKeys[0]].length;
             for (let k = 0; k < objsToMake; k++) {
                 let timberDataObj = {};
-                currentKeys.forEach((curr, j) => {
-                    timberDataObj[curr] = c[curr][k]
-                    console.log(timberDataObj);
+                currentKeys.forEach((curr) => {
+                    //adds i for cases where names are the same 
+                    timberDataObj[curr + i] = c[curr][k]
                 })
-                //push timberObj to timberdata
+                timberData.push(timberDataObj);
             }
-            
-           
-            
-            // for (let k = 0;  )
+            return timberData
         })
+        console.log(timberData);
+        
+        //make 4 arrays for each ending number
+        let timberUser = []
+        let timberTop5Emoji = []
+        let timberMostPopular = []
+        let timberOS = []
+
+        timberUser = timberData.slice(0,14)
+        timberTop5Emoji = timberData.slice(14,19)
+        timberMostPopular = timberData.slice(19,20)
+        timberOS = timberData.slice(20, 29)
+        
+        timberDataObj.user = timberUser
+        timberDataObj.top5Emoji = timberTop5Emoji
+        timberDataObj.mostPopEmoji = timberMostPopular
+        timberDataObj.operatingStstem = timberOS
+
+        return timberDataObj;
     }
 
 
@@ -83,9 +89,7 @@ class D3Test extends Component {
     fetchWeatherData = () => {
         let timbersQuery = 'http://sticky-data.local:8888/projects-dash/?project=timbers';
         axios.get(timbersQuery).then((response) => {
-            console.log(response.data)
             let allKeys = Object.keys(response.data);
-            //dataset as {{cols:[keys],rows:[values]}} to [{key:[values]},]
             let cleanData = allKeys.map((c) => {
                 let timberData = {}
                 let currentRows = response.data[`${c}`].rows;
@@ -99,29 +103,32 @@ class D3Test extends Component {
                 })
                 return timberData
             })
-           this.makeTimberGraphable(cleanData);
-        })
-        let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
-        axios.get(omoQuery).then((response) => {
-            const omo = response.data;
-          
-            let omhofQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omhof';
-            axios.get(omhofQuery).then((response) => {
-                const omhof = response.data;
-               
-                let omhofRawWeeklyData = {}
-                omhofRawWeeklyData.weekly = new Object(omhof['kiosks-7day'])
-                let omhofRawDailyData = {}
-                omhofRawDailyData.daily = new Object(omhof['kiosks-today'])
-                const weeklyData = Object.values(omo);
-                //weeklyData[x] happens for each route position 
-                //since omhof routes each only have 1 route they only need to live inside the 0 position in the prop data to routemanager
-                this.setState({
-                    data: Object.assign(weeklyData[0], omhofRawWeeklyData),
-                    data: Object.assign(weeklyData[0], omhofRawDailyData),
-                    data: weeklyData
-                });
-                this.setState({ loaded: true })
+
+            console.log(this.makeTimberGraphable(cleanData))
+            let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
+            axios.get(omoQuery).then((response) => {
+                const omo = response.data;
+
+                let omhofQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omhof';
+                axios.get(omhofQuery).then((response) => {
+                    const omhof = response.data;
+                    let omhofRawWeeklyData = {}
+                    omhofRawWeeklyData.weekly = new Object(omhof['kiosks-7day'])
+                    let omhofRawDailyData = {}
+                    omhofRawDailyData.daily = new Object(omhof['kiosks-today'])
+                    const weeklyData = Object.values(omo);
+                    //weeklyData[x] happens for each route position 
+                    //since omhof routes each only have 1 route they only need to live inside the 0 position in the prop data to routemanager
+
+                    this.setState({
+                        data: Object.assign(weeklyData[0], omhofRawWeeklyData),
+                        data: Object.assign(weeklyData[0], omhofRawDailyData),
+                        data: weeklyData
+                    });
+                    console.log(this.state.data);
+
+                    this.setState({ loaded: true })
+                })
             })
         })
     }
