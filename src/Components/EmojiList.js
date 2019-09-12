@@ -18,16 +18,16 @@ export default class EmojiList extends Component {
             .text((d) => {
                 return `${d.dataSet0} degrees celsius on ${d.labels}`
             })
-            .style("color", "slategrey")
+            .style("color", "whitesmoke")
             .attr("class", (d) => {
                 if (d > 79) {
                     return "higherTempurature"
                 } else { return "lowerTempurature" }
             })
             .transition()
-            .delay(1000)
+            .delay(2000)
             .duration(1000)
-            .style("color", "black")
+            .style("color", "red")
     }
 
     render() {
