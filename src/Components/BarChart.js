@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 export default class BarChart extends Component {
 
     componentDidMount() {
+        console.log(this.props.dataToGraph);
+        
         this.drawBarChart(this.props.dataToGraph)
     }
 
@@ -59,6 +61,7 @@ export default class BarChart extends Component {
             .attr("class", "x axis")
             .call(x)
             .append("text")
+            .style("fill", "whitesmoke")
             .attr("x", 200)
             .attr("dx", ".71em")
             .attr("transform", "rotate(-360)")
@@ -68,10 +71,12 @@ export default class BarChart extends Component {
         svgCanvas.append('g')
             .attr('class', 'x axis')
             .attr("transform", "translate(0, " + canvasHeight + ")")
+            .style("color", "whitesmoke")
             .call(d3.axisBottom(x))
         //y axis
         svgCanvas.append('g')
             .attr('class', 'y axis')
+            .style("color", "whitesmoke")
             .call(d3.axisLeft(y))
         //Bar Data to graph
         g.selectAll('rect')

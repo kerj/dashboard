@@ -8,14 +8,15 @@ var width = 960,
     innerRadius = outerRadius * .6,
     displayMax = true,
     data0 = [],
-    data = [];
+    data = [0,0,0,0,0,0];
 
 export default class DonutGraph extends Component {
 
     componentDidMount() {
+        console.log(this.props.dataToGraph)
         this.props.dataToGraph.map((data1) => {
             data0.push(data1.dataSet0);
-            data.push(data1.dataSet1);
+            // data.push(data1.dataSet1);
         });
         data0.splice(6, data0.length);
         data.splice(6, data.length);
@@ -24,7 +25,7 @@ export default class DonutGraph extends Component {
 
     componentWillUnmount() {
         data0 = []
-        data = []
+        // data = []
     }
 
     arcs(data, data0) {
@@ -79,13 +80,14 @@ export default class DonutGraph extends Component {
             })
 
         legendSvg.append("text")
-            .text((d) => {
+            .text((d,i) => {
                 if (displayMax) {
-                    return d.value
+                    return d.value + " " + this.props.dataToGraph[i]['dataSet1']
                 } else {
                     return d.next.value
                 }
             })
+            .style('fill', 'whitesmoke')
             .style("font-size", 12)
             .attr("y", 10)
             .attr("x", 11);

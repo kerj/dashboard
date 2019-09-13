@@ -20,7 +20,7 @@ export default function RouteManager(props) {
     useInterval(() => {
         updateRoute();
         setPropsToPass();
-    }, 5000)
+    }, 15000)
 
     function useInterval(callback, delay) {
         const savedCallback = useRef();
@@ -128,12 +128,27 @@ export default function RouteManager(props) {
                 console.log(timberProps.user.length)
                 timberProps.user.map((d) => {
                     let propToPass = {};
-                    let { 'ga:sessions0': dataSet0, 'ga:sessions0': dataSet1, 'ga:dayOfWeekName0': labels } = d
+                    let { 'new': dataSet0, 'return': dataSet1, 'ga:dayOfWeekName0': labels } = d
                     propToPass.dataSet0 = `${dataSet0}`
                     propToPass.dataSet1 = `${dataSet1}`
                     propToPass.labels = `${labels}`
                     propsToPass.push(propToPass);
                 })
+                propsToPass.reduce((acc, curr) => {
+                    if (curr['dataSet0'] !== "null"){
+                        acc['dataSet0'] = curr['dataSet0']
+                    }else if(curr['dataSet0'] === "null" ){
+                        curr['dataSet0'] = acc['dataSet0']
+                    }else if (curr['dataSet1'] !== "null"){
+                        acc['dataSet1'] = curr['dataSet1']
+                    }else{
+                        curr['dataSet1'] = acc['dataSet1']
+                    }
+                    return acc
+                })
+                for( let i = 0; i < propsToPass.length; i++){
+                    propsToPass.splice(i, 1)
+                }
             } else if (dataRoute.routeIterator === 2) {
                 console.log(timberProps.mostPopEmoji.length)
                 timberProps.mostPopEmoji.map((d) => {
@@ -148,12 +163,27 @@ export default function RouteManager(props) {
                 console.log(timberProps.operatingSystem.length)
                 timberProps.operatingSystem.map((d) => {
                     let propToPass = {};
-                    let { 'ga:sessions3': dataSet0, 'ga:sessions3': dataSet1, 'ga:operatingSystemVersion3': labels } = d
+                    let { 'ga:sessions3': dataSet0, 'ga:operatingSystem3': dataSet1, 'ga:operatingSystemVersion3': labels } = d
                     propToPass.dataSet0 = `${dataSet0}`
                     propToPass.dataSet1 = `${dataSet1}`
                     propToPass.labels = `${labels}`
                     propsToPass.push(propToPass);
                 })
+                // propsToPass.reduce((acc, curr) => {
+                //     if (curr['dataSet0'] !== "null"){
+                //         acc['dataSet0'] = curr['dataSet0']
+                //     }else if(curr['dataSet0'] === "null" ){
+                //         curr['dataSet0'] = acc['dataSet0']
+                //     }else if (curr['dataSet1'] !== "null"){
+                //         acc['dataSet1'] = curr['dataSet1']
+                //     }else{
+                //         curr['dataSet1'] = acc['dataSet1']
+                //     }
+                //     return acc
+                // })
+                // for( let i = 0; i < propsToPass.length; i++){
+                //     propsToPass.splice(i, 1)
+                // }
             }
         }
 

@@ -9,31 +9,31 @@ class D3Test extends Component {
         this.state = {
             loaded: false,
             data: {},
-            omoGames: {
-                routes: [
-                    'stackedBarChutes',
-                    'stackedBarFletcher',
-                    'stackedBarVortex',
-                    'stackedBarMarie',
-                    // 'stackedBarDorian',
-                ]
-            },
-            omoStories: {
-                routes: [
-                    'listMostCompleted',
-                    'listMostStarted'
-                ]
-            },
-            omhofWeekly: {
-                routes: [
-                    'listWeekAwards',
-                ]
-            },
-            omhofDaily: {
-                routes: [
-                    'awardOfTheDay',
-                ]
-            },
+            // omoGames: {
+            //     routes: [
+            //         'stackedBarChutes',
+            //         'stackedBarFletcher',
+            //         'stackedBarVortex',
+            //         'stackedBarMarie',
+            //         // 'stackedBarDorian',
+            //     ]
+            // },
+            // omoStories: {
+            //     routes: [
+            //         'listMostCompleted',
+            //         'listMostStarted'
+            //     ]
+            // },
+            // omhofWeekly: {
+            //     routes: [
+            //         'listWeekAwards',
+            //     ]
+            // },
+            // omhofDaily: {
+            //     routes: [
+            //         'awardOfTheDay',
+            //     ]
+            // },
             timbers: {
                 routes: [
                     'listWeekTopEmojis',
@@ -54,8 +54,21 @@ class D3Test extends Component {
             for (let k = 0; k < objsToMake; k++) {
                 let timberDataObj = {};
                 currentKeys.forEach((curr) => {
-                    //adds i for cases where names are the same 
+                    if (curr === 'ga:userType' && c[curr][k] === 'New Visitor') {
+                        timberDataObj.new = c[curr][k];
+                        timberDataObj.return = null;
+                    } else if (curr === 'ga:userType' && c[curr][k] === 'Returning Visitor'){
+                        timberDataObj.new = null;
+                        timberDataObj.return = c[curr][k];
+                    } else if ( curr === 'ga:operatingSystem' && c[curr][k] === 'iOS') {
+                        timberDataObj.iOS = c[curr][k]
+                        timberDataObj.android = null;
+                    }else if ( curr === 'ga:operatingSystem' && c[curr][k] === 'Android') {
+                        timberDataObj.iOS = null;
+                        timberDataObj.android = c[curr][k];
+                    }else
                     timberDataObj[curr + i] = c[curr][k]
+                    //adds i for cases where names are the same 
                 })
                 timberData.push(timberDataObj);
             }
@@ -108,6 +121,24 @@ class D3Test extends Component {
                     for (let k = 0; k < objsToMake; k++) {
                         let timberDataObj = {};
                         currentKeys.forEach((curr) => {
+                            if (curr === 'ga:userType' && c[curr][k] === 'New Visitor') {
+                                timberDataObj.new = c[curr][k];
+                                timberDataObj.return = null;
+                            } else if (curr === 'ga:userType' && c[curr][k] === 'Returning Visitor'){
+                                timberDataObj.new = null;
+                                timberDataObj.return = c[curr][k];
+                            } else if ( curr === 'ga:operatingSystem' && c[curr][k] === 'iOS') {
+                                timberDataObj.iOS = c[curr][k]
+                                timberDataObj.android = null;
+                            }else if ( curr === 'ga:operatingSystem' && c[curr][k] === 'Android') {
+                                timberDataObj.iOS = null;
+                                timberDataObj.android = c[curr][k];
+                            }else
+                            if ( curr === 'ga:sessions' && timberDataObj.new != null){
+                                timberDataObj.new = c[curr][k]
+                            }else if (curr === 'ga:sessions' && timberDataObj.new === null) {
+                                timberDataObj.return = c[curr][k]
+                            }
                             //adds i for cases where names are the same 
                             timberDataObj[curr + i] = c[curr][k]
                         })
@@ -159,9 +190,8 @@ class D3Test extends Component {
                         data: Object.assign(weeklyData[3], timberData(cleanData)),
                         data: weeklyData
                     });
-                    console.log(this.state.data);
-
                     this.setState({ loaded: true })
+                    console.log(this.state.data)
                 })
             })
         })
