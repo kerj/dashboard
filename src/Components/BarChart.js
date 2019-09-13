@@ -7,8 +7,6 @@ import PropTypes from 'prop-types';
 export default class BarChart extends Component {
 
     componentDidMount() {
-        console.log(this.props.dataToGraph);
-        
         this.drawBarChart(this.props.dataToGraph)
     }
 

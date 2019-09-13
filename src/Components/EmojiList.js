@@ -16,7 +16,7 @@ export default class EmojiList extends Component {
             .enter()
             .append("li")
             .text((d) => {
-                return `${d.dataSet0} degrees celsius on ${d.labels}`
+                return `${d.dataSet0} reads or emojis ${d.labels}`
             })
             .style("color", "whitesmoke")
             .attr("class", (d) => {
