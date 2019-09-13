@@ -9,19 +9,19 @@ class D3Test extends Component {
         this.state = {
             loaded: false,
             data: {},
-            omoGames: {
+            omo: {
                 routes: [
-                    'stackedBarChutes',
-                    'stackedBarFletcher',
-                    'stackedBarVortex',
-                    'stackedBarMarie',
+                    'stackedGameChutes',
+                    'stackedGameFletcher',
+                    'stackedGameVortex',
+                    'stackedGameMarie',
                     // 'stackedBarDorian',
-                ]
-            },
-            omoStories: {
-                routes: [
+                    'stackedStoryChutes',
+                    'stackedStoryFletcher',
+                    'stackedStoryVortex',
+                    'stackedStoryMarie',
                     'listMostCompleted',
-                    'listMostStarted'
+                    'listWeeklyTotal'
                 ]
             },
             omhofWeekly: {
@@ -115,13 +115,12 @@ class D3Test extends Component {
                 timberDataObj.operatingSystem = timberOS
 
                 finalTimberData.timberData = timberDataObj
-
+                console.log(finalTimberData)
                 return finalTimberData;
             }
             let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
             axios.get(omoQuery).then((response) => {
-                const omo = response.data;
-
+                const omoData = response.data;
                 let omhofQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omhof';
                 axios.get(omhofQuery).then((response) => {
                     const omhof = response.data;
@@ -129,19 +128,18 @@ class D3Test extends Component {
                     omhofRawWeeklyData.weekly = new Object(omhof['kiosks-7day'])
                     let omhofRawDailyData = {}
                     omhofRawDailyData.daily = new Object(omhof['kiosks-today'])
-                    const weeklyData = Object.values(omo);
+                    const weeklyData = { omoData };
+                    console.log(weeklyData)
                     //since omhof routes each only have 1 route/view they only need to live inside the 0 position in the prop data to routemanager
                     //keep this in mind data that has 2,3, or 50 routes/views need to have thier data available in state.data array at that index 
                     this.setState({
-                        data: Object.assign(weeklyData[0], omhofRawWeeklyData),
-                        data: Object.assign(weeklyData[0], omhofRawDailyData),
-                        data: Object.assign(weeklyData[0], timberData(cleanData)),
-                        data: Object.assign(weeklyData[1], timberData(cleanData)),
-                        data: Object.assign(weeklyData[2], timberData(cleanData)),
-                        data: Object.assign(weeklyData[3], timberData(cleanData)),
+                        data: Object.assign(weeklyData, omhofRawWeeklyData),
+                        data: Object.assign(weeklyData, omhofRawDailyData),
+                        data: Object.assign(weeklyData, timberData(cleanData)),
                         data: weeklyData
                     });
                     this.setState({ loaded: true })
+                    console.log(this.state.data)
                 })
             })
         })
