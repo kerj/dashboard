@@ -26,6 +26,7 @@ export default class DonutGraph extends Component {
     componentWillUnmount() {
         data0 = []
         // data = []
+        clearTimeout();
     }
 
     arcs(data, data0) {
@@ -82,7 +83,7 @@ export default class DonutGraph extends Component {
         legendSvg.append("text")
             .text((d,i) => {
                 if (displayMax) {
-                    return d.value + " " + this.props.dataToGraph[i]['dataSet1']
+                    return d.value + " " + this.props.dataToGraph[i]['dataSet1'] + " " + this.props.dataToGraph[i]['labels']
                 } else {
                     return d.next.value
                 }
@@ -142,7 +143,6 @@ export default class DonutGraph extends Component {
         let t1 =
             t0.transition()
                 .attrTween("d", this.tweenArc((d, i) => {
-                    console.log(d)
                     let a0 = d.next.startAngle + d.next.endAngle,
                         a1 = d.startAngle - d.endAngle;
                     return {
@@ -169,10 +169,13 @@ export default class DonutGraph extends Component {
                     }
                 }))
         //this could be used as an exit transition with another call to run
-        displayMax = !displayMax;
     }
 
     render() {
+        setTimeout(() => {
+            console.log(displayMax);
+            this.transition(!displayMax)
+        }, 12250);
 
         return (
             <div ref="donutCanvas">
