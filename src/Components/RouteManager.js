@@ -112,12 +112,13 @@ export default function RouteManager(props) {
                             propsToPass.push(propToPass);
                         })
                         break;
-                    case 'stackedStoryFletcher':
+                    case 'stackedStoryFletcher':// glitch showing two set of data
                         gameProps.fletcher.stories.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             propsToPass.push(propToPass);
                         })
+                        break;
                     case 'stackedStoryVortex':
                         gameProps.vortex.stories.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }

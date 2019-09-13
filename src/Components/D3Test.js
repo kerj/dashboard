@@ -41,7 +41,7 @@ class D3Test extends Component {
                     'mostPopularEmoji',
                     'mobileIosVsAndroid'
                 ]
-            }
+            },
         }
     }
 
@@ -129,9 +129,6 @@ class D3Test extends Component {
                     let omhofRawDailyData = {}
                     omhofRawDailyData.daily = new Object(omhof['kiosks-today'])
                     const weeklyData = { omoData };
-                    console.log(weeklyData)
-                    //since omhof routes each only have 1 route/view they only need to live inside the 0 position in the prop data to routemanager
-                    //keep this in mind data that has 2,3, or 50 routes/views need to have thier data available in state.data array at that index 
                     this.setState({
                         data: Object.assign(weeklyData, omhofRawWeeklyData),
                         data: Object.assign(weeklyData, omhofRawDailyData),
@@ -139,7 +136,6 @@ class D3Test extends Component {
                         data: weeklyData
                     });
                     this.setState({ loaded: true })
-                    console.log(this.state.data)
                 })
             })
         })
