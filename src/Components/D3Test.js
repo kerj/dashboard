@@ -9,31 +9,31 @@ class D3Test extends Component {
         this.state = {
             loaded: false,
             data: {},
-            // omoGames: {
-            //     routes: [
-            //         'stackedBarChutes',
-            //         'stackedBarFletcher',
-            //         'stackedBarVortex',
-            //         'stackedBarMarie',
-            //         // 'stackedBarDorian',
-            //     ]
-            // },
-            // omoStories: {
-            //     routes: [
-            //         'listMostCompleted',
-            //         'listMostStarted'
-            //     ]
-            // },
-            // omhofWeekly: {
-            //     routes: [
-            //         'listWeekAwards',
-            //     ]
-            // },
-            // omhofDaily: {
-            //     routes: [
-            //         'awardOfTheDay',
-            //     ]
-            // },
+            omoGames: {
+                routes: [
+                    'stackedBarChutes',
+                    'stackedBarFletcher',
+                    'stackedBarVortex',
+                    'stackedBarMarie',
+                    // 'stackedBarDorian',
+                ]
+            },
+            omoStories: {
+                routes: [
+                    'listMostCompleted',
+                    'listMostStarted'
+                ]
+            },
+            omhofWeekly: {
+                routes: [
+                    'listWeekAwards',
+                ]
+            },
+            omhofDaily: {
+                routes: [
+                    'awardOfTheDay',
+                ]
+            },
             timbers: {
                 routes: [
                     'listWeekTopEmojis',
@@ -43,54 +43,6 @@ class D3Test extends Component {
                 ]
             }
         }
-    }
-
-    makeTimberGraphable = (cleanedData) => {
-        let timberDataObj = {}
-        let timberData = [];
-        cleanedData.map((c, i) => {
-            let currentKeys = Object.keys(c);
-            let objsToMake = cleanedData[i][currentKeys[0]].length;
-            for (let k = 0; k < objsToMake; k++) {
-                let timberDataObj = {};
-                currentKeys.forEach((curr) => {
-                    if (curr === 'ga:userType' && c[curr][k] === 'New Visitor') {
-                        timberDataObj.new = c[curr][k];
-                        timberDataObj.return = null;
-                    } else if (curr === 'ga:userType' && c[curr][k] === 'Returning Visitor'){
-                        timberDataObj.new = null;
-                        timberDataObj.return = c[curr][k];
-                    } else if ( curr === 'ga:operatingSystem' && c[curr][k] === 'iOS') {
-                        timberDataObj.iOS = c[curr][k]
-                        timberDataObj.android = null;
-                    }else if ( curr === 'ga:operatingSystem' && c[curr][k] === 'Android') {
-                        timberDataObj.iOS = null;
-                        timberDataObj.android = c[curr][k];
-                    }else
-                    timberDataObj[curr + i] = c[curr][k]
-                    //adds i for cases where names are the same 
-                })
-                timberData.push(timberDataObj);
-            }
-            return timberData
-        })
-        //make 4 arrays for each ending number
-        let timberUser = []
-        let timberTop5Emoji = []
-        let timberMostPopular = []
-        let timberOS = []
-
-        timberUser = timberData.slice(0, 14)
-        timberTop5Emoji = timberData.slice(14, 19)
-        timberMostPopular = timberData.slice(19, 20)
-        timberOS = timberData.slice(20, 29)
-
-        timberDataObj.user = timberUser
-        timberDataObj.top5Emoji = timberTop5Emoji
-        timberDataObj.mostPopEmoji = timberMostPopular
-        timberDataObj.operatingSystem = timberOS
-
-        return timberDataObj;
     }
 
     fetchGraphData = () => {
@@ -124,21 +76,21 @@ class D3Test extends Component {
                             if (curr === 'ga:userType' && c[curr][k] === 'New Visitor') {
                                 timberDataObj.new = c[curr][k];
                                 timberDataObj.return = null;
-                            } else if (curr === 'ga:userType' && c[curr][k] === 'Returning Visitor'){
+                            } else if (curr === 'ga:userType' && c[curr][k] === 'Returning Visitor') {
                                 timberDataObj.new = null;
                                 timberDataObj.return = c[curr][k];
-                            } else if ( curr === 'ga:operatingSystem' && c[curr][k] === 'iOS') {
+                            } else if (curr === 'ga:operatingSystem' && c[curr][k] === 'iOS') {
                                 timberDataObj.iOS = c[curr][k]
                                 timberDataObj.android = null;
-                            }else if ( curr === 'ga:operatingSystem' && c[curr][k] === 'Android') {
+                            } else if (curr === 'ga:operatingSystem' && c[curr][k] === 'Android') {
                                 timberDataObj.iOS = null;
                                 timberDataObj.android = c[curr][k];
-                            }else
-                            if ( curr === 'ga:sessions' && timberDataObj.new != null){
-                                timberDataObj.new = c[curr][k]
-                            }else if (curr === 'ga:sessions' && timberDataObj.new === null) {
-                                timberDataObj.return = c[curr][k]
-                            }
+                            } else
+                                if (curr === 'ga:sessions' && timberDataObj.new != null) {
+                                    timberDataObj.new = c[curr][k]
+                                } else if (curr === 'ga:sessions' && timberDataObj.new === null) {
+                                    timberDataObj.return = c[curr][k]
+                                }
                             //adds i for cases where names are the same 
                             timberDataObj[curr + i] = c[curr][k]
                         })
@@ -178,9 +130,8 @@ class D3Test extends Component {
                     let omhofRawDailyData = {}
                     omhofRawDailyData.daily = new Object(omhof['kiosks-today'])
                     const weeklyData = Object.values(omo);
-                    //weeklyData[x] happens for each route position 
-                    //since omhof routes each only have 1 route they only need to live inside the 0 position in the prop data to routemanager
-
+                    //since omhof routes each only have 1 route/view they only need to live inside the 0 position in the prop data to routemanager
+                    //keep this in mind data that has 2,3, or 50 routes/views need to have thier data available in state.data array at that index 
                     this.setState({
                         data: Object.assign(weeklyData[0], omhofRawWeeklyData),
                         data: Object.assign(weeklyData[0], omhofRawDailyData),
@@ -191,7 +142,6 @@ class D3Test extends Component {
                         data: weeklyData
                     });
                     this.setState({ loaded: true })
-                    console.log(this.state.data)
                 })
             })
         })

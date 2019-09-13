@@ -21,7 +21,7 @@ export default function RouteManager(props) {
         updateRoute();
         setPropsToPass();
     }, 15000)
-
+    //hook to update view when routes change
     function useInterval(callback, delay) {
         const savedCallback = useRef();
         useEffect(() => {
@@ -42,16 +42,12 @@ export default function RouteManager(props) {
         setRoute(props.stateHelper[`${dataToCycle[dataRoute.datasetIterator]}`].routes[dataRoute.routeIterator]);
 
         dataRoute.routeIterator + 1 > routesAvailable.length - 1 || !routesAvailable.length === 2 ?
-            dataRoute.datasetIterator + 1 > dataToCycle.length - 1 ?
-                setDataRoute({ routeIterator: 0, datasetIterator: 0 }) :
-                setDataRoute({ routeIterator: 0, datasetIterator: dataRoute.datasetIterator + 1 }) :
+            (dataRoute.datasetIterator + 1 > dataToCycle.length - 1 ? setDataRoute({ routeIterator: 0, datasetIterator: 0 }) : setDataRoute({ routeIterator: 0, datasetIterator: dataRoute.datasetIterator + 1 })) :
             setDataRoute({ routeIterator: dataRoute.routeIterator + 1, datasetIterator: dataRoute.datasetIterator })
     }
 
     function setPropsToPass() {
-        // console.log(currentKey, route); this is the log to troubleshoot if needed
         propsToPass.length = 0;
-        //route = key : currentKey = value ....ie, 'stackedBar' : 'weeklyWeather'
         const ROUTES = {
             //omoGames
             stackedBarChutes: <BarChart dataToGraph={propsToPass} title={route} />,
@@ -70,90 +66,85 @@ export default function RouteManager(props) {
             mostPopularEmoji: <EmojiList dataToGraph={propsToPass} title={route} />,
             mobileIosVsAndroid: <DonutGraph dataToGraph={propsToPass} title={route} />,
         }
-
-
-        if (currentKey === 'omoGames') {
-            let gameProps = weeklyData[dataRoute.routeIterator].finishedGames;
-            gameProps.map((c) => {
-                const { finished: dataSet1, started: dataSet0 = 0, day: labels } = {...c}
-                const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
-                propsToPass.push(propToPass);
-            })
-        } else if (currentKey === 'omoStories') {
-            //need to find the story with the highest counts most read for the day then  
-            let storyProps = weeklyData[dataRoute.routeIterator].stories;
-            storyProps.map((c) => {
-                const { finished: dataSet0, started: dataSet1 = 0, day: labels } = {...c}
-                const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
-                propsToPass.push(propToPass);
-            })
-        } else if (currentKey === 'omhofWeekly') {
-            let omhofWeeklyProps = weeklyData[dataRoute.routeIterator].weekly;
-            omhofWeeklyProps.map((c) => {
-                const { page_path: dataSet0, count: dataSet1 = 0, page_title: labels } = {...c}
-                const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
-                propsToPass.push(propToPass);
-            })
-        } else if (currentKey === 'omhofDaily') {
-            let omhofDailyProps = weeklyData[dataRoute.routeIterator].daily;
-            omhofDailyProps.map((c) => {
-                const { page_path: dataSet0, count: dataSet1 = 0, page_title: labels } = {...c}
-                const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
-                propsToPass.push(propToPass);
-            })
-        } else if (currentKey === 'timbers') {
-            let timberProps = weeklyData[dataRoute.routeIterator].timberData;
-            if (dataRoute.routeIterator === 0) {
-                timberProps.top5Emoji.map((c) => {
-                    const { 'ga:eventLabel1': dataSet0, 'ga:totalEvents1': dataSet1, 'ga:totalEvents1': labels = ':D' } = {...c}
-                    const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
+        //assigns graphable objects to propsToPass array
+        switch (currentKey) {
+            case 'omoGames':
+                let gameProps = weeklyData[dataRoute.routeIterator].finishedGames;
+                gameProps.map((c) => {
+                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     propsToPass.push(propToPass);
                 })
-            } else if (dataRoute.routeIterator === 1) {
-                timberProps.user.map((c) => {
-                    const { 'new': dataSet0, 'return': dataSet1, 'ga:dayOfWeekName0': labels } = {...c}
-                    const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
+                break;
+            case 'omoStories':
+                let storyProps = weeklyData[dataRoute.routeIterator].stories;
+                storyProps.map((c) => {
+                    const { finished: dataSet0, started: dataSet1 = 0, day: labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     propsToPass.push(propToPass);
                 })
-                propsToPass.reduce((curr, acc) => {
-                    curr['dataSet0'] !== "null" ? 
-                    curr['dataSet1'] = acc['dataSet1'] : curr['dataSet0'] = acc['dataSet0']
-                    return acc
+                break;
+            case 'omhofWeekly':
+                let omhofWeeklyProps = weeklyData[dataRoute.routeIterator].weekly;
+                omhofWeeklyProps.map((c) => {
+                    const { page_path: dataSet0, count: dataSet1 = 0, page_title: labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                    propsToPass.push(propToPass);
                 })
-                for (let i = 0; i < propsToPass.length; i++) {
-                    propsToPass.splice(i+1, 1)
+                break;
+            case 'omhofDaily':
+                let omhofDailyProps = weeklyData[dataRoute.routeIterator].daily;
+                omhofDailyProps.map((c) => {
+                    const { page_path: dataSet0, count: dataSet1 = 0, page_title: labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                    propsToPass.push(propToPass);
+                })
+                break;
+            case 'timbers':
+                let timberProps = weeklyData[dataRoute.routeIterator].timberData;
+                switch (route) {
+                    case 'listWeekTopEmojis':
+                        timberProps.top5Emoji.map((c) => {
+                            const { 'ga:eventLabel1': dataSet0, 'ga:totalEvents1': dataSet1, 'ga:totalEvents1': labels = ':D' } = { ...c }
+                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                            propsToPass.push(propToPass);
+                        })
+                        break;
+                    case 'stackedBarNewVReturn':
+                        timberProps.user.map((c) => {
+                            const { 'new': dataSet0, 'return': dataSet1, 'ga:dayOfWeekName0': labels } = { ...c }
+                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                            propsToPass.push(propToPass);
+                        })
+                        propsToPass.reduce((curr, acc) => {
+                            curr['dataSet0'] !== "null" ?
+                                curr['dataSet1'] = acc['dataSet1'] :
+                                curr['dataSet0'] = acc['dataSet0'];
+                            return acc
+                        })
+                        for (let i = 0; i < propsToPass.length; i++) {
+                            propsToPass.splice(i + 1, 1)
+                        }
+                        break;
+                    case 'mostPopularEmoji':
+                        timberProps.mostPopEmoji.map((c) => {
+                            const { 'ga:eventLabel2': dataSet0, 'ga:totalEvents2': dataSet1, 'ga:totalEvents2': labels = ':D' } = { ...c }
+                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                            propsToPass.push(propToPass);
+                        })
+                        break;
+                    case 'mobileIosVsAndroid':
+                        timberProps.operatingSystem.map((c) => {
+                            const { 'ga:sessions3': dataSet0, 'ga:operatingSystem3': dataSet1, 'ga:operatingSystemVersion3': labels } = { ...c }
+                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                            propsToPass.push(propToPass);
+                        })
+                        break;
                 }
-            } else if (dataRoute.routeIterator === 2) {
-                timberProps.mostPopEmoji.map((c) => {
-                    const { 'ga:eventLabel2': dataSet0, 'ga:totalEvents2': dataSet1, 'ga:totalEvents2': labels = ':D' } = {...c}
-                    const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
-                    propsToPass.push(propToPass);
-                })
-            } else if (dataRoute.routeIterator === 3) {
-                timberProps.operatingSystem.map((c) => {
-                    const { 'ga:sessions3': dataSet0, 'ga:operatingSystem3': dataSet1, 'ga:operatingSystemVersion3': labels } = {...c}
-                    const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
-                    propsToPass.push(propToPass);
-                })
-                // propsToPass.reduce((acc, curr) => {
-                //     if (curr['dataSet0'] !== "null"){
-                //         acc['dataSet0'] = curr['dataSet0']
-                //     }else if(curr['dataSet0'] === "null" ){
-                //         curr['dataSet0'] = acc['dataSet0']
-                //     }else if (curr['dataSet1'] !== "null"){
-                //         acc['dataSet1'] = curr['dataSet1']
-                //     }else{
-                //         curr['dataSet1'] = acc['dataSet1']
-                //     }
-                //     return acc
-                // })
-                // for( let i = 0; i < propsToPass.length; i++){
-                //     propsToPass.splice(i, 1)
-                // }
-            }
+                //Add more data sets here
+                break
         }
-
-
+        //returns the view for the graph
         return (
             <div key={route}>
                 {ROUTES[route]}
