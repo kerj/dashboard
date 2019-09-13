@@ -74,99 +74,65 @@ export default function RouteManager(props) {
 
         if (currentKey === 'omoGames') {
             let gameProps = weeklyData[dataRoute.routeIterator].finishedGames;
-            gameProps.map((d) => {
-                let propToPass = {};
-                let { finished: dataSet1, started: dataSet0 = 0, day: labels } = d
-                propToPass.dataSet0 = `${dataSet0}`
-                propToPass.dataSet1 = `${dataSet1}`
-                propToPass.labels = `${labels}`
+            gameProps.map((c) => {
+                const { finished: dataSet1, started: dataSet0 = 0, day: labels } = {...c}
+                const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
                 propsToPass.push(propToPass);
             })
         } else if (currentKey === 'omoStories') {
             //need to find the story with the highest counts most read for the day then  
             let storyProps = weeklyData[dataRoute.routeIterator].stories;
-            storyProps.map((d) => {
-                let propToPass = {};
-                let { finished: dataSet0, started: dataSet1 = 0, day: labels } = d
-                propToPass.dataSet0 = `${dataSet0}`
-                propToPass.dataSet1 = `${dataSet1}`
-                propToPass.labels = `${labels}`
+            storyProps.map((c) => {
+                const { finished: dataSet0, started: dataSet1 = 0, day: labels } = {...c}
+                const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
                 propsToPass.push(propToPass);
             })
         } else if (currentKey === 'omhofWeekly') {
             let omhofWeeklyProps = weeklyData[dataRoute.routeIterator].weekly;
-            omhofWeeklyProps.map((d) => {
-                let propToPass = {};
-                let { page_path: dataSet0, count: dataSet1 = 0, page_title: labels } = d
-                propToPass.dataSet0 = `${dataSet0}`
-                propToPass.dataSet1 = `${dataSet1}`
-                propToPass.labels = `${labels}`
+            omhofWeeklyProps.map((c) => {
+                const { page_path: dataSet0, count: dataSet1 = 0, page_title: labels } = {...c}
+                const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
                 propsToPass.push(propToPass);
             })
         } else if (currentKey === 'omhofDaily') {
             let omhofDailyProps = weeklyData[dataRoute.routeIterator].daily;
-            omhofDailyProps.map((d) => {
-                let propToPass = {};
-                let { page_path: dataSet0, count: dataSet1 = 0, page_title: labels } = d
-                propToPass.dataSet0 = `${dataSet0}`
-                propToPass.dataSet1 = `${dataSet1}`
-                propToPass.labels = `${labels}`
+            omhofDailyProps.map((c) => {
+                const { page_path: dataSet0, count: dataSet1 = 0, page_title: labels } = {...c}
+                const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
                 propsToPass.push(propToPass);
             })
         } else if (currentKey === 'timbers') {
             let timberProps = weeklyData[dataRoute.routeIterator].timberData;
             if (dataRoute.routeIterator === 0) {
-                timberProps.top5Emoji.map((d) => {
-                    let propToPass = {};
-                    let { 'ga:eventLabel1': dataSet0, 'ga:totalEvents1': dataSet1, 'ga:totalEvents1': labels = ':D' } = d
-                    propToPass.dataSet0 = `${dataSet0}`
-                    propToPass.dataSet1 = `${dataSet1}`
-                    propToPass.labels = `${labels}`
+                timberProps.top5Emoji.map((c) => {
+                    const { 'ga:eventLabel1': dataSet0, 'ga:totalEvents1': dataSet1, 'ga:totalEvents1': labels = ':D' } = {...c}
+                    const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
                     propsToPass.push(propToPass);
                 })
             } else if (dataRoute.routeIterator === 1) {
-                console.log(timberProps.user.length)
-                timberProps.user.map((d) => {
-                    let propToPass = {};
-                    let { 'new': dataSet0, 'return': dataSet1, 'ga:dayOfWeekName0': labels } = d
-                    propToPass.dataSet0 = `${dataSet0}`
-                    propToPass.dataSet1 = `${dataSet1}`
-                    propToPass.labels = `${labels}`
+                timberProps.user.map((c) => {
+                    const { 'new': dataSet0, 'return': dataSet1, 'ga:dayOfWeekName0': labels } = {...c}
+                    const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
                     propsToPass.push(propToPass);
                 })
-                propsToPass.reduce((acc, curr) => {
-                    if (curr['dataSet0'] !== "null"){
-                        acc['dataSet0'] = curr['dataSet0']
-                    }else if(curr['dataSet0'] === "null" ){
-                        curr['dataSet0'] = acc['dataSet0']
-                    }else if (curr['dataSet1'] !== "null"){
-                        acc['dataSet1'] = curr['dataSet1']
-                    }else{
-                        curr['dataSet1'] = acc['dataSet1']
-                    }
+                propsToPass.reduce((curr, acc) => {
+                    curr['dataSet0'] !== "null" ? 
+                    curr['dataSet1'] = acc['dataSet1'] : curr['dataSet0'] = acc['dataSet0']
                     return acc
                 })
-                for( let i = 0; i < propsToPass.length; i++){
-                    propsToPass.splice(i, 1)
+                for (let i = 0; i < propsToPass.length; i++) {
+                    propsToPass.splice(i+1, 1)
                 }
             } else if (dataRoute.routeIterator === 2) {
-                console.log(timberProps.mostPopEmoji.length)
-                timberProps.mostPopEmoji.map((d) => {
-                    let propToPass = {};
-                    let { 'ga:eventLabel2': dataSet0, 'ga:totalEvents2': dataSet1, 'ga:totalEvents2': labels = ':D' } = d
-                    propToPass.dataSet0 = `${dataSet0}`
-                    propToPass.dataSet1 = `${dataSet1}`
-                    propToPass.labels = `${labels}`
+                timberProps.mostPopEmoji.map((c) => {
+                    const { 'ga:eventLabel2': dataSet0, 'ga:totalEvents2': dataSet1, 'ga:totalEvents2': labels = ':D' } = {...c}
+                    const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
                     propsToPass.push(propToPass);
                 })
             } else if (dataRoute.routeIterator === 3) {
-                console.log(timberProps.operatingSystem.length)
-                timberProps.operatingSystem.map((d) => {
-                    let propToPass = {};
-                    let { 'ga:sessions3': dataSet0, 'ga:operatingSystem3': dataSet1, 'ga:operatingSystemVersion3': labels } = d
-                    propToPass.dataSet0 = `${dataSet0}`
-                    propToPass.dataSet1 = `${dataSet1}`
-                    propToPass.labels = `${labels}`
+                timberProps.operatingSystem.map((c) => {
+                    const { 'ga:sessions3': dataSet0, 'ga:operatingSystem3': dataSet1, 'ga:operatingSystemVersion3': labels } = {...c}
+                    const propToPass = Object.assign({},{dataSet0,dataSet1,labels});
                     propsToPass.push(propToPass);
                 })
                 // propsToPass.reduce((acc, curr) => {
