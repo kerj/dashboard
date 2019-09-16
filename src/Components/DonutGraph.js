@@ -6,26 +6,25 @@ var width = 960,
     height = 500,
     outerRadius = Math.min(width, height) * .5 - 10,
     innerRadius = outerRadius * .6,
-    displayMax = true,
+    transitionIn = true,
     data0 = [],
-    data = [0,0,0,0,0,0];
+    data = [];
 
 export default class DonutGraph extends Component {
 
     componentDidMount() {
-        console.log(this.props.dataToGraph)
         this.props.dataToGraph.map((data1) => {
-            data0.push(data1.dataSet0);
-            // data.push(data1.dataSet1);
+            data.push(0);
+            return data0.push(data1.dataSet0);
         });
         data0.splice(6, data0.length);
         data.splice(6, data.length);
-        this.phaseDonut()
+        this.phaseDonut();
     }
 
     componentWillUnmount() {
-        data0 = []
-        // data = []
+        data0 = [];
+        data = [];
         clearTimeout();
     }
 
@@ -36,7 +35,6 @@ export default class DonutGraph extends Component {
             arcs1 = pie(data0),
             i = -1,
             currentArc;
-        console.log(arcs0)
         while (++i < 6) {
             currentArc = arcs0[i];
             currentArc.innerRadius = innerRadius;
@@ -81,8 +79,8 @@ export default class DonutGraph extends Component {
             })
 
         legendSvg.append("text")
-            .text((d,i) => {
-                if (displayMax) {
+            .text((d, i) => {
+                if (transitionIn) {
                     return d.value + " " + this.props.dataToGraph[i]['dataSet1'] + " " + this.props.dataToGraph[i]['labels']
                 } else {
                     return d.next.value
@@ -93,42 +91,13 @@ export default class DonutGraph extends Component {
             .attr("y", 10)
             .attr("x", 11);
         // //TODO add logos for center of Donut
-
-        this.transition(displayMax)
+        this.transition(transitionIn)
     }
 
-    tweenArc(b) {
-        return (a, i) => {
-            let d = b.call(this, a, i)
-            let interp = d3.interpolateObject(a, d);
-            for (let k in d) {
-                a[k] = d[k];
-            }//update data
-            return (t) => {
-                let tempProps = interp(t);
-                let arc = d3.arc()
-                if (tempProps.innerRadius) {
-                    return arc({
-                        innerRadius: tempProps.innerRadius,
-                        outerRadius: tempProps.outerRadius,
-                        startAngle: a.startAngle,
-                        endAngle: a.endAngle,
-                    })
-                } else {
-                    return arc({
-                        innerRadius: a.innerRadius,
-                        outerRadius: a.outerRadius,
-                        startAngle: tempProps.startAngle,
-                        endAngle: tempProps.endAngle,
-                    })
-                }
-            };
-        }
-    }
 
-    transition(displayMax) {
+    transition(transitionIn) {
         let path = d3.selectAll(".arc > path")
-            .data(displayMax ? this.arcs(data, data0) : this.arcs(data0, data));
+            .data(transitionIn ? this.arcs(data, data0) : this.arcs(data0, data));
         //Wedges Split into two rings
         let t0 =
             path.transition()
@@ -170,12 +139,40 @@ export default class DonutGraph extends Component {
                 }))
         //this could be used as an exit transition with another call to run
     }
+    //tweenArc can be called twice in a row and cause the animation to look choppy initially - this doesnt always happen
+    tweenArc(b) {
+        return (a, i) => {
+            let d = b.call(this, a, i)
+            let interp = d3.interpolateObject(a, d);
+            for (let k in d) {
+                a[k] = d[k];
+            }//update data
+            return (t) => {
+                let tempProps = interp(t);
+                let arc = d3.arc()
+                if (tempProps.innerRadius) {
+                    return arc({
+                        innerRadius: tempProps.innerRadius,
+                        outerRadius: tempProps.outerRadius,
+                        startAngle: a.startAngle,
+                        endAngle: a.endAngle,
+                    })
+                } else {
+                    return arc({
+                        innerRadius: a.innerRadius,
+                        outerRadius: a.outerRadius,
+                        startAngle: tempProps.startAngle,
+                        endAngle: tempProps.endAngle,
+                    })
+                }
+            };
+        }
+    }
 
     render() {
         setTimeout(() => {
-            console.log(displayMax);
-            this.transition(!displayMax)
-        }, 12250);
+            this.transition(!transitionIn)
+        }, 12200);
 
         return (
             <div ref="donutCanvas">
