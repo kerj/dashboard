@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import emojiList from './../CSS/emojiList.css'
 import * as d3 from 'd3';
 
 export default class EmojiList extends Component {
 
     componentDidMount() {
-        this.displayList(this.props.dataToGraph)
+        // console.log(this.props.dataToGraph);
+        this.displayList(this.props.dataToGraph);
     }
 
     displayList(data) {
+
         //this shows as text what is displayed in the barchart
         d3.select(this.refs.list)
             .selectAll("li")
@@ -16,16 +19,11 @@ export default class EmojiList extends Component {
             .enter()
             .append("li")
             .text((d) => {
-                return `${d.dataSet0} reads or emojis ${d.labels}`
+                return `${d.dataSet0} ${d.dataSet1} ${d.labels}`
             })
-            .style("color", "whitesmoke")
-            .attr("class", (d) => {
-                if (d > 79) {
-                    return "higherTempurature"
-                } else { return "lowerTempurature" }
-            })
+            .style("color", "black")
             .transition()
-            .delay(2000)
+            .delay(500)
             .duration(1000)
             .style("color", "red")
     }
@@ -33,7 +31,6 @@ export default class EmojiList extends Component {
     render() {
         return (
             <div ref="list">
-
             </div>
         )
     }
