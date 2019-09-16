@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 export default class BarChart extends Component {
 
     componentDidMount() {
+        console.log(this.props.dataToGraph)
         this.drawBarChart(this.props.dataToGraph)
     }
 
@@ -109,5 +110,5 @@ export default class BarChart extends Component {
 
 BarChart.propTypes = {
     dataToGraph: PropTypes.array.isRequired,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.any
 }

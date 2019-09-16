@@ -115,7 +115,7 @@ class D3Test extends Component {
                 timberDataObj.operatingSystem = timberOS
 
                 finalTimberData.timberData = timberDataObj
-                console.log(finalTimberData)
+
                 return finalTimberData;
             }
             let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
@@ -124,15 +124,34 @@ class D3Test extends Component {
                 let omhofQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omhof';
                 axios.get(omhofQuery).then((response) => {
                     const omhof = response.data;
-                    let omhofRawWeeklyData = {}
-                    omhofRawWeeklyData.weekly = new Object(omhof['kiosks-7day'])
-                    let omhofRawDailyData = {}
-                    omhofRawDailyData.daily = new Object(omhof['kiosks-today'])
-                    const weeklyData = { omoData };
+                    console.log(omhof)
+
+                    let filteredOmhof = (dataKey) => {
+                        let temp = []
+                        Object.keys(omhof[dataKey]).forEach((e, i) => {
+                            if (omhof[dataKey][e]['page_path'] === '/detail') {
+                                omhof[dataKey][e]['page_title'] = omhof[dataKey][e]['page_title'].replace(/[^\w_]/g, " ");
+                                temp.push(omhof[dataKey][e])
+                            }
+                        })
+
+                        return temp;
+                    }
+
+                    let omhofRawWeeklyData = {
+                        weekly: filteredOmhof('kiosks-7day'),
+                    }
+
+                    let omhofRawDailyData = {
+                        daily: filteredOmhof('kiosks-today'),
+                    }
+
+                    let weeklyData = { omoData };
+                    Object.assign(weeklyData, omhofRawDailyData)
+                    Object.assign(weeklyData, omhofRawWeeklyData)
+                    Object.assign(weeklyData, timberData(cleanData))
+
                     this.setState({
-                        data: Object.assign(weeklyData, omhofRawWeeklyData),
-                        data: Object.assign(weeklyData, omhofRawDailyData),
-                        data: Object.assign(weeklyData, timberData(cleanData)),
                         data: weeklyData
                     });
                     this.setState({ loaded: true })
