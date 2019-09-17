@@ -9,46 +9,45 @@ class D3Test extends Component {
         this.state = {
             loaded: false,
             data: {},
-            // omo: {
-            //     routes: [
-            //         'stackedGameChutes',
-            //         'stackedGameFletcher',
-            //         'stackedGameVortex',
-            //         'stackedGameMarie',
-            //         // 'stackedBarDorian',
-            //         'stackedStoryChutes',
-            //         'stackedStoryFletcher',
-            //         'stackedStoryVortex',
-            //         'stackedStoryMarie',
-            //         'listMostCompleted',
-            //         'listWeeklyTotal'
-            //     ]
-            // },
-            // omhofWeekly: {
-            //     routes: [
-            //         'listWeekAwards',
-            //     ]
-            // },
-            // omhofDaily: {
-            //     routes: [
-            //         'awardOfTheDay',
-            //     ]
-            // },
-            timbers: {
+            omo: {
                 routes: [
-                    'listWeekTopEmojis',
-                    'stackedBarNewVReturn',
-                    'mostPopularEmoji',
-                    'mobileIosVsAndroid'
+                    //         'stackedGameChutes',
+                    //         'stackedGameFletcher',
+                    //         'stackedGameVortex',
+                    //         'stackedGameMarie',
+                    //         // 'stackedBarDorian',
+                    //         'stackedStoryChutes',
+                    //         'stackedStoryFletcher',
+                    //         'stackedStoryVortex',
+                    //         'stackedStoryMarie',
+                    'listMostCompleted',
+                    'listWeeklyTotal'
                 ]
             },
+            omhofWeekly: {
+                routes: [
+                    'listWeekAwards',
+                ]
+            },
+            omhofDaily: {
+                routes: [
+                    'awardOfTheDay',
+                ]
+            },
+            // timbers: {
+            //     routes: [
+            //         'listWeekTopEmojis',
+            //         'stackedBarNewVReturn',
+            //         'mostPopularEmoji',
+            //         'mobileIosVsAndroid'
+            //     ]
+            // },
         }
     }
 
     fetchGraphData = () => {
         let timbersQuery = 'http://sticky-data.local:8888/projects-dash/?project=timbers';
         axios.get(timbersQuery).then((response) => {
-            console.log(response.data)
             let allKeys = Object.keys(response.data);
             let cleanData = allKeys.map((c) => {
                 let timberData = {}
@@ -59,7 +58,7 @@ class D3Test extends Component {
                     for (let j = 0; j <= currentRows.length - 1; j++) {
                         timberData[curr].push(currentRows[j][i]);
                     }
-                    if (currentRows.length === 0 ){
+                    if (currentRows.length === 0) {
                         timberData[curr].push("none")
                     }
                     return timberData
@@ -68,7 +67,6 @@ class D3Test extends Component {
             })
 
             let timberData = (cleanData) => {
-                console.log(cleanData)
                 let finalTimberData = {}
                 let timberDataObj = {}
                 let timberData = [];
@@ -113,11 +111,11 @@ class D3Test extends Component {
                 })
 
                 //issue with response-users-newusers inconsistant response length where a day can be cut off
-                timberUser = timberData.slice(0, 13)
-                timberTop5Emoji = timberData.slice(13, 18)
-                timberMostPopular = timberData.slice(18, 19)
-                timberOS = timberData.slice(19, 28)
-               
+                timberUser = timberData.slice(0, 14)
+                timberTop5Emoji = timberData.slice(14, 19)
+                timberMostPopular = timberData.slice(19, 20)
+                timberOS = timberData.slice(20, 29)
+
 
                 timberDataObj.user = timberUser
                 timberDataObj.top5Emoji = timberTop5Emoji
@@ -125,13 +123,24 @@ class D3Test extends Component {
                 timberDataObj.operatingSystem = timberOS
 
                 finalTimberData.timberData = timberDataObj
-                console.log(finalTimberData)
 
                 return finalTimberData;
             }
             let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
             axios.get(omoQuery).then((response) => {
                 const omoData = response.data;
+                let omoKeys = Object.keys(omoData)
+                let weeklyGames = {}
+                let weeklyStories = {}
+                omoKeys.map((c, i, a) => {
+                    console.log(c)
+                    weeklyGames[c+"weeklyStats"] = omoData[c].finishedGames.reduce((curr, acc) => {
+                        acc.finished = parseInt(acc.finished) + parseInt(curr.finished)
+                        return acc
+                    })
+                    return weeklyGames
+                })
+                console.log(weeklyGames)
                 let omhofQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omhof';
                 axios.get(omhofQuery).then((response) => {
                     const omhof = response.data;
@@ -166,7 +175,6 @@ class D3Test extends Component {
                         data: weeklyData
                     });
                     this.setState({ loaded: true })
-                    console.log(this.state.data)
                 })
             })
         })
