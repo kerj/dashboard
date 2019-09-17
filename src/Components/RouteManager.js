@@ -13,6 +13,7 @@ export default function RouteManager(props) {
 
     let propsToPass = [];
     const weeklyData = props.stateHelper.data;
+    console.log(weeklyData)
     //routes change every 15 seconds
     useInterval(() => {
         updateRoute();
@@ -187,7 +188,7 @@ export default function RouteManager(props) {
                         break;
                     case 'mostPopularEmoji':
                         timberProps.mostPopEmoji.map((c) => {
-                            const { 'ga:eventLabel2': dataSet0, 'ga:totalEvents2': dataSet1, 'ga:totalEvents2': labels = ':D' } = { ...c }
+                            const { 'ga:eventLabel2': dataSet0 = 'none used', 'ga:totalEvents2': dataSet1 = "today", 'ga:totalEvents2': labels = ':D' } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })

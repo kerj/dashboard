@@ -7,32 +7,32 @@ var width = 960,
     outerRadius = Math.min(width, height) * .5 - 10,
     innerRadius = outerRadius * .6,
     transitionIn = true,
-    data0 = [],
-    data = [];
+    activeData = [],
+    queuedData = [];
 
 export default class DonutGraph extends Component {
 
     componentDidMount() {
         this.props.dataToGraph.map((data1) => {
-            data.push(0);
-            return data0.push(data1.dataSet0);
+            queuedData.push(0);
+            return activeData.push(data1.dataSet0);
         });
-        data0.splice(6, data0.length);
-        data.splice(6, data.length);
+        activeData.splice(6, activeData.length);
+        queuedData.splice(6, queuedData.length);
         this.phaseDonut();
     }
 
     componentWillUnmount() {
-        data0 = [];
-        data = [];
-        clearTimeout();
+        activeData = [];
+        queuedData = [];
+        transitionIn = true;
     }
 
-    arcs(data, data0) {
+    arcs(queuedData, activeData) {
         let pie = d3.pie()
             .sort(null);
-        let arcs0 = pie(data),
-            arcs1 = pie(data0),
+        let arcs0 = pie(queuedData),
+            arcs1 = pie(activeData),
             i = -1,
             currentArc;
         while (++i < 6) {
@@ -50,7 +50,7 @@ export default class DonutGraph extends Component {
             let interp = d3.interpolateObject(a, d);
             for (let k in d) {
                 a[k] = d[k];
-            }//update data
+            }//update queuedData
             return (t) => {
                 let tempProps = interp(t);
                 let arc = d3.arc()
@@ -81,7 +81,7 @@ export default class DonutGraph extends Component {
             .attr("height", height)
 
         svg.selectAll(".arc")
-            .data(this.arcs(data, data0))
+            .data(this.arcs(queuedData, activeData))
             .enter().append("g")
             .attr("class", "arc")
             .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
@@ -93,7 +93,7 @@ export default class DonutGraph extends Component {
 
         //TODO add legend    
         let legendSvg = svg.selectAll(".legend")
-            .data(this.arcs(data0, data))
+            .data(this.arcs(activeData, queuedData))
             .enter().append("g")
             .attr("transform", (d, i) => {
                 return "translate(" + (width - 110) + "," + (i * 15 + 20) + ")";
@@ -123,56 +123,58 @@ export default class DonutGraph extends Component {
         this.transition(transitionIn)
     }
 
-
-    transition(transitionIn) {
+    transition(inOrOut) {
         let path = d3.selectAll(".arc > path")
-            .data(transitionIn ? this.arcs(data, data0) : this.arcs(data0, data));
-        //Wedges Split into two rings
-        let t0 =
-            path.transition()
-                .duration(750)
-                .attrTween("d", this.tweenArc((d, i) => {
-                    return {
-                        innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
-                        outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
-                    };
-                }))
-                //wedges to be centered on final position
-                .transition()
-                .attrTween("d", this.tweenArc((d, i) => {
-                    let a0 = d.next.startAngle + d.next.endAngle,
-                        a1 = d.startAngle - d.endAngle;
-                    return {
-                        startAngle: (a0 + a1) / 2,
-                        endAngle: (a0 - a1) / 2
-                    };
-                }))
-                //wedges then update values, change size
-                .transition()
-                .attrTween("d", this.tweenArc((d, i) => {
-                    return {
-                        startAngle: d.next.startAngle,
-                        endAngle: d.next.endAngle
-                    };
-                }))
-                //wedges reunite into a single ring
-                .transition()
-                .attrTween("d", this.tweenArc((d, i) => {
-                    return {
-                        innerRadius: innerRadius,
-                        outerRadius: outerRadius
-                    }
-                }))
+            .data(inOrOut ? this.arcs(queuedData, activeData) :
+                this.arcs(activeData, queuedData))
+            //Wedges Split into two rings
+            .transition()
+            .duration(750)
+            .attrTween("d", this.tweenArc((d, i) => {
+                return {
+                    innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
+                    outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
+                };
+            }))
+            //wedges to be centered on final position
+            .transition()
+            .attrTween("d", this.tweenArc((d, i) => {
+                let a0 = d.next.startAngle + d.next.endAngle,
+                    a1 = d.startAngle - d.endAngle;
+                return {
+                    startAngle: (a0 + a1) / 2,
+                    endAngle: (a0 - a1) / 2
+                };
+            }))
+            //wedges then update values, change size
+            .transition()
+            .attrTween("d", this.tweenArc((d, i) => {
+                return {
+                    startAngle: d.next.startAngle,
+                    endAngle: d.next.endAngle
+                };
+            }))
+            //wedges reunite into a single ring
+            .transition()
+            .attrTween("d", this.tweenArc((d, i) => {
+                return {
+                    innerRadius: innerRadius,
+                    outerRadius: outerRadius
+                }
+            }))
         //this could be used as an exit transition with another call to run
+        if (!transitionIn) {
+            clearTimeout();
+        } else {
+            transitionIn = false;
+            setTimeout(() => {
+                this.transition(transitionIn)
+            }, 12200);
+        }
     }
-    //tweenArc can be called twice in a row and cause the animation to look choppy initially - this doesnt always happen
 
 
     render() {
-        setTimeout(() => {
-            this.transition(!transitionIn)
-        }, 12200);
-
         return (
             <div ref="donutCanvas">
             </div>

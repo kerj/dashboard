@@ -57,7 +57,10 @@ class D3Test extends Component {
                 currentCols.forEach((curr, i) => {
                     timberData[curr] = [];
                     for (let j = 0; j <= currentRows.length - 1; j++) {
-                        timberData[curr].push(currentRows[j][i])
+                        timberData[curr].push(currentRows[j][i]);
+                    }
+                    if (currentRows.length === 0 ){
+                        timberData[curr].push("none")
                     }
                     return timberData
                 })
@@ -65,6 +68,7 @@ class D3Test extends Component {
             })
 
             let timberData = (cleanData) => {
+                console.log(cleanData)
                 let finalTimberData = {}
                 let timberDataObj = {}
                 let timberData = [];
@@ -75,7 +79,7 @@ class D3Test extends Component {
                 let timberMostPopular = []
                 let timberOS = []
 
-                cleanData.map((c, i) => {
+                cleanData.forEach((c, i) => {
                     let currentKeys = Object.keys(c);
                     let objsToMake = cleanData[i][currentKeys[0]].length;
                     //need to account for when an emoji has not yet been used today!!
@@ -108,11 +112,12 @@ class D3Test extends Component {
                     return timberData
                 })
 
-
-                timberUser = timberData.slice(0, 14)
-                timberTop5Emoji = timberData.slice(14, 19)
-                timberMostPopular = timberData.slice(19, 20)
-                timberOS = timberData.slice(20, 29)
+                //issue with response-users-newusers inconsistant response length where a day can be cut off
+                timberUser = timberData.slice(0, 13)
+                timberTop5Emoji = timberData.slice(13, 18)
+                timberMostPopular = timberData.slice(18, 19)
+                timberOS = timberData.slice(19, 28)
+               
 
                 timberDataObj.user = timberUser
                 timberDataObj.top5Emoji = timberTop5Emoji
