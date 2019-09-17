@@ -132,15 +132,18 @@ class D3Test extends Component {
                 let omoKeys = Object.keys(omoData)
                 let weeklyGames = {}
                 let weeklyStories = {}
-                omoKeys.map((c, i, a) => {
-                    console.log(c)
-                    weeklyGames[c+"weeklyStats"] = omoData[c].finishedGames.reduce((curr, acc) => {
+                omoKeys.map((c) => {
+                    weeklyStories[c + "weeklystats"] = omoData[c].stories.reduce((curr, acc) => {
                         acc.finished = parseInt(acc.finished) + parseInt(curr.finished)
                         return acc
                     })
-                    return weeklyGames
+                    weeklyGames[c + "weeklyStats"] = omoData[c].finishedGames.reduce((curr, acc) => {
+                        acc.finished = parseInt(acc.finished) + parseInt(curr.finished)
+                        return acc
+                    })
+                    return weeklyGames, weeklyStories
                 })
-                console.log(weeklyGames)
+                console.log(weeklyGames, weeklyStories)
                 let omhofQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omhof';
                 axios.get(omhofQuery).then((response) => {
                     const omhof = response.data;
