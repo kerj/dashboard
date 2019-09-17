@@ -13,7 +13,6 @@ export default function RouteManager(props) {
 
     let propsToPass = [];
     const weeklyData = props.stateHelper.data;
-    console.log(weeklyData)
     //routes change every 15 seconds
     useInterval(() => {
         updateRoute();
