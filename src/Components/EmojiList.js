@@ -6,7 +6,7 @@ import * as d3 from 'd3';
 export default class EmojiList extends Component {
 
     componentDidMount() {
-        // console.log(this.props.dataToGraph);
+        console.log(this.props.dataToGraph);
         this.displayList(this.props.dataToGraph);
     }
 
@@ -19,6 +19,7 @@ export default class EmojiList extends Component {
             .enter()
             .append("li")
             .text((d) => {
+                //d.dataSet0 should be an Image!!
                 return `${d.dataSet0} ${d.dataSet1} ${d.labels}`
             })
             .style("color", "black")

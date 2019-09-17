@@ -9,31 +9,31 @@ class D3Test extends Component {
         this.state = {
             loaded: false,
             data: {},
-            omo: {
-                routes: [
-                    'stackedGameChutes',
-                    'stackedGameFletcher',
-                    'stackedGameVortex',
-                    'stackedGameMarie',
-                    // 'stackedBarDorian',
-                    'stackedStoryChutes',
-                    'stackedStoryFletcher',
-                    'stackedStoryVortex',
-                    'stackedStoryMarie',
-                    'listMostCompleted',
-                    'listWeeklyTotal'
-                ]
-            },
-            omhofWeekly: {
-                routes: [
-                    'listWeekAwards',
-                ]
-            },
-            omhofDaily: {
-                routes: [
-                    'awardOfTheDay',
-                ]
-            },
+            // omo: {
+            //     routes: [
+            //         'stackedGameChutes',
+            //         'stackedGameFletcher',
+            //         'stackedGameVortex',
+            //         'stackedGameMarie',
+            //         // 'stackedBarDorian',
+            //         'stackedStoryChutes',
+            //         'stackedStoryFletcher',
+            //         'stackedStoryVortex',
+            //         'stackedStoryMarie',
+            //         'listMostCompleted',
+            //         'listWeeklyTotal'
+            //     ]
+            // },
+            // omhofWeekly: {
+            //     routes: [
+            //         'listWeekAwards',
+            //     ]
+            // },
+            // omhofDaily: {
+            //     routes: [
+            //         'awardOfTheDay',
+            //     ]
+            // },
             timbers: {
                 routes: [
                     'listWeekTopEmojis',
@@ -48,6 +48,7 @@ class D3Test extends Component {
     fetchGraphData = () => {
         let timbersQuery = 'http://sticky-data.local:8888/projects-dash/?project=timbers';
         axios.get(timbersQuery).then((response) => {
+            console.log(response.data)
             let allKeys = Object.keys(response.data);
             let cleanData = allKeys.map((c) => {
                 let timberData = {}
@@ -67,9 +68,17 @@ class D3Test extends Component {
                 let finalTimberData = {}
                 let timberDataObj = {}
                 let timberData = [];
+
+                //make 4 arrays for each ending number
+                let timberUser = []
+                let timberTop5Emoji = []
+                let timberMostPopular = []
+                let timberOS = []
+
                 cleanData.map((c, i) => {
                     let currentKeys = Object.keys(c);
                     let objsToMake = cleanData[i][currentKeys[0]].length;
+                    //need to account for when an emoji has not yet been used today!!
                     for (let k = 0; k < objsToMake; k++) {
                         let timberDataObj = {};
                         currentKeys.forEach((curr) => {
@@ -98,11 +107,7 @@ class D3Test extends Component {
                     }
                     return timberData
                 })
-                //make 4 arrays for each ending number
-                let timberUser = []
-                let timberTop5Emoji = []
-                let timberMostPopular = []
-                let timberOS = []
+
 
                 timberUser = timberData.slice(0, 14)
                 timberTop5Emoji = timberData.slice(14, 19)
@@ -115,6 +120,7 @@ class D3Test extends Component {
                 timberDataObj.operatingSystem = timberOS
 
                 finalTimberData.timberData = timberDataObj
+                console.log(finalTimberData)
 
                 return finalTimberData;
             }
@@ -155,6 +161,7 @@ class D3Test extends Component {
                         data: weeklyData
                     });
                     this.setState({ loaded: true })
+                    console.log(this.state.data)
                 })
             })
         })

@@ -44,6 +44,35 @@ export default class DonutGraph extends Component {
         return arcs0
     }
 
+    tweenArc(b) {
+        return (a, i) => {
+            let d = b.call(this, a, i)
+            let interp = d3.interpolateObject(a, d);
+            for (let k in d) {
+                a[k] = d[k];
+            }//update data
+            return (t) => {
+                let tempProps = interp(t);
+                let arc = d3.arc()
+                if (tempProps.innerRadius) {
+                    return arc({
+                        innerRadius: tempProps.innerRadius,
+                        outerRadius: tempProps.outerRadius,
+                        startAngle: a.startAngle,
+                        endAngle: a.endAngle,
+                    })
+                } else {
+                    return arc({
+                        innerRadius: a.innerRadius,
+                        outerRadius: a.outerRadius,
+                        startAngle: tempProps.startAngle,
+                        endAngle: tempProps.endAngle,
+                    })
+                }
+            };
+        }
+    }
+
     phaseDonut() {
         let colors = ['#bc2add', '#FF4436', '#4bdd2a', '#e77f18', '#1880E7', '#1de2ca', '#E21H35', '#E23I86', '#fg77R2', '#3Wg487'];
         let svg = d3.select(this.refs.donutCanvas)
@@ -107,10 +136,9 @@ export default class DonutGraph extends Component {
                         innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
                         outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
                     };
-                }));
-        //wedges to be centered on final position
-        let t1 =
-            t0.transition()
+                }))
+                //wedges to be centered on final position
+                .transition()
                 .attrTween("d", this.tweenArc((d, i) => {
                     let a0 = d.next.startAngle + d.next.endAngle,
                         a1 = d.startAngle - d.endAngle;
@@ -118,19 +146,17 @@ export default class DonutGraph extends Component {
                         startAngle: (a0 + a1) / 2,
                         endAngle: (a0 - a1) / 2
                     };
-                }));
-        //wedges then update values, change size
-        let t2 =
-            t1.transition()
+                }))
+                //wedges then update values, change size
+                .transition()
                 .attrTween("d", this.tweenArc((d, i) => {
                     return {
                         startAngle: d.next.startAngle,
                         endAngle: d.next.endAngle
                     };
-                }));
-        //wedges reunite into a single ring
-        let t3 =
-            t2.transition()
+                }))
+                //wedges reunite into a single ring
+                .transition()
                 .attrTween("d", this.tweenArc((d, i) => {
                     return {
                         innerRadius: innerRadius,
@@ -140,34 +166,7 @@ export default class DonutGraph extends Component {
         //this could be used as an exit transition with another call to run
     }
     //tweenArc can be called twice in a row and cause the animation to look choppy initially - this doesnt always happen
-    tweenArc(b) {
-        return (a, i) => {
-            let d = b.call(this, a, i)
-            let interp = d3.interpolateObject(a, d);
-            for (let k in d) {
-                a[k] = d[k];
-            }//update data
-            return (t) => {
-                let tempProps = interp(t);
-                let arc = d3.arc()
-                if (tempProps.innerRadius) {
-                    return arc({
-                        innerRadius: tempProps.innerRadius,
-                        outerRadius: tempProps.outerRadius,
-                        startAngle: a.startAngle,
-                        endAngle: a.endAngle,
-                    })
-                } else {
-                    return arc({
-                        innerRadius: a.innerRadius,
-                        outerRadius: a.outerRadius,
-                        startAngle: tempProps.startAngle,
-                        endAngle: tempProps.endAngle,
-                    })
-                }
-            };
-        }
-    }
+
 
     render() {
         setTimeout(() => {
