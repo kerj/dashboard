@@ -48,6 +48,7 @@ class D3Test extends Component {
 
     cleanData = (dataKeys, responseData) => {
         let cleanedData = {}
+        console.log(dataKeys, responseData)
         dataKeys.map((c) => {
             let tempData = {}
             let currentRows = responseData[`${c}`].rows;
@@ -91,6 +92,7 @@ class D3Test extends Component {
                 let allKeys = Object.keys(response.data);
                 return this.cleanData(allKeys, timberResponse);
             })
+            console.log(timbers)
             let timberData = (cleanTimber) => {
                 console.log(cleanTimber)
                 let timberDataObj = {}
