@@ -139,13 +139,13 @@ export default function RouteManager(props) {
                                 }
                                 return propsToPass.push(tempProp)
                             })
-                            let tempProp;
+                            let highestProp;
                             propsToPass.reduce((prev, curr) => {
-                                tempProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
+                                highestProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
                                 return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
                             })
-                            propsToPass = []
-                            propsToPass.push(tempProp)
+                            propsToPass.splice(0);
+                            return propsToPass.push(highestProp)
                         })
                         break;
                     case "listWeeklyTotal":
