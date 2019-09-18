@@ -129,18 +129,24 @@ export default function RouteManager(props) {
                         })
                         break;
                     case 'listMostCompleted': // these last two need a special category made for them
-                        Object.keys(gameProps).map((c, i) => {
-                            let candidateProp = {}
-                            gameProps[c].finishedGames.reduce((curr, ind, acc) => {
-
-                             //needs to find value from each key with the highest weekFinished prop and pass that to the propsToPass
+                        let candidateProp = {}
+                        Object.keys(gameProps).map((c) => {
+                            if (candidateProp) {
+                                propsToPass.push(candidateProp);
+                            }
+                            candidateProp = {};
+                            gameProps[c].finishedGames.reduce((curr, i, acc) => {
+                                // I need c to be the labels prop
+                                //instead of dataSet1 = 0 set this to the daily count for that day
+                                //needs to find value from each key with the highest weekFinished prop and pass that to the propsToPass
                                 if (acc.weekFinished > curr.weekFinished) {
                                     const { weekFinished: dataSet1 = 0, image: dataSet0 = 0, gameName: labels } = { ...curr }
                                     candidateProp = Object.assign({}, { dataSet0, dataSet1, labels });
                                 } else { return acc }
                             })
+                            //candidatePro needs to equal weeklyData : [{weekFinished: 61, image: image.svg, gameName: chutes}...]
                             console.log(candidateProp)
-                            return propsToPass.push(candidateProp);
+                            return candidateProp
                         })
                         break;
                     case "listWeeklyTotal":
