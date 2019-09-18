@@ -13,6 +13,7 @@ var width = 960,
 export default class DonutGraph extends Component {
 
     componentDidMount() {
+        console.log(this)
         this.props.dataToGraph.map((data1) => {
             queuedData.push(0);
             return activeData.push(data1.dataSet0);

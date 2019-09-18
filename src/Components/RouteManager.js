@@ -13,6 +13,7 @@ export default function RouteManager(props) {
 
     let propsToPass = [];
     const weeklyData = props.stateHelper.data;
+    console.log(weeklyData)
     // console.log(weeklyData)
     //routes change every 15 seconds
     useInterval(() => {
@@ -70,7 +71,6 @@ export default function RouteManager(props) {
         switch (currentKey) {
             case 'omo':
                 let gameProps = weeklyData.omoData;
-                console.log(gameProps)
                 switch (route) {
                     case 'stackedGameChutes':
                         gameProps.chutes.finishedGames.map((c) => {
@@ -128,9 +128,9 @@ export default function RouteManager(props) {
                             return propsToPass.push(propToPass);
                         })
                         break;
-                    case 'listMostCompleted': // these last two need a special category made for them
+                    case 'listMostCompleted': 
                         Object.keys(gameProps).map((c, i, a) => {
-                            gameProps[c].finishedGames.reduce((prev, curr) => {
+                            gameProps[c].stories.reduce((prev, curr) => {
                                 let gameName = c
                                 const { weekFinished: dataSet1 = 0, image: dataSet0 = 0, name: labels = gameName } = { ...curr }
                                 let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
@@ -227,7 +227,6 @@ export default function RouteManager(props) {
                 break
             default:
         }
-        console.log(propsToPass)
         //returns the view for the graph
         return (
             <div key={route}>
