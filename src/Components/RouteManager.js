@@ -13,7 +13,7 @@ export default function RouteManager(props) {
 
     let propsToPass = [];
     const weeklyData = props.stateHelper.data;
-    console.log(weeklyData)
+    // console.log(weeklyData)
     //routes change every 15 seconds
     useInterval(() => {
         updateRoute();
@@ -70,6 +70,7 @@ export default function RouteManager(props) {
         switch (currentKey) {
             case 'omo':
                 let gameProps = weeklyData.omoData;
+                console.log(gameProps)
                 switch (route) {
                     case 'stackedGameChutes':
                         gameProps.chutes.finishedGames.map((c) => {
@@ -128,15 +129,23 @@ export default function RouteManager(props) {
                         })
                         break;
                     case 'listMostCompleted': // these last two need a special category made for them
-                        gameProps.chutes.stories.map((c) => {
-                            const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                            return propsToPass.push(propToPass);
+                        Object.keys(gameProps).map((c, i) => {
+                            let candidateProp = {}
+                            gameProps[c].finishedGames.reduce((curr, ind, acc) => {
+
+                             //needs to find value from each key with the highest weekFinished prop and pass that to the propsToPass
+                                if (acc.weekFinished > curr.weekFinished) {
+                                    const { weekFinished: dataSet1 = 0, image: dataSet0 = 0, gameName: labels } = { ...curr }
+                                    candidateProp = Object.assign({}, { dataSet0, dataSet1, labels });
+                                } else { return acc }
+                            })
+                            console.log(candidateProp)
+                            return propsToPass.push(candidateProp);
                         })
                         break;
                     case "listWeeklyTotal":
                         gameProps.chutes.stories.map((c) => {
-                            const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
+                            const { weekFinished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
@@ -206,6 +215,7 @@ export default function RouteManager(props) {
                 break
             default:
         }
+        console.log(propsToPass)
         //returns the view for the graph
         return (
             <div key={route}>
