@@ -11,17 +11,17 @@ class D3Test extends Component {
             data: {},
             omo: {
                 routes: [
-                    //         'stackedGameChutes',
-                    //         'stackedGameFletcher',
-                    //         'stackedGameVortex',
-                    //         'stackedGameMarie',
-                    //         // 'stackedBarDorian',
-                    //         'stackedStoryChutes',
-                    //         'stackedStoryFletcher',
-                    //         'stackedStoryVortex',
-                    //         'stackedStoryMarie',
+                    // 'stackedGameChutes',
+                    // 'stackedGameFletcher',
+                    // 'stackedGameVortex',
+                    // 'stackedGameMarie',
+                    // // 'stackedBarDorian',
+                    // 'stackedStoryChutes',
+                    // 'stackedStoryFletcher',
+                    // 'stackedStoryVortex',
+                    // 'stackedStoryMarie',
                     'listMostCompleted',
-                    // 'listWeeklyTotal'
+                    'listWeeklyTotal'
                 ]
             },
             // omhofWeekly: {
@@ -37,9 +37,9 @@ class D3Test extends Component {
             // timbers: {
             //     routes: [
             //         'listWeekTopEmojis',
-            //         'stackedBarNewVReturn',
-            //         'mostPopularEmoji',
-            //         'mobileIosVsAndroid'
+            //         // 'stackedBarNewVReturn',
+            //         // 'mostPopularEmoji',
+            //         // 'mobileIosVsAndroid'
             //     ]
             // },
         }
@@ -126,74 +126,83 @@ class D3Test extends Component {
 
         //         return finalTimberData;
         //     }
-        let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
-        axios.get(omoQuery).then((response) => {
-            const omoData = response.data;
-            console.log(omoData)
-            let omoKeys = Object.keys(omoData)
-            let weeklyGames = {}
-            let weeklyStories = {}
-            let tempObj = {}
-            omoKeys.map((c) => {
-                let tempStory = 0;
-                let tempGame = 0;
-                weeklyStories[c + "weeklyStories"] = omoData[c].stories.reduce((curr, acc) => {
-                    tempStory += parseInt(curr.finished)
-                    acc.weekFinished = tempStory + parseInt(acc.finished)
-                    return acc
-                })
-                weeklyGames[c + "weeklyGames"] = omoData[c].finishedGames.reduce((curr, acc) => {
-                    tempGame += parseInt(curr.finished)
-                    acc.weekFinished = tempGame + parseInt(acc.finished)
-                    return acc
-                })
-                return weeklyGames, weeklyStories
-            })
-            omoKeys.map((c) => {
-                let valueToFetch = omoData[c].finishedGames.length - 1;
-                let weekFinished = omoData[c].finishedGames[valueToFetch].weekFinished;
-                tempObj[c] = {weekFinished}
-            })
-            console.log(tempObj)
-            console.log(weeklyGames, weeklyStories)
-            console.log(omoData)
-
-            let omhofQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omhof';
-            axios.get(omhofQuery).then((response) => {
-                const omhof = response.data;
-                // console.log(omhof)
-
-                let filteredOmhof = (dataKey) => {
-                    let temp = []
-                    Object.keys(omhof[dataKey]).forEach((e, i) => {
-                        if (omhof[dataKey][e]['page_path'] === '/detail') {
-                            omhof[dataKey][e]['page_title'] = omhof[dataKey][e]['page_title'].replace(/[^\w_]/g, " ");
-                            temp.push(omhof[dataKey][e])
-                        }
+            let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
+            axios.get(omoQuery).then((response) => {
+                const omoData = response.data;
+                console.log(omoData)
+                let omoKeys = Object.keys(omoData)
+                let weeklyGames = {}
+                let weeklyStories = {}
+                let tempObj = {}
+                omoKeys.map((c) => {
+                    //c = a property string
+                    let tempStory = 0;
+                    let tempGame = 0;
+                    //sets a new property to weeklystories object = to the tally of complete stories
+                    weeklyStories[c + "weeklyStories"] = omoData[c].stories.reduce((curr, acc) => {
+                        tempStory += parseInt(curr.finished)
+                        acc.weekFinished = tempStory + parseInt(acc.finished)
+                        return acc
                     })
+                    weeklyGames[c + "weeklyGames"] = omoData[c].finishedGames.reduce((curr, acc) => {
+                        tempGame += parseInt(curr.finished)
+                        acc.weekFinished = tempGame + parseInt(acc.finished)
+                        return acc
+                    })
+                    return weeklyGames, weeklyStories
+                })
 
-                    return temp;
-                }
+                omoKeys.map((c) => {
+                    //set to the sum of the weekly stat for that particular game
+                    let valueToFetch = omoData[c].finishedGames.length - 1;
+                    let weekFinished = omoData[c].finishedGames[valueToFetch].weekFinished;
+                    tempObj[c] = { weekFinished }
+                })
+                // obj w/ kvp's for = game : weeklyTotalCompleteAmount
+                console.log(tempObj)
+                //== to omoData w/ extra props called weekFinished = the week count to that point
+                console.log(weeklyGames, weeklyStories)
+                console.log(omoData)
+                //Need data to stucture like [{[]},{[]},{[]}]
 
-                let omhofRawWeeklyData = {
-                    weekly: filteredOmhof('kiosks-7day'),
-                }
 
-                let omhofRawDailyData = {
-                    daily: filteredOmhof('kiosks-today'),
-                }
 
-                let weeklyData = { omoData };
-                Object.assign(weeklyData, omhofRawDailyData)
-                Object.assign(weeklyData, omhofRawWeeklyData)
-                // Object.assign(weeklyData, timberData(cleanData))
+                let omhofQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omhof';
+                axios.get(omhofQuery).then((response) => {
+                    const omhof = response.data;
+                    // console.log(omhof)
 
-                this.setState({
-                    data: weeklyData
-                });
-                this.setState({ loaded: true })
+                    let filteredOmhof = (dataKey) => {
+                        let temp = []
+                        Object.keys(omhof[dataKey]).forEach((e, i) => {
+                            if (omhof[dataKey][e]['page_path'] === '/detail') {
+                                omhof[dataKey][e]['page_title'] = omhof[dataKey][e]['page_title'].replace(/[^\w_]/g, " ");
+                                temp.push(omhof[dataKey][e])
+                            }
+                        })
+
+                        return temp;
+                    }
+
+                    let omhofRawWeeklyData = {
+                        weekly: filteredOmhof('kiosks-7day'),
+                    }
+
+                    let omhofRawDailyData = {
+                        daily: filteredOmhof('kiosks-today'),
+                    }
+
+                    let weeklyData = { omoData };
+                    Object.assign(weeklyData, omhofRawDailyData)
+                    Object.assign(weeklyData, omhofRawWeeklyData)
+                    // Object.assign(weeklyData, timberData(cleanData))
+
+                    this.setState({
+                        data: weeklyData
+                    });
+                    this.setState({ loaded: true })
+                })
             })
-        })
         // })
     }
 
