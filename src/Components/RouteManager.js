@@ -19,7 +19,7 @@ export default function RouteManager(props) {
     useInterval(() => {
         updateRoute();
         setPropsToPass();
-    }, 60000)
+    }, 15000)
     //hook to update view when routes change
     function useInterval(callback, delay) {
         const savedCallback = useRef();

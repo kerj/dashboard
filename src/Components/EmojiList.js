@@ -45,5 +45,5 @@ export default class EmojiList extends Component {
 
 EmojiList.propTypes = {
     dataToGraph: PropTypes.array.isRequired,
-    title: PropTypes.object
+    title: PropTypes.any
 }
