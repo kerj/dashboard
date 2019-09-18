@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
+import './../scss/emojiList.scss';
 
 export default class EmojiList extends Component {
 
@@ -19,7 +20,7 @@ export default class EmojiList extends Component {
             .append("li")
             .text((d) => {
                 //d.dataSet0 should be an Image!!
-                return `${d.dataSet0} ${d.dataSet1} ${d.labels}`
+                return `${d.dataSet1} - ${d.labels}`
             })
             .attr("class", (d) => {
                return `${d.labels}`
@@ -33,8 +34,10 @@ export default class EmojiList extends Component {
 
     render() {
         return (
-            <div ref="list">
+            <div>
                 <h1>{this.props.title}</h1>
+                <ul ref="list">
+                </ul>
             </div>
         )
     }

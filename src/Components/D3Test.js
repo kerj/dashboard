@@ -11,15 +11,15 @@ class D3Test extends Component {
             data: {},
             omo: {
                 routes: [
-                    'stackedGameChutes',
-                    'stackedGameFletcher',
-                    'stackedGameVortex',
-                    'stackedGameMarie',
+                    // 'stackedGameChutes',
+                    // 'stackedGameFletcher',
+                    // 'stackedGameVortex',
+                    // 'stackedGameMarie',
                     // 'stackedBarDorian',
-                    'stackedStoryChutes',
-                    'stackedStoryFletcher',
-                    'stackedStoryVortex',
-                    'stackedStoryMarie',
+                    // 'stackedStoryChutes',
+                    // 'stackedStoryFletcher',
+                    // 'stackedStoryVortex',
+                    // 'stackedStoryMarie',
                     'listMostCompleted',
                     'listWeeklyTotal'
                 ]
@@ -37,9 +37,9 @@ class D3Test extends Component {
             timbers: {
                 routes: [
                     'listWeekTopEmojis',
-                    'stackedBarNewVReturn',
+                    // 'stackedBarNewVReturn',
                     'mostPopularEmoji',
-                    'mobileIosVsAndroid'
+                    // 'mobileIosVsAndroid'
                 ]
             },
         }
@@ -110,10 +110,10 @@ class D3Test extends Component {
                 })
 
                 //issue with response-users-newusers inconsistant response length where a day can be cut off
-                timberUser = timberData.slice(0, 13)
-                timberTop5Emoji = timberData.slice(13, 18)
-                timberMostPopular = timberData.slice(18, 19)
-                timberOS = timberData.slice(19, 28)
+                timberUser = timberData.slice(0, 14)
+                timberTop5Emoji = timberData.slice(14, 19)
+                timberMostPopular = timberData.slice(19, 20)
+                timberOS = timberData.slice(20, 29)
 
 
                 timberDataObj.user = timberUser

@@ -19,7 +19,7 @@ export default function RouteManager(props) {
     useInterval(() => {
         updateRoute();
         setPropsToPass();
-    }, 15000)
+    }, 60000)
     //hook to update view when routes change
     function useInterval(callback, delay) {
         const savedCallback = useRef();
@@ -186,7 +186,7 @@ export default function RouteManager(props) {
                 switch (route) {
                     case 'listWeekTopEmojis':
                         timberProps.top5Emoji.map((c) => {
-                            const { 'ga:eventLabel1': dataSet0, 'ga:totalEvents1': dataSet1, 'ga:totalEvents1': labels = ':D' } = { ...c }
+                            const { 'ga:eventLabel1': dataSet0, 'ga:eventLabel1': dataSet1, 'ga:totalEvents1': labels = ':D' } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
@@ -209,7 +209,7 @@ export default function RouteManager(props) {
                         break;
                     case 'mostPopularEmoji':
                         timberProps.mostPopEmoji.map((c) => {
-                            const { 'ga:eventLabel2': dataSet0 = 'none used', 'ga:totalEvents2': dataSet1 = "today", 'ga:totalEvents2': labels = ':D' } = { ...c }
+                            const { 'ga:eventLabel2': dataSet0 = 'none used', 'ga:totalEvents2': dataSet1 = "today", 'ga:eventLabel2': labels = ':D' } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })

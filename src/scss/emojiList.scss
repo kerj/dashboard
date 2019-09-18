@@ -1,0 +1,31 @@
+ul {
+    list-style: none;
+    padding-left: 1em;
+    text-align: center;
+    list-style-position: inside;
+    width: 240px;
+    padding-bottom: 10px;
+    text-transform: capitalize; 
+    text-transform: full-width;
+    
+  }
+h1{
+    color: whitesmoke;
+}
+  li {
+    &:before {
+      content: '';
+      display: inline-block;
+      height: 15em;
+      width: 15em;
+      padding-left: 50px;
+      padding-top: 3px;
+      margin-top: 10px;
+      background-image: url(http://placehold.it/32?text=fallback); // Fallback PNG
+      background: url(https://upload.wikimedia.org/wikipedia/commons/9/93/Tango-bullet.svg);
+      background-size: contain;
+      background-repeat: no-repeat;
+      margin-right:0.5em; 
+      text-transform: uppercase; 
+    }
+  }

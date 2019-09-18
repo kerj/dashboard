@@ -1,6 +1,6 @@
 import React from 'react';
 import D3Test from './Components/D3Test'
-import './App.css';
+import './App.scss';
 import * as d3 from 'd3';
 
 function App() {
