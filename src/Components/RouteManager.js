@@ -129,31 +129,37 @@ export default function RouteManager(props) {
                         })
                         break;
                     case 'listMostCompleted': // these last two need a special category made for them
-                        let candidateProp = {}
-                        Object.keys(gameProps).map((c) => {
-                            if (candidateProp) {
-                                propsToPass.push(candidateProp);
-                            }
-                            candidateProp = {};
-                            gameProps[c].finishedGames.reduce((curr, i, acc) => {
-                                // I need c to be the labels prop
-                                //instead of dataSet1 = 0 set this to the daily count for that day
-                                //needs to find value from each key with the highest weekFinished prop and pass that to the propsToPass
-                                if (acc.weekFinished > curr.weekFinished) {
-                                    const { weekFinished: dataSet1 = 0, image: dataSet0 = 0, gameName: labels } = { ...curr }
-                                    candidateProp = Object.assign({}, { dataSet0, dataSet1, labels });
-                                } else { return acc }
+                        Object.keys(gameProps).map((c, i, a) => {
+                            gameProps[c].finishedGames.reduce((prev, curr) => {
+                                let gameName = c
+                                const { weekFinished: dataSet1 = 0, image: dataSet0 = 0, name: labels = gameName } = { ...curr }
+                                let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
+                                if (tempProp.dataSet1 < curr.weekFinished) {
+                                    tempProp.dataSet1 = curr.weekFinished
+                                }
+                                return propsToPass.push(tempProp)
                             })
-                            //candidatePro needs to equal weeklyData : [{weekFinished: 61, image: image.svg, gameName: chutes}...]
-                            console.log(candidateProp)
-                            return candidateProp
+                            let tempProp;
+                            propsToPass.reduce((prev, curr) => {
+                                tempProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
+                                return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
+                            })
+                            propsToPass = []
+                            propsToPass.push(tempProp)
                         })
                         break;
                     case "listWeeklyTotal":
-                        gameProps.chutes.stories.map((c) => {
-                            const { weekFinished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                            return propsToPass.push(propToPass);
+                        Object.keys(gameProps).map((c) => {
+                            let weeklyTotal = gameProps[c].finishedGames.reduce((acc, curr) => {
+                                let gameName = c
+                                const { weekFinished: dataSet1 = 0, image: dataSet0 = 0, name: labels = gameName } = { ...curr }
+                                let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
+                                if (tempProp.dataSet1 < curr.weekFinished) {
+                                    tempProp.dataSet1 = curr.weekFinished
+                                }
+                                return tempProp
+                            })
+                            return propsToPass.push(weeklyTotal);
                         })
                         break;
                     default:
