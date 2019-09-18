@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
+import './../scss/donut.scss';
 
 var width = 960,
     height = 500,
@@ -87,11 +88,14 @@ export default class DonutGraph extends Component {
             .attr("class", "arc")
             .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
             .append("path")
-            .attr("fill", (d, i) => {
-                return colors[i];
-            })
+            // .attr("fill", (d, i) => {
+            //     return colors[i];
+            // })
             .attr("d", d3.arc())
-
+            .attr("class", (d,i) => {
+                return this.props.dataToGraph[i]['dataSet1'] + i
+            })
+            
         //TODO add legend    
         let legendSvg = svg.selectAll(".legend")
             .data(this.arcs(activeData, queuedData))
@@ -104,9 +108,12 @@ export default class DonutGraph extends Component {
         legendSvg.append("rect")
             .attr("width", 10)
             .attr("height", 10)
-            .attr("fill", (d, i) => {
-                return colors[i]
+            .attr("class", (d,i) => {
+                return this.props.dataToGraph[i]['dataSet1'] + i
             })
+            // .attr("fill", (d, i) => {
+            //     return colors[i]
+            // })
 
         legendSvg.append("text")
             .text((d, i) => {

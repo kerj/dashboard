@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
+import './../scss/barChart.scss'
 
 //Issues still with getting both bars to start at x = 0, this is needed for transitions in/out
 
@@ -15,11 +16,11 @@ export default class BarChart extends Component {
         var margin = { top: 40, right: 20, bottom: 40, left: 40 }
         var canvasWidth = 400 - margin.left - margin.right
         var canvasHeight = 600 - margin.top - margin.bottom
-        var colors = ['#00D7D2', '#FF4436', '#313c53'];
+        var colors = ['#FF4436', '#313c53'];
         //container for graph
         let svgCanvas = d3.select(this.refs.canvas)
             .append("svg")
-            .attr("class", "barchart")
+            .attr("class", this.props.title)
             .attr("width", canvasWidth + margin.left + margin.right)
             .attr("height", canvasHeight + margin.top + margin.bottom)
             //moves whole canvas
@@ -34,14 +35,18 @@ export default class BarChart extends Component {
             .offset(d3.stackOffsetNone)(data)
 
         var g = d3.select('g')
-            .selectAll('g.addColor')
+            .selectAll('g')
+            .attr("class", this.props.title)
             .data(stack)
             .enter()
             .append('g')
-            .classed('addColor', true)
-            .style('fill', (d, i) => {
-                return colors[i];
-            });
+            .attr("class", (d,i) => {
+                return 'set'+ i;
+            })
+            // .classed('addColor', true)
+            // .style('fill', (d, i) => {
+            //     return colors[i];
+            // });
 
         let x = d3.scaleLinear()
             .rangeRound([0, canvasWidth - 20])

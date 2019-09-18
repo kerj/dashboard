@@ -9,37 +9,37 @@ class D3Test extends Component {
         this.state = {
             loaded: false,
             data: {},
-            omo: {
-                routes: [
-                    // 'stackedGameChutes',
-                    // 'stackedGameFletcher',
-                    // 'stackedGameVortex',
-                    // 'stackedGameMarie',
-                    // 'stackedBarDorian',
-                    // 'stackedStoryChutes',
-                    // 'stackedStoryFletcher',
-                    // 'stackedStoryVortex',
-                    // 'stackedStoryMarie',
-                    'listMostCompleted',
-                    'listWeeklyTotal'
-                ]
-            },
-            omhofWeekly: {
-                routes: [
-                    'listWeekAwards',
-                ]
-            },
-            omhofDaily: {
-                routes: [
-                    'awardOfTheDay',
-                ]
-            },
+            // omo: {
+            //     routes: [
+            //         'stackedGameChutes',
+            //         'stackedGameFletcher',
+            //         'stackedGameVortex',
+            //         'stackedGameMarie',
+            //         // 'stackedBarDorian',
+            //         'stackedStoryChutes',
+            //         'stackedStoryFletcher',
+            //         'stackedStoryVortex',
+            //         'stackedStoryMarie',
+            //         'listMostCompleted',
+            //         'listWeeklyTotal'
+            //     ]
+            // },
+            // omhofWeekly: {
+            //     routes: [
+            //         'listWeekAwards',
+            //     ]
+            // },
+            // omhofDaily: {
+            //     routes: [
+            //         'awardOfTheDay',
+            //     ]
+            // },
             timbers: {
                 routes: [
-                    'listWeekTopEmojis',
+                    // 'listWeekTopEmojis',
                     // 'stackedBarNewVReturn',
                     'mostPopularEmoji',
-                    // 'mobileIosVsAndroid'
+                    'mobileIosVsAndroid'
                 ]
             },
         }
