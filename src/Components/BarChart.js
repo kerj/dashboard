@@ -3,6 +3,8 @@ import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import './../scss/barChart.scss'
 
+//there are two types of stacked bar graphs need a way to tell between the two
+//one has a addition of the stacks the other has to show the difference between the stacks
 export default class BarChart extends Component {
 
     componentDidMount() {
@@ -43,9 +45,13 @@ export default class BarChart extends Component {
         let x = d3.scaleLinear()
             .rangeRound([0, width - 20])
             .domain([0, d3.max(stack, (d) => {
-                return d3.max(d, (d) => d[1])
+                if(this.props.title === "NEW VS. RETURNING VISITORS"){
+                    return d3.max(d, (d) => d[1])
+                }else {
+                    return d3.max(d, (d) => d[0])
+                }
             })])
-
+    
         let y = d3.scaleBand()
             .range([height, 0])
             .padding(0.1)
@@ -56,24 +62,29 @@ export default class BarChart extends Component {
         let legend = svgCanvas.selectAll(".legend")
             .data(stack)
             .enter().append('g')
-            .attr("transform", (d,i) => {
-                return "translate(" + (width -110) + "," + (i * 15 + 20) + ")";
+            .attr("transform", (d, i) => {
+                return "translate(" + (width - 110) + "," + (i * 15 + 20) + ")";
             })
             .attr("class", "legend")
 
         legend.append("rect")
             .attr("width", 10)
             .attr("height", 10)
-            .attr("class", (d,i) => {
-                return 'set'+i
+            .attr("class", (d, i) => {
+                return 'set' + i
             })
-            //how to make this change with the dataset...
+        //how to make this change with the dataset...
         legend.append('text')
+            .attr('class', `${this.props.title === "NEW VS. RETURNING VISITORS" ? 'NVR' : 'SVF'}`)
             .text((d) => {
-                if (d.key === "dataSet0") {
-                    return 'NEW'
-                }else {
-                    return 'RETURNING'
+                if (d3.select('text').classed('NVR')) {
+                    if (d.key === 'dataSet1') {
+                        return 'NEW'
+                    } return 'RETURNING'
+                } else {
+                    if (d.key === 'dataSet0') {
+                        return 'STARTED'
+                    } return 'COMPLETED'
                 }
             })
             .style('fill', 'whitesmoke')
@@ -81,7 +92,7 @@ export default class BarChart extends Component {
             .attr('y', 10)
             .attr('x', 11)
 
-
+        //title at the top of barchart
         svgCanvas.append('g')
             .attr("class", "x axis")
             .call(x)
@@ -116,7 +127,11 @@ export default class BarChart extends Component {
             .duration(1000)
             .ease(d3.easeSinInOut)
             .attr('x', (d, i) => {
-                return x(d[0])
+                if (this.props.title === "NEW VS. RETURNING VISITORS"){
+                    return x(d[0])
+                }else{
+                    return x(d)
+                }
             })
             .attr('y', (d) => {
                 return y(d.data.labels)

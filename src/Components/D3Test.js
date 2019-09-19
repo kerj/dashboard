@@ -12,30 +12,30 @@ class D3Test extends Component {
             omo: {
                 routes: [
                     'OHS-CHUTES GAME',
-                    'OHS-FLECTCHER GAME',
-                    'OHS-VORTEX GAME',
-                    'OHS-MARIE GAME',
-                    // 'stackedBarDorian',
-                    'OHS-CHUTES STORY',
-                    'OHS-FLECTCHER STORY',
-                    'OHS-VORTEX STORY',
-                    'OHS-MARIE STORY',
-                    'OHS-MOST READ TODAY',
-                    'OHS-WEEKLY STORIES READ'
+                    // 'OHS-FLECTCHER GAME',
+                    // 'OHS-VORTEX GAME',
+                    // 'OHS-MARIE GAME',
+            //         // 'stackedBarDorian',
+            //         'OHS-CHUTES STORY',
+            //         'OHS-FLECTCHER STORY',
+            //         'OHS-VORTEX STORY',
+            //         'OHS-MARIE STORY',
+            //         'OHS-MOST READ TODAY',
+            //         'OHS-WEEKLY STORIES READ'
                 ]
             },
-            omhof: {
-                routes: [
-                    'OMHOF TOP AWARDS',
-                    'OMHOF AWARD OF THE DAY',
-                ]
-            },
+            // omhof: {
+            //     routes: [
+            //         'OMHOF TOP AWARDS',
+            //         'OMHOF AWARD OF THE DAY',
+            //     ]
+            // },
             timbers: {
                 routes: [
-                    'TIMBERS WEEKLY TOP EMOJIS',
+                    // 'TIMBERS WEEKLY TOP EMOJIS',
                     'NEW VS. RETURNING VISITORS',
-                    'MOST POPULAR EMOJI TODAY',
-                    'MOBILE OPERATING SYSTEMS'
+                    // 'MOST POPULAR EMOJI TODAY',
+                    // 'MOBILE OPERATING SYSTEMS'
                 ]
             },
         }
@@ -104,10 +104,11 @@ class D3Test extends Component {
                     return timberData
                 })
                 //issue with response-users-newusers inconsistant response length where a day can be cut off
-                timberUser = timberData.slice(0, 14)
-                timberTop5Emoji = timberData.slice(14, 19)
-                timberMostPopular = timberData.slice(19, 20)
-                timberOS = timberData.slice(20, 29)
+                //problem when no new, or returning visisors have used this
+                timberUser = timberData.slice(0, 13)
+                timberTop5Emoji = timberData.slice(13, 18)
+                timberMostPopular = timberData.slice(18, 19)
+                timberOS = timberData.slice(19, 28)
 
                 timberDataObj.user = timberUser
                 timberDataObj.top5Emoji = timberTop5Emoji
