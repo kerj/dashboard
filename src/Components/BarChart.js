@@ -11,14 +11,14 @@ export default class BarChart extends Component {
 
     drawBarChart(data) {
         var margin = { top: 40, right: 20, bottom: 40, left: 40 }
-        var canvasWidth = 400 - margin.left - margin.right
-        var canvasHeight = 600 - margin.top - margin.bottom
+        var width = 400 - margin.left - margin.right
+        var height = 600 - margin.top - margin.bottom
         //container for graph
         let svgCanvas = d3.select(this.refs.canvas)
             .append("svg")
             .attr("class", this.props.title)
-            .attr("width", canvasWidth + margin.left + margin.right)
-            .attr("height", canvasHeight + margin.top + margin.bottom)
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
             //moves whole canvas
             .attr('transform', 'translate(100,10)')
             .append('g')
@@ -41,17 +41,46 @@ export default class BarChart extends Component {
             })
 
         let x = d3.scaleLinear()
-            .rangeRound([0, canvasWidth - 20])
+            .rangeRound([0, width - 20])
             .domain([0, d3.max(stack, (d) => {
                 return d3.max(d, (d) => d[1])
             })])
 
         let y = d3.scaleBand()
-            .range([canvasHeight, 0])
+            .range([height, 0])
             .padding(0.1)
             .domain(data.map((d) => {
                 return d.labels
             }))
+
+        let legend = svgCanvas.selectAll(".legend")
+            .data(stack)
+            .enter().append('g')
+            .attr("transform", (d,i) => {
+                return "translate(" + (width -110) + "," + (i * 15 + 20) + ")";
+            })
+            .attr("class", "legend")
+
+        legend.append("rect")
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("class", (d,i) => {
+                return 'set'+i
+            })
+            //how to make this change with the dataset...
+        legend.append('text')
+            .text((d) => {
+                if (d.key === "dataSet0") {
+                    return 'NEW'
+                }else {
+                    return 'RETURNING'
+                }
+            })
+            .style('fill', 'whitesmoke')
+            .style("font-size", 12)
+            .attr('y', 10)
+            .attr('x', 11)
+
 
         svgCanvas.append('g')
             .attr("class", "x axis")
@@ -66,7 +95,7 @@ export default class BarChart extends Component {
         //x axis
         svgCanvas.append('g')
             .attr('class', 'x axis')
-            .attr("transform", "translate(0, " + canvasHeight + ")")
+            .attr("transform", "translate(0, " + height + ")")
             .style("color", "whitesmoke")
             .call(d3.axisBottom(x))
         //y axis
