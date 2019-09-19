@@ -48,87 +48,87 @@ export default function RouteManager(props) {
         propsToPass.length = 0;
         const ROUTES = {
             //omoGames
-            stackedGameChutes: <BarChart dataToGraph={propsToPass} title={route} />,
-            stackedGameFletcher: <BarChart dataToGraph={propsToPass} title={route} />,
-            stackedGameVortex: <BarChart dataToGraph={propsToPass} title={route} />,
-            stackedGameMarie: <BarChart dataToGraph={propsToPass} title={route} />,
-            stackedStoryChutes: <BarChart dataToGraph={propsToPass} title={route} />,
-            stackedStoryFletcher: <BarChart dataToGraph={propsToPass} title={route} />,
-            stackedStoryVortex: <BarChart dataToGraph={propsToPass} title={route} />,
-            stackedStoryMarie: <BarChart dataToGraph={propsToPass} title={route} />,
-            listMostCompleted: <EmojiList dataToGraph={propsToPass} title={route} />,
-            listWeeklyTotal: <EmojiList dataToGraph={propsToPass} title={route} />,
+            'OHS-CHUTES GAME': <BarChart dataToGraph={propsToPass} title={route} />,
+            'OHS-FLECTCHER GAME': <BarChart dataToGraph={propsToPass} title={route} />,
+            'OHS-VORTEX GAME': <BarChart dataToGraph={propsToPass} title={route} />,
+            'OHS-MARIE GAME': <BarChart dataToGraph={propsToPass} title={route} />,
+            'OHS-CHUTES STORY': <BarChart dataToGraph={propsToPass} title={route} />,
+            'OHS-FLECTCHER STORY': <BarChart dataToGraph={propsToPass} title={route} />,
+            'OHS-VORTEX STORY': <BarChart dataToGraph={propsToPass} title={route} />,
+            'OHS-MARIE STORY': <BarChart dataToGraph={propsToPass} title={route} />,
+            'OHS-MOST READ TODAY': <EmojiList dataToGraph={propsToPass} title={route} />,
+            'OHS-WEEKLY STORIES READ': <EmojiList dataToGraph={propsToPass} title={route} />,
             //omhof
-            listWeekAwards: <EmojiList dataToGraph={propsToPass} title={route} />,
-            awardOfTheDay: <EmojiList dataToGraph={propsToPass} title={route} />,
+            'OMHOF TOP AWARDS': <EmojiList dataToGraph={propsToPass} title={route} />,
+            'OMHOF AWARD OF THE DAY': <EmojiList dataToGraph={propsToPass} title={route} />,
             //timbers
-            listWeekTopEmojis: <EmojiList dataToGraph={propsToPass} title={route} />,
-            stackedBarNewVReturn: <BarChart dataToGraph={propsToPass} title={route} />,
-            mostPopularEmoji: <EmojiList dataToGraph={propsToPass} title={route} />,
-            mobileIosVsAndroid: <DonutGraph dataToGraph={propsToPass} title={route} />,
+            'TIMBERS WEEKLY TOP EMOJIS': <EmojiList dataToGraph={propsToPass} title={route} />,
+            'NEW VS. RETURNING VISITORS': <BarChart dataToGraph={propsToPass} title={route} />,
+            'MOST POPULAR EMOJI TODAY': <EmojiList dataToGraph={propsToPass} title={route} />,
+            'MOBILE OPERATING SYSTEMS': <DonutGraph dataToGraph={propsToPass} title={route} />,
         }
         //assigns graphable objects to propsToPass array
         switch (currentKey) {
             case 'omo':
                 let gameProps = weeklyData.omoData;
                 switch (route) {
-                    case 'stackedGameChutes':
+                    case 'OHS-CHUTES GAME':
                         gameProps.chutes.finishedGames.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
                         break;
-                    case 'stackedGameFletcher':
+                    case 'OHS-FLECTCHER GAME':
                         gameProps.fletcher.finishedGames.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
                         break;
-                    case 'stackedGameVortex':
+                    case 'OHS-VORTEX GAME':
                         gameProps.marie.finishedGames.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
                         break;
-                    case 'stackedGameMarie':
+                    case 'OHS-MARIE GAME':
                         gameProps.vortex.finishedGames.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
                         break;
-                    case 'stackedStoryChutes':
+                    case 'OHS-CHUTES STORY':
                         gameProps.chutes.stories.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
                         break;
-                    case 'stackedStoryFletcher':// glitch showing two set of data
+                    case 'OHS-FLECTCHER STORY':// glitch showing two set of data
                         gameProps.fletcher.stories.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
                         break;
-                    case 'stackedStoryVortex':
+                    case 'OHS-VORTEX STORY':
                         gameProps.vortex.stories.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
                         break;
-                    case 'stackedStoryMarie':
+                    case 'OHS-MARIE STORY':
                         gameProps.marie.stories.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
                         break;
-                    case 'listMostCompleted': 
+                    case 'OHS-MOST READ TODAY':
                         Object.keys(gameProps).map((c, i, a) => {
                             gameProps[c].stories.reduce((prev, curr) => {
                                 let gameName = c
@@ -148,7 +148,7 @@ export default function RouteManager(props) {
                             return propsToPass.push(highestProp)
                         })
                         break;
-                    case "listWeeklyTotal":
+                    case 'OHS-WEEKLY STORIES READ':
                         Object.keys(gameProps).map((c) => {
                             let weeklyTotal = gameProps[c].finishedGames.reduce((acc, curr) => {
                                 let gameName = c
@@ -165,33 +165,37 @@ export default function RouteManager(props) {
                     default:
                 }
                 break;
-            case 'omhofWeekly':
-                let omhofWeeklyProps = weeklyData.weekly;
-                omhofWeeklyProps.map((c) => {
-                    const { page_path: dataSet0, count: dataSet1 = 0, page_title: labels } = { ...c }
-                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return propsToPass.push(propToPass);
-                })
-                break;
-            case 'omhofDaily':
-                let omhofDailyProps = weeklyData.daily;
-                omhofDailyProps.map((c) => {
-                    const { page_path: dataSet0, count: dataSet1 = 0, page_title: labels } = { ...c }
-                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return propsToPass.push(propToPass);
-                })
-                break;
+            case 'omhof':
+                let omhofProps = weeklyData.omhof;
+                switch (route) {
+                    case 'OMHOF TOP AWARDS':
+                        omhofProps.weekly.map((c) => {
+                            const { page_path: dataSet0, count: dataSet1 = 0, page_title: labels } = { ...c }
+                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                            return propsToPass.push(propToPass);
+                        })
+                        break;
+                    case 'OMHOF AWARD OF THE DAY':
+                        omhofProps.daily.map((c) => {
+                            const { page_path: dataSet0, count: dataSet1 = 0, page_title: labels } = { ...c }
+                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                            return propsToPass.push(propToPass);
+                        })
+                        break;
+                    default:
+                }
+                break
             case 'timbers':
                 let timberProps = weeklyData.timberData;
                 switch (route) {
-                    case 'listWeekTopEmojis':
+                    case 'TIMBERS WEEKLY TOP EMOJIS':
                         timberProps.top5Emoji.map((c) => {
                             const { 'ga:eventLabel1': dataSet0, 'ga:eventLabel1': dataSet1, 'ga:totalEvents1': labels = ':D' } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
                         break;
-                    case 'stackedBarNewVReturn':
+                    case 'NEW VS. RETURNING VISITORS':
                         timberProps.user.map((c) => {
                             const { 'new': dataSet0, 'return': dataSet1, 'ga:dayOfWeekName0': labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
@@ -207,14 +211,14 @@ export default function RouteManager(props) {
                             propsToPass.splice(i + 1, 1)
                         }
                         break;
-                    case 'mostPopularEmoji':
+                    case 'MOST POPULAR EMOJI TODAY':
                         timberProps.mostPopEmoji.map((c) => {
                             const { 'ga:eventLabel2': dataSet0 = 'none used', 'ga:totalEvents2': dataSet1 = "today", 'ga:eventLabel2': labels = ':D' } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
                         break;
-                    case 'mobileIosVsAndroid':
+                    case 'MOBILE OPERATING SYSTEMS':
                         timberProps.operatingSystem.map((c) => {
                             const { 'ga:sessions3': dataSet0, 'ga:operatingSystem3': dataSet1, 'ga:operatingSystemVersion3': labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });

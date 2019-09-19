@@ -9,37 +9,33 @@ class D3Test extends Component {
         this.state = {
             loaded: false,
             data: {},
-            // omo: {
-            //     routes: [
-            //         'stackedGameChutes',
-            //         'stackedGameFletcher',
-            //         'stackedGameVortex',
-            //         'stackedGameMarie',
-            //         // 'stackedBarDorian',
-            //         'stackedStoryChutes',
-            //         'stackedStoryFletcher',
-            //         'stackedStoryVortex',
-            //         'stackedStoryMarie',
-            //         'listMostCompleted',
-            //         'listWeeklyTotal'
-            //     ]
-            // },
-            // omhofWeekly: {
-            //     routes: [
-            //         'listWeekAwards',
-            //     ]
-            // },
-            // omhofDaily: {
-            //     routes: [
-            //         'awardOfTheDay',
-            //     ]
-            // },
+            omo: {
+                routes: [
+                    'OHS-CHUTES GAME',
+                    'OHS-FLECTCHER GAME',
+                    'OHS-VORTEX GAME',
+                    'OHS-MARIE GAME',
+                    // 'stackedBarDorian',
+                    'OHS-CHUTES STORY',
+                    'OHS-FLECTCHER STORY',
+                    'OHS-VORTEX STORY',
+                    'OHS-MARIE STORY',
+                    'OHS-MOST READ TODAY',
+                    'OHS-WEEKLY STORIES READ'
+                ]
+            },
+            omhof: {
+                routes: [
+                    'OMHOF TOP AWARDS',
+                    'OMHOF AWARD OF THE DAY',
+                ]
+            },
             timbers: {
                 routes: [
-                    // 'listWeekTopEmojis',
-                    // 'stackedBarNewVReturn',
-                    'mostPopularEmoji',
-                    'mobileIosVsAndroid'
+                    'TIMBERS WEEKLY TOP EMOJIS',
+                    'NEW VS. RETURNING VISITORS',
+                    'MOST POPULAR EMOJI TODAY',
+                    'MOBILE OPERATING SYSTEMS'
                 ]
             },
         }
@@ -70,7 +66,6 @@ class D3Test extends Component {
                 let finalTimberData = {}
                 let timberDataObj = {}
                 let timberData = [];
-
                 //make 4 arrays for each ending number
                 let timberUser = []
                 let timberTop5Emoji = []
@@ -108,13 +103,11 @@ class D3Test extends Component {
                     }
                     return timberData
                 })
-
                 //issue with response-users-newusers inconsistant response length where a day can be cut off
                 timberUser = timberData.slice(0, 14)
                 timberTop5Emoji = timberData.slice(14, 19)
                 timberMostPopular = timberData.slice(19, 20)
                 timberOS = timberData.slice(20, 29)
-
 
                 timberDataObj.user = timberUser
                 timberDataObj.top5Emoji = timberTop5Emoji
@@ -128,7 +121,6 @@ class D3Test extends Component {
             let omoQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omo';
             axios.get(omoQuery).then((response) => {
                 const omoData = response.data;
-                console.log(omoData)
                 let omoKeys = Object.keys(omoData)
                 let weeklyGames = {}
                 let weeklyStories = {}
@@ -157,32 +149,24 @@ class D3Test extends Component {
 
                 let omhofQuery = 'http://sticky-data.local:8888/projects-dash/analytics/omhof';
                 axios.get(omhofQuery).then((response) => {
-                    const omhof = response.data;
+                    const omhofResponse = response.data;
                     let filteredOmhof = (dataKey) => {
                         let temp = []
-                        Object.keys(omhof[dataKey]).forEach((e, i) => {
-                            if (omhof[dataKey][e]['page_path'] === '/detail') {
-                                omhof[dataKey][e]['page_title'] = omhof[dataKey][e]['page_title'].replace(/[^\w_]/g, " ");
-                                temp.push(omhof[dataKey][e])
+                        Object.keys(omhofResponse[dataKey]).forEach((e, i) => {
+                            if (omhofResponse[dataKey][e]['page_path'] === '/detail') {
+                                omhofResponse[dataKey][e]['page_title'] = omhofResponse[dataKey][e]['page_title'].replace(/[^\w_]/g, " ");
+                                temp.push(omhofResponse[dataKey][e])
                             }
                         })
-
                         return temp;
                     }
-
-                    let omhofRawWeeklyData = {
+                    let omhof = {
                         weekly: filteredOmhof('kiosks-7day'),
+                        daily: filteredOmhof('kiosks-today')
                     }
-
-                    let omhofRawDailyData = {
-                        daily: filteredOmhof('kiosks-today'),
-                    }
-
                     let weeklyData = { omoData };
-                    Object.assign(weeklyData, omhofRawDailyData)
-                    Object.assign(weeklyData, omhofRawWeeklyData)
+                    Object.assign(weeklyData, {omhof})
                     Object.assign(weeklyData, timberData(cleanData))
-
                     this.setState({
                         data: weeklyData
                     });
@@ -191,11 +175,9 @@ class D3Test extends Component {
             })
         })
     }
-
     componentDidMount() {
         this.fetchGraphData()
     }
-
     render() {
         return (
             <div>
