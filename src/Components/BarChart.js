@@ -3,12 +3,9 @@ import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import './../scss/barChart.scss'
 
-//Issues still with getting both bars to start at x = 0, this is needed for transitions in/out
-
 export default class BarChart extends Component {
 
     componentDidMount() {
-        console.log(this.props.dataToGraph)
         this.drawBarChart(this.props.dataToGraph)
     }
 
@@ -16,7 +13,6 @@ export default class BarChart extends Component {
         var margin = { top: 40, right: 20, bottom: 40, left: 40 }
         var canvasWidth = 400 - margin.left - margin.right
         var canvasHeight = 600 - margin.top - margin.bottom
-        var colors = ['#FF4436', '#313c53'];
         //container for graph
         let svgCanvas = d3.select(this.refs.canvas)
             .append("svg")
@@ -40,13 +36,9 @@ export default class BarChart extends Component {
             .data(stack)
             .enter()
             .append('g')
-            .attr("class", (d,i) => {
-                return 'set'+ i;
+            .attr("class", (d, i) => {
+                return 'set' + i;
             })
-            // .classed('addColor', true)
-            // .style('fill', (d, i) => {
-            //     return colors[i];
-            // });
 
         let x = d3.scaleLinear()
             .rangeRound([0, canvasWidth - 20])
@@ -66,7 +58,7 @@ export default class BarChart extends Component {
             .call(x)
             .append("text")
             .style("fill", "whitesmoke")
-            .attr("x", 200)
+            .attr("x", 250)
             .attr("dx", ".71em")
             .attr("transform", "rotate(-360)")
             .style("text-anchor", "end")

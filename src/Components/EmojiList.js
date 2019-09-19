@@ -6,12 +6,11 @@ import './../scss/emojiList.scss';
 export default class EmojiList extends Component {
 
     componentDidMount() {
-        // console.log(this.props.dataToGraph);
+        console.log(this.props.dataToGraph);
         this.displayList(this.props.dataToGraph);
     }
 
     displayList(data) {
-
         //this shows as text what is displayed in the barchart
         d3.select(this.refs.list)
             .selectAll("li")

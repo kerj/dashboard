@@ -14,7 +14,6 @@ var width = 960,
 export default class DonutGraph extends Component {
 
     componentDidMount() {
-        console.log(this)
         this.props.dataToGraph.map((data1) => {
             queuedData.push(0);
             return activeData.push(data1.dataSet0);
@@ -76,7 +75,6 @@ export default class DonutGraph extends Component {
     }
 
     phaseDonut() {
-        let colors = ['#bc2add', '#FF4436', '#4bdd2a', '#e77f18', '#1880E7', '#1de2ca', '#E21H35', '#E23I86', '#fg77R2', '#3Wg487'];
         let svg = d3.select(this.refs.donutCanvas)
             .append("svg")
             .attr("width", width)
@@ -88,9 +86,6 @@ export default class DonutGraph extends Component {
             .attr("class", "arc")
             .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
             .append("path")
-            // .attr("fill", (d, i) => {
-            //     return colors[i];
-            // })
             .attr("d", d3.arc())
             .attr("class", (d,i) => {
                 return this.props.dataToGraph[i]['dataSet1'] + i
@@ -111,9 +106,6 @@ export default class DonutGraph extends Component {
             .attr("class", (d,i) => {
                 return this.props.dataToGraph[i]['dataSet1'] + i
             })
-            // .attr("fill", (d, i) => {
-            //     return colors[i]
-            // })
 
         legendSvg.append("text")
             .text((d, i) => {
@@ -181,15 +173,17 @@ export default class DonutGraph extends Component {
         }
     }
 
-
     render() {
         return (
-            <div ref="donutCanvas">
+            <div>
+                <h1>{this.props.title}</h1>
+                <div ref="donutCanvas"></div>
             </div>
         )
     }
 }
 
 DonutGraph.propTypes = {
-    dataToGraph: PropTypes.array.isRequired
+    dataToGraph: PropTypes.array.isRequired,
+    title: PropTypes.any
 }
