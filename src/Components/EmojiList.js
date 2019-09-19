@@ -17,18 +17,20 @@ export default class EmojiList extends Component {
             .data(data)
             .enter()
             .append("li")
+            .transition()
+            .delay((d, i) => {
+                return i * 100 + 100;
+            })
+            .duration(1000)
+            .ease(d3.easeBounceInOut)
             .text((d) => {
-                //d.dataSet0 should be an Image!!
                 return `${d.dataSet1} - ${d.labels}`
             })
             .attr("class", (d) => {
-               return `${d.labels}`
+                return `${d.labels}`
             })
-            .style("color", "black")
-            .transition()
-            .delay(500)
-            .duration(1000)
-            .style("color", "red")
+            .style("color", "whitesmoke")
+            .style("font-family", "Impact, Charcoal, sans-serif")
     }
 
     render() {

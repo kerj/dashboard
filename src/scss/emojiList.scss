@@ -1,6 +1,6 @@
 ul {
     list-style: none;
-    padding-left: 1em;
+    padding-left: 4em;
     text-align: center;
     list-style-position: inside;
     width: 240px;
@@ -9,7 +9,24 @@ ul {
 h1{
     color: whitesmoke;
 }
-  li {
+
+// li {
+//   &:before {
+//     content: '';
+//     display: inline-block;
+//     height: 15em;
+//     width: 15em;
+//     padding-left: 50px;
+//     padding-top: 3px;
+//     margin-top: 10px;
+   
+//     background-size: contain;
+//     background-repeat: no-repeat;
+//     margin-right:0.5em; 
+//   }
+// }
+
+ .vortex {
     &:before {
       content: '';
       display: inline-block;
@@ -18,7 +35,55 @@ h1{
       padding-left: 50px;
       padding-top: 3px;
       margin-top: 10px;
-      background: url(https://upload.wikimedia.org/wikipedia/commons/9/93/Tango-bullet.svg);
+      background: url(./../Assets/Vortex.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      margin-right:0.5em; 
+    }
+  }
+
+  .chutes {
+    &:before {
+      content: '';
+      display: inline-block;
+      height: 15em;
+      width: 15em;
+      padding-left: 50px;
+      padding-top: 3px;
+      margin-top: 10px;
+      background: url(./../Assets/grandma.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      margin-right:0.5em; 
+    }
+  }
+
+  .fletcher {
+    &:before {
+      content: '';
+      display: inline-block;
+      height: 15em;
+      width: 15em;
+      padding-left: 50px;
+      padding-top: 3px;
+      margin-top: 10px;
+      background: url(./../Assets/Fletcher.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      margin-right:0.5em; 
+    }
+  }
+
+  .marie {
+    &:before {
+      content: '';
+      display: inline-block;
+      height: 15em;
+      width: 15em;
+      padding-left: 50px;
+      padding-top: 3px;
+      margin-top: 10px;
+      background: url(./../Assets/Marie.png);
       background-size: contain;
       background-repeat: no-repeat;
       margin-right:0.5em; 
