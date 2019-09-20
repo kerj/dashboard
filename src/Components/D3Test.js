@@ -15,7 +15,7 @@ class D3Test extends Component {
                     'OHS-FLECTCHER GAME',
                     'OHS-VORTEX GAME',
                     'OHS-MARIE GAME',
-            //         // 'stackedBarDorian',
+                    //         // 'stackedBarDorian',
                     'OHS-CHUTES STORY',
                     'OHS-FLECTCHER STORY',
                     'OHS-VORTEX STORY',
@@ -110,12 +110,12 @@ class D3Test extends Component {
                     timberTop5Emoji = timberData.slice(12, 17)
                     timberMostPopular = timberData.slice(17, 18)
                     timberOS = timberData.slice(18, 27)
-                }else if ( timberData.length === 28) {
+                } else if (timberData.length === 28) {
                     timberUser = timberData.slice(0, 13)
                     timberTop5Emoji = timberData.slice(13, 18)
                     timberMostPopular = timberData.slice(18, 19)
                     timberOS = timberData.slice(19, 28)
-                }else {
+                } else {
                     timberUser = timberData.slice(0, 14)
                     timberTop5Emoji = timberData.slice(14, 19)
                     timberMostPopular = timberData.slice(19, 20)
@@ -171,14 +171,31 @@ class D3Test extends Component {
                                 temp.push(omhofResponse[dataKey][e])
                             }
                         })
+                        if (temp['page_title']) //matches another pagetitle
+                            console.log(temp)
                         return temp;
                     }
+
+                    let test = filteredOmhof('kiosks-7day'),
+                        unique = [...new Set(test.map(a => 
+                           a['page_title']
+                        ))] 
+
+                    console.log("unique values for page_title", unique)
+
+                    
+
+
                     let omhof = {
                         weekly: filteredOmhof('kiosks-7day'),
                         daily: filteredOmhof('kiosks-today')
                     }
+
+         
+                    console.log(omhof)
+
                     let weeklyData = { omoData };
-                    Object.assign(weeklyData, {omhof})
+                    Object.assign(weeklyData, { omhof })
                     Object.assign(weeklyData, timberData(cleanData))
                     this.setState({
                         data: weeklyData
