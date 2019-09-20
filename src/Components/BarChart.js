@@ -98,6 +98,7 @@ export default class BarChart extends Component {
             .call(x)
             .append("text")
             .style("fill", "whitesmoke")
+            .style("font-family", "Impact, Charcoal, sans-serif")
             .attr("x", 250)
             .attr("dx", ".71em")
             .attr("transform", "rotate(-360)")

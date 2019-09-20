@@ -105,10 +105,10 @@ class D3Test extends Component {
                 })
                 //issue with response-users-newusers inconsistant response length where a day can be cut off
                 //problem when no new, or returning visisors have used this
-                timberUser = timberData.slice(0, 13)
-                timberTop5Emoji = timberData.slice(13, 18)
-                timberMostPopular = timberData.slice(18, 19)
-                timberOS = timberData.slice(19, 28)
+                timberUser = timberData.slice(0, 14)
+                timberTop5Emoji = timberData.slice(14, 19)
+                timberMostPopular = timberData.slice(19, 20)
+                timberOS = timberData.slice(20, 29)
 
                 timberDataObj.user = timberUser
                 timberDataObj.top5Emoji = timberTop5Emoji
