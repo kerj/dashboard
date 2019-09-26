@@ -171,29 +171,24 @@ class D3Test extends Component {
                                 temp.push(omhofResponse[dataKey][e])
                             }
                         })
-                        if (temp['page_title']) //matches another pagetitle
+                        if (temp['page_title']){
                             console.log(temp)
+                        } //matches another pagetitle
                         return temp;
                     }
-
+                    // finding the matching items and add their counts together needs to happen
                     let test = filteredOmhof('kiosks-7day'),
-                        unique = [...new Set(test.map(a => 
-                           a['page_title']
-                        ))] 
+                        unique = [...new Set(test.map(a =>
+                            a['page_title']
+                        ))]
 
                     console.log("unique values for page_title", unique)
-
-                    
-
 
                     let omhof = {
                         weekly: filteredOmhof('kiosks-7day'),
                         daily: filteredOmhof('kiosks-today')
                     }
-
-         
-                    console.log(omhof)
-
+                 
                     let weeklyData = { omoData };
                     Object.assign(weeklyData, { omhof })
                     Object.assign(weeklyData, timberData(cleanData))
