@@ -175,10 +175,10 @@ export default class DonutGraph extends Component {
 
     render() {
         return (
-            <div>
+            <>
                 <h1>{this.props.title}</h1>
                 <div ref="donutCanvas"></div>
-            </div>
+            </>
         )
     }
 }

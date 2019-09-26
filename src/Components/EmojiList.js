@@ -6,7 +6,6 @@ import './../scss/emojiList.scss';
 export default class EmojiList extends Component {
 
     componentDidMount() {
-        console.log(this.props.dataToGraph);
         this.displayList(this.props.dataToGraph);
     }
 
@@ -35,11 +34,11 @@ export default class EmojiList extends Component {
 
     render() {
         return (
-            <div>
+            <>
                 <h1>{this.props.title}</h1>
                 <ul ref="list">
                 </ul>
-            </div>
+            </>
         )
     }
 }

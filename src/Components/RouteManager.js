@@ -3,18 +3,19 @@ import PropTypes from 'prop-types';
 import BarChart from './BarChart';
 import DonutGraph from './DonutGraph';
 import EmojiList from './EmojiList';
+import { allRoutes } from './DataRoutes';
 
 export default function RouteManager(props) {
-    let dataToCycle = Object.keys(props.stateHelper).slice(2);
+
+    const dataToCycle = Object.keys(allRoutes);
     let [dataRoute, setDataRoute] = useState({ routeIterator: 0, datasetIterator: 0 })
-    let routesAvailable = props.stateHelper[`${dataToCycle[dataRoute.datasetIterator]}`].routes;
+    let routesAvailable = allRoutes[`${dataToCycle[dataRoute.datasetIterator]}`].routes;
     let [route, setRoute] = useState({ route: routesAvailable[dataRoute.routeIterator] });
     let currentKey = dataToCycle[dataRoute.datasetIterator];
 
+
     let propsToPass = [];
-    const weeklyData = props.stateHelper.data;
-    console.log(weeklyData)
-    // console.log(weeklyData)
+    const weeklyData = props.stateHelper;
     //routes change every 15 seconds
     useInterval(() => {
         updateRoute();
@@ -38,11 +39,13 @@ export default function RouteManager(props) {
     }
     //cycles through each route then change to next dataset and repeats
     function updateRoute() {
-        setRoute(props.stateHelper[`${dataToCycle[dataRoute.datasetIterator]}`].routes[dataRoute.routeIterator]);
+        setRoute(allRoutes[`${dataToCycle[dataRoute.datasetIterator]}`].routes[dataRoute.routeIterator]);
 
         dataRoute.routeIterator + 1 > routesAvailable.length - 1 || !routesAvailable.length === 2 ?
-            (dataRoute.datasetIterator + 1 > dataToCycle.length - 1 ? setDataRoute({ routeIterator: 0, datasetIterator: 0 }) : setDataRoute({ routeIterator: 0, datasetIterator: dataRoute.datasetIterator + 1 })) :
-            setDataRoute({ routeIterator: dataRoute.routeIterator + 1, datasetIterator: dataRoute.datasetIterator })
+            (dataRoute.datasetIterator + 1 > dataToCycle.length - 1 ? 
+                setDataRoute({ routeIterator: 0, datasetIterator: 0 }) 
+                : setDataRoute({ routeIterator: 0, datasetIterator: dataRoute.datasetIterator + 1 })) 
+            : setDataRoute({ routeIterator: dataRoute.routeIterator + 1, datasetIterator: dataRoute.datasetIterator })
     }
     function setPropsToPass() {
         propsToPass.length = 0;
@@ -69,7 +72,7 @@ export default function RouteManager(props) {
         }
         //assigns graphable objects to propsToPass array
         switch (currentKey) {
-            case 'omo':
+            case 'omoData':
                 let gameProps = weeklyData.omoData;
                 switch (route) {
                     case 'OHS-CHUTES GAME':
@@ -185,7 +188,7 @@ export default function RouteManager(props) {
                     default:
                 }
                 break
-            case 'timbers':
+            case 'timbersData':
                 let timberProps = weeklyData.timberData;
                 switch (route) {
                     case 'TIMBERS WEEKLY TOP EMOJIS':
@@ -240,9 +243,9 @@ export default function RouteManager(props) {
     }
 
     return (
-        <div>
+        <>
             {setPropsToPass()}
-        </div>
+        </>
     )
 }
 
