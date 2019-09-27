@@ -112,45 +112,127 @@ export default function HooksFetchData() {
                         axios.get(omhofQuery).then((response) => {
                             const omhofResponse = response.data;
                             console.log(omhofResponse)
-                            let filteredOmhof = (dataKey) => {
+
+                            //{outerKey:dataKey:[{someKey: dataValue, kvpToClean: *^*@FOO@@},{..}], outerKey:dataKey:[{},{}]}
+                            //sort by value that exists, then remove special characters from a value with optional param
+                            let getRelevantData = (outerKey, dataKey, dataValue, kvpToClean = false) => {
                                 let temp = []
-                                let final = []
-                                Object.keys(omhofResponse[dataKey]).forEach((e) => {
-                                    if (omhofResponse[dataKey][e]['page_path'] === '/detail') {
-                                        omhofResponse[dataKey][e]['page_title'] = omhofResponse[dataKey][e]['page_title'].replace(/[^\w_]/g, " ");
-
-                                        temp.push(omhofResponse[dataKey][e])
+                                Object.keys(omhofResponse[outerKey]).forEach((e) => {
+                                    if (omhofResponse[outerKey][e][dataKey] === dataValue) {
+                                        temp.push(omhofResponse[outerKey][e])
+                                    }
+                                    if (kvpToClean) {
+                                        omhofResponse[outerKey][e][kvpToClean] = omhofResponse[outerKey][e][kvpToClean].replace(/[^\w_]/g, " ");
                                     }
                                 })
+                                // let hofr = [];
+                                // let hofl = [];
+                                // temp.map((c) => {
+                                //    c['hostname'] === "HOFR" ? hofr.push(c) : hofl.push(c)
+                                //    console.log(hofr, hofl)
+                                // })
 
-                                // need values full array for this
-                                let allTitleValues = temp.map((c) => {
-                                    return [...Object.values(c)]
-                                })
 
-
-                                temp.reduce((acc, curr, ind, src) => {
-
-                                    let currentHostName = curr['hostname']
-                                    let currentTitle = curr['page_title']
-                                    if (Object.values(acc).indexOf(currentTitle) > 0 && Object.values(acc).indexOf(currentHostName) < 0) {
-                                        acc['count'] = parseInt(acc['count']) + parseInt(curr['count'])
-                                        final.push(acc)
-                                    }
-                                    return curr
-                                })
-                                return final;
+                                // temp.reduce((acc, curr, ind, src) => {
+                                //     let currentTitle = curr['page_title']
+                                //     console.log(Object.values(curr), currentTitle)
+                                //     if (Object.values(acc).includes(currentTitle)) {
+                                //         acc['count'] = parseInt(acc['count']) + parseInt(curr['count'])
+                                //         final.push(acc)
+                                //     }
+                                //     return curr
+                                // })
+                                // return final;
+                                return temp
                             }
+                            let splitLeftRight = (arrayToReduce, keyToReference, kvpThatMayDiffer, keyToAddTogether) => {
+                                let left = []
+                                let right = []
+                                arrayToReduce.reduce((a, c) => {
+                                    if (a[kvpThatMayDiffer] !== c[kvpThatMayDiffer]) {
+                                        left.push(c)
+                                        return a
+                                    }
+                                    right.push(c)
+                                    return c
+                                })
+                                //sorts in order then combines duplicates 
+                                // left.sort((a,b) => (a[keyToReference] > b[keyToReference]) ? 1 : ((b[keyToReference] > a[keyToReference]) ? -1 : 0));
+                                let count = 0;
+                                while (count !== 2) {
+                                    left.sort((a, b) => (a[keyToReference] > b[keyToReference]) ? 1 : ((b[keyToReference] > a[keyToReference]) ? -1 : 0));
+                                    count++
+                                    left.reduce((acc, curr, ind) => {
+                                        if (curr[keyToReference] === acc[keyToReference]) {
+                                            acc[keyToAddTogether] = parseInt(acc[keyToAddTogether]) + parseInt(curr[keyToAddTogether])
+                                            left.splice(ind, 1);
+                                        }
+                                        return curr
+                                    })
+
+                                }
+                                // right.sort((a,b) => (a[keyToReference] > b[keyToReference]) ? 1 : ((b[keyToReference] > a[keyToReference]) ? -1 : 0));
+                                count = 0;
+                                while (count !== 2) {
+                                    right.sort((a, b) => (a[keyToReference] > b[keyToReference]) ? 1 : ((b[keyToReference] > a[keyToReference]) ? -1 : 0));
+                                    count++
+                                    right.reduce((acc, curr, ind) => {
+                                        if (curr[keyToReference] === acc[keyToReference]) {
+                                            acc[keyToAddTogether] = parseInt(acc[keyToAddTogether]) + parseInt(curr[keyToAddTogether])
+                                            right.splice(ind, 1);
+                                        }
+                                        return curr
+                                    })
+                                }
+                                let final = [];
+
+                                for (let j = 0; j <= left.length - 1; j++) {
+                                    if (j >= right.length) {
+                                        final.push(left[j]);
+                                    }else {
+                                        if (left[j][keyToReference] === right[j][keyToReference]) {
+                                            left[j][keyToAddTogether] = parseInt(left[j][keyToAddTogether]) + parseInt(right[j][keyToAddTogether])
+                                            final.push(left[j])
+                                        } else {
+                                            final.push(left[j])
+                                        }
+                                    }
+                                }
+                                final.sort((a,b) => b[keyToAddTogether] - a[keyToAddTogether])
+                                return final
+                            }
+
+                            //combine left and right values for omhof this skips some values
+                            let combineLeftRight = (arrayToReduce, keyToReference, kvpThatMayDiffer, keyToAddTogether) => {
+                                let reducedArray = [];
+                                arrayToReduce.reduce((acc, curr, ind, src) => {
+                                    if (Object.is(acc[keyToReference], curr[keyToReference]) && !Object.is(acc[kvpThatMayDiffer], curr[kvpThatMayDiffer])) {
+                                        acc[keyToAddTogether] = parseInt(acc[keyToAddTogether]) + parseInt(curr[keyToAddTogether]);
+                                        reducedArray.push(acc);
+                                        return src[src.indexOf(acc)];
+                                    }
+                                    // console.log(src.indexOf(curr)) //index curr
+                                    return src[src.indexOf(curr)];
+                                })
+                                console.log(reducedArray)
+                            }
+
 
                             let omhof = {
-                                weekly: filteredOmhof('kiosks-7day'),
-                                daily: filteredOmhof('kiosks-today')
+                                weekly: getRelevantData('kiosks-7day', "page_path", "/detail", "page_title"),
+                                daily: getRelevantData('kiosks-today', "page_path", "/detail", "page_title")
                             }
-                            console.log(omhof)
+                            omhof.weekly = splitLeftRight(omhof.weekly, 'page_title', 'hostname', 'count')
+                            omhof.daily = splitLeftRight(omhof.daily, 'page_title', 'hostname', 'count')
+                            // splitLeftRight(omhof.weekly, 'page_title', 'hostname', 'count');
+                            // splitLeftRight(omhof.daily, 'page_title', 'hostname', 'count');
+                            // combineLeftRight(omhof.weekly, 'page_title', 'hostname', 'count');
+                            // combineLeftRight(omhof.daily, 'page_title', 'hostname', 'count')
+                            // console.log(omhof)
                             let weeklyData = { omoData };
                             Object.assign(weeklyData, { omhof })
                             Object.assign(weeklyData, timberData(cleanData))
-
+                            console.log(weeklyData)
                             setData(weeklyData);
                             setLoaded(true);
                         })
