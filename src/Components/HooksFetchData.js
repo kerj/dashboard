@@ -8,17 +8,13 @@ export default function HooksFetchData() {
     const [loaded, setLoaded] = useState(false);
 
     const timberData = (cleanData) => {
+        console.log(cleanData)
         let finalTimberData = {}
         let timberDataObj = {}
         let timberData = [];
-        //make 4 arrays for each ending number
-        let timberUser = []
-        let timberTop5Emoji = []
-        let timberMostPopular = []
-        let timberOS = []
 
         cleanData.forEach((c, i) => {
-            let currentKeys = Object.keys(c);
+            const currentKeys = Object.keys(c);
             let objsToMake = cleanData[i][currentKeys[0]].length;
             for (let k = 0; k < objsToMake; k++) {
                 let timberDataObj = {};
@@ -50,15 +46,11 @@ export default function HooksFetchData() {
         })
         //issue with response-users-newusers inconsistant response length where a day can be cut off
         //problem when no new, or returning visisors have used this
-        timberUser = timberData.slice(0, 14)
-        timberTop5Emoji = timberData.slice(14, 19)
-        timberMostPopular = timberData.slice(19, 20)
-        timberOS = timberData.slice(20, 29)
 
-        timberDataObj.user = timberUser
-        timberDataObj.top5Emoji = timberTop5Emoji
-        timberDataObj.mostPopEmoji = timberMostPopular
-        timberDataObj.operatingSystem = timberOS
+        timberDataObj.user = timberData.slice(0, 14)
+        timberDataObj.top5Emoji = timberData.slice(14, 19)
+        timberDataObj.mostPopEmoji = timberData.slice(19, 20)
+        timberDataObj.operatingSystem = timberData.slice(20, 29)
 
         finalTimberData.timberData = timberDataObj
 
@@ -119,16 +111,37 @@ export default function HooksFetchData() {
                         })
                         axios.get(omhofQuery).then((response) => {
                             const omhofResponse = response.data;
+                            console.log(omhofResponse)
                             let filteredOmhof = (dataKey) => {
                                 let temp = []
-                                Object.keys(omhofResponse[dataKey]).forEach((e, i) => {
+                                let final = []
+                                Object.keys(omhofResponse[dataKey]).forEach((e) => {
                                     if (omhofResponse[dataKey][e]['page_path'] === '/detail') {
                                         omhofResponse[dataKey][e]['page_title'] = omhofResponse[dataKey][e]['page_title'].replace(/[^\w_]/g, " ");
+
                                         temp.push(omhofResponse[dataKey][e])
                                     }
                                 })
-                                return temp;
+
+                                // need values full array for this
+                                let allTitleValues = temp.map((c) => {
+                                    return [...Object.values(c)]
+                                })
+
+
+                                temp.reduce((acc, curr, ind, src) => {
+
+                                    let currentHostName = curr['hostname']
+                                    let currentTitle = curr['page_title']
+                                    if (Object.values(acc).indexOf(currentTitle) > 0 && Object.values(acc).indexOf(currentHostName) < 0) {
+                                        acc['count'] = parseInt(acc['count']) + parseInt(curr['count'])
+                                        final.push(acc)
+                                    }
+                                    return curr
+                                })
+                                return final;
                             }
+
                             let omhof = {
                                 weekly: filteredOmhof('kiosks-7day'),
                                 daily: filteredOmhof('kiosks-today')

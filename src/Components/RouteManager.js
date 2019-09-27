@@ -16,6 +16,29 @@ export default function RouteManager(props) {
 
     let propsToPass = [];
     const weeklyData = props.stateHelper;
+
+    const ROUTES = {
+        //omoGames
+        'OHS-CHUTES GAME': <BarChart dataToGraph={propsToPass} title={route} />,
+        'OHS-FLECTCHER GAME': <BarChart dataToGraph={propsToPass} title={route} />,
+        'OHS-VORTEX GAME': <BarChart dataToGraph={propsToPass} title={route} />,
+        'OHS-MARIE GAME': <BarChart dataToGraph={propsToPass} title={route} />,
+        'OHS-CHUTES STORY': <BarChart dataToGraph={propsToPass} title={route} />,
+        'OHS-FLECTCHER STORY': <BarChart dataToGraph={propsToPass} title={route} />,
+        'OHS-VORTEX STORY': <BarChart dataToGraph={propsToPass} title={route} />,
+        'OHS-MARIE STORY': <BarChart dataToGraph={propsToPass} title={route} />,
+        'OHS-MOST READ TODAY': <EmojiList dataToGraph={propsToPass} title={route} />,
+        'OHS-WEEKLY STORIES READ': <EmojiList dataToGraph={propsToPass} title={route} />,
+        //omhof
+        'OMHOF TOP AWARDS': <EmojiList dataToGraph={propsToPass} title={route} />,
+        'OMHOF AWARD OF THE DAY': <EmojiList dataToGraph={propsToPass} title={route} />,
+        //timbers
+        'TIMBERS WEEKLY TOP EMOJIS': <EmojiList dataToGraph={propsToPass} title={route} />,
+        'NEW VS. RETURNING VISITORS': <BarChart dataToGraph={propsToPass} title={route} />,
+        'MOST POPULAR EMOJI TODAY': <EmojiList dataToGraph={propsToPass} title={route} />,
+        'MOBILE OPERATING SYSTEMS': <DonutGraph dataToGraph={propsToPass} title={route} />,
+    }
+
     //routes change every 15 seconds
     useInterval(() => {
         updateRoute();
@@ -49,27 +72,7 @@ export default function RouteManager(props) {
     }
     function setPropsToPass() {
         propsToPass.length = 0;
-        const ROUTES = {
-            //omoGames
-            'OHS-CHUTES GAME': <BarChart dataToGraph={propsToPass} title={route} />,
-            'OHS-FLECTCHER GAME': <BarChart dataToGraph={propsToPass} title={route} />,
-            'OHS-VORTEX GAME': <BarChart dataToGraph={propsToPass} title={route} />,
-            'OHS-MARIE GAME': <BarChart dataToGraph={propsToPass} title={route} />,
-            'OHS-CHUTES STORY': <BarChart dataToGraph={propsToPass} title={route} />,
-            'OHS-FLECTCHER STORY': <BarChart dataToGraph={propsToPass} title={route} />,
-            'OHS-VORTEX STORY': <BarChart dataToGraph={propsToPass} title={route} />,
-            'OHS-MARIE STORY': <BarChart dataToGraph={propsToPass} title={route} />,
-            'OHS-MOST READ TODAY': <EmojiList dataToGraph={propsToPass} title={route} />,
-            'OHS-WEEKLY STORIES READ': <EmojiList dataToGraph={propsToPass} title={route} />,
-            //omhof
-            'OMHOF TOP AWARDS': <EmojiList dataToGraph={propsToPass} title={route} />,
-            'OMHOF AWARD OF THE DAY': <EmojiList dataToGraph={propsToPass} title={route} />,
-            //timbers
-            'TIMBERS WEEKLY TOP EMOJIS': <EmojiList dataToGraph={propsToPass} title={route} />,
-            'NEW VS. RETURNING VISITORS': <BarChart dataToGraph={propsToPass} title={route} />,
-            'MOST POPULAR EMOJI TODAY': <EmojiList dataToGraph={propsToPass} title={route} />,
-            'MOBILE OPERATING SYSTEMS': <DonutGraph dataToGraph={propsToPass} title={route} />,
-        }
+
         //assigns graphable objects to propsToPass array
         switch (currentKey) {
             case 'omoData':
