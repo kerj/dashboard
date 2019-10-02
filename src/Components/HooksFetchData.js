@@ -124,178 +124,24 @@ export default function HooksFetchData() {
                                         omhofResponse[outerKey][e][kvpToClean] = omhofResponse[outerKey][e][kvpToClean].replace(/[^\w_]/g, " ");
                                     }
                                 })
-                                // let hofr = [];
-                                // let hofl = [];
-                                // temp.map((c) => {
-                                //    c['hostname'] === "HOFR" ? hofr.push(c) : hofl.push(c)
-                                //    console.log(hofr, hofl)
-                                // })
 
-
-                                // temp.reduce((acc, curr, ind, src) => {
-                                //     let currentTitle = curr['page_title']
-                                //     console.log(Object.values(curr), currentTitle)
-                                //     if (Object.values(acc).includes(currentTitle)) {
-                                //         acc['count'] = parseInt(acc['count']) + parseInt(curr['count'])
-                                //         final.push(acc)
-                                //     }
-                                //     return curr
-                                // })
-                                // return final;
                                 return temp
                             }
 
-
-
-
-                            let mergeAdd = (propToAdd, ...objects) => {
-                                const merged = objects.reduce((a, obj) => {
-                                    Object.entries(obj).forEach(([key, val]) => {
-                                        if (key === propToAdd) {
-                                            a[key] = (parseInt(a[key]) || '') + parseInt(val);
-                                        } else { a[key] = a[key] || '' + val }
-                                    });
-                                    return a;
-                                }, {});
-                                return Object.fromEntries(
-                                    Object.entries(merged).sort(
-                                        (a, b) => b[1] - a[1]
-                                    )
-                                );
-                            }
-
-                            let combineDuplicates = (array, duplicateCheck) => {
+                            //takes array of objects and looks for kvp's that are duplicated and removes from the top
+                            let combineDuplicates = (arrayOfObjs, duplicateCheck) => {
                                 let returnArray = [];
                                 let objectCheck = {};
 
-                                for (let i in array) {
-                                    objectCheck[array[i][duplicateCheck]] = array[i];
+                                for (let i in arrayOfObjs) {
+                                    objectCheck[arrayOfObjs[i][duplicateCheck]] = arrayOfObjs[i];
                                 }
-
                                 for (let i in objectCheck) {
                                     returnArray.push(objectCheck[i]);
                                 }
                                 return returnArray;
                             }
-
-
-                            // let combineDupe = (originalArray, kvpDuplicate, valueToCombine) => {
-                            //     let kvpInCheck = originalArray[0];
-                            //     let returnArray = [];
-                            //     originalArray.filter((ele) => {
-                            //         if (kvpInCheck[kvpDuplicate] === ele[kvpDuplicate]) {
-                            //             ele[valueToCombine] = parseInt(ele[valueToCombine]) + parseInt(kvpInCheck[valueToCombine])
-                            //             ele[valueToCombine].toString();
-                            //             kvpInCheck = ele;
-                            //             return returnArray.push(kvpInCheck);
-                            //         } else {
-                            //             kvpInCheck = ele;
-                            //             returnArray.push(kvpInCheck);
-                            //             return false;
-                            //         }
-                            //     })
-                            //     returnArray.sort((a,b) => (b[valueToCombine] < a[valueToCombine]) ? -1 : ((a[valueToCombine] > b[valueToCombine]) ? 1 : 0));
-                            //     console.log(returnArray)
-                            // }
-
-
-
-                            let splitLeftRight = (arrayToSplit, keyToReference, kvpThatMayDiffer, keyToAddTogether) => {
-                                arrayToSplit.sort((a, b) => (b[keyToAddTogether] < a[keyToAddTogether]) ? -1 : ((a[keyToAddTogether] > b[keyToAddTogether]) ? 1 : 0));
-                                let left = [];
-                                let tempLeft = [];
-                                let right = [];
-                                let temp = [];
-                                arrayToSplit.reduce((a, c) => {
-                                    if (a[kvpThatMayDiffer] === c[kvpThatMayDiffer]) {
-                                        right.push(a)
-                                        return c
-                                    } else {
-                                        left.push(c)
-                                        return a
-                                    }
-                                })
-                                left.sort((a, b) => (b[keyToReference] < a[keyToReference]) ? -1 : ((a[keyToReference] > b[keyToReference]) ? 1 : 0));
-                                right.sort((a, b) => (b[keyToReference] < a[keyToReference]) ? -1 : ((a[keyToReference] > b[keyToReference]) ? 1 : 0));
-                                for (let i = 0; i < left.length - 1; i++) {
-                                    tempLeft.push(mergeAdd(keyToAddTogether, left[i], left[i + 1]));
-                                }
-                                for (let i = 0; i < right.length; i++) {
-                                    temp.push(mergeAdd(keyToAddTogether, tempLeft[i], right[i]));
-                                }
-                                temp.reduce((a, c, i) => {
-                                    if (a[keyToReference] === c[keyToReference]) {
-                                        c[keyToAddTogether] = parseInt(a[keyToAddTogether]) + parseInt(c[keyToAddTogether]);
-                                        temp.splice(i - 1, 1)
-                                        return c
-                                    } else {
-                                        return c
-                                    }
-                                })
-                                return temp.sort((a, b) => (b[keyToAddTogether] < a[keyToAddTogether]) ? -1 : ((a[keyToAddTogether] > b[keyToAddTogether]) ? 1 : 0));
-                            }
-
-                            // left.sort((a, b) => (b[keyToAddTogether] < a[keyToAddTogether]) ? -1 : ((a[keyToAddTogether] > b[keyToAddTogether]) ? 1 : 0));
-                            // needs to add up counts for duplicate titles in order of high to low
-
-
-
-                            // //add up values that have the same keyToReference only works if they are next to each other
-                            // left.reduce((acc, curr, ind) => {
-                            //     if (curr[keyToReference] === acc[keyToReference]) {
-                            //         acc[keyToAddTogether] = parseInt(acc[keyToAddTogether]) + parseInt(curr[keyToAddTogether])
-                            //         left.splice(ind, 1);
-                            //     }
-                            //     return curr
-                            // })
-                            // console.log(left)
-
-                            // right.sort((a, b) => (b[keyToReference] < a[keyToReference]) ? -1 : ((a[keyToReference] > b[keyToReference]) ? 1 : 0));
-                            // right.reduce((acc, curr, ind) => {
-                            //     if (curr[keyToReference] === acc[keyToReference]) {
-                            //         acc[keyToAddTogether] = parseInt(acc[keyToAddTogether]) + parseInt(curr[keyToAddTogether])
-                            //         right.splice(ind, 1);
-                            //     }
-                            //     return curr
-                            // })
-
-                            // right.sort((a, b) => (b[keyToAddTogether] < a[keyToAddTogether]) ? -1 : ((a[keyToAddTogether] > b[keyToAddTogether]) ? 1 : 0));
-
-                            // console.log(left, right)
-
-                            // let final = [];
-
-                            // for (let j = 0; j <= left.length - 1; j++) {
-                            //     if (j >= right.length) {
-                            //         final.push(left[j]);
-                            //     } else {
-                            //         if (left[j][keyToReference] === right[j][keyToReference]) {
-                            //             left[j][keyToAddTogether] = parseInt(left[j][keyToAddTogether]) + parseInt(right[j][keyToAddTogether])
-                            //             final.push(left[j])
-                            //         } else {
-                            //             final.push(left[j])
-                            //         }
-                            //     }
-                            // }
-                            // final.sort((a, b) => b[keyToAddTogether] - a[keyToAddTogether])
-                            // return final
-                            // }
-
-                            //combine left and right values for omhof this skips some values
-                            // let combineLeftRight = (arrayToReduce, keyToReference, kvpThatMayDiffer, keyToAddTogether) => {
-                            //     let reducedArray = [];
-                            //     arrayToReduce.reduce((acc, curr, ind, src) => {
-                            //         if (Object.is(acc[keyToReference], curr[keyToReference]) && !Object.is(acc[kvpThatMayDiffer], curr[kvpThatMayDiffer])) {
-                            //             acc[keyToAddTogether] = parseInt(acc[keyToAddTogether]) + parseInt(curr[keyToAddTogether]);
-                            //             reducedArray.push(acc);
-                            //             return src[src.indexOf(acc)];
-                            //         }
-                            //         // console.log(src.indexOf(curr)) //index curr
-                            //         return src[src.indexOf(curr)];
-                            //     })
-                            //     console.log(reducedArray)
-                            // }
-
+                            //combines duplicate objects when filterKey values are the same, then adds together the addition keys as ints, removes the duplicate objs return decsending order
                             let combineOmhof = (originalArray, filterKey, additionKey) => {
                                 let tempArray = [];
                                 let returnArray = [];
@@ -316,32 +162,19 @@ export default function HooksFetchData() {
                                 //remove duplicates
                                 returnArray = combineDuplicates(returnArray, filterKey)
                                 //return ascending order
-                                return returnArray.sort((a,b) => (b[additionKey] < a[additionKey]) ? -1 : ((a[additionKey] > b[additionKey]) ? 1 : 0));
+                                return returnArray.sort((a, b) => (b[additionKey] < a[additionKey]) ? -1 : ((a[additionKey] > b[additionKey]) ? 1 : 0));
                             }
-                            
-
-
 
                             let omhof = {
                                 weekly: getRelevantData('kiosks-7day', "page_path", "/detail", "page_title"),
                                 daily: getRelevantData('kiosks-today', "page_path", "/detail", "page_title")
                             }
-                            // omhof.weekly = splitLeftRight(omhof.weekly, 'page_title', 'hostname', 'count')
-                            // omhof.daily = splitLeftRight(omhof.daily, 'page_title', 'hostname', 'count')
-
                             omhof.weekly = combineOmhof(omhof.weekly, 'page_title', 'count');
                             omhof.daily = combineOmhof(omhof.daily, 'page_title', 'count');
- 
-                            // omhof.weekly = tester(omhof.weekly, 'page_title', 'count')
-                            // splitLeftRight(omhof.weekly, 'page_title', 'hostname', 'count');
-                            // splitLeftRight(omhof.daily, 'page_title', 'hostname', 'count');
-                            // combineLeftRight(omhof.weekly, 'page_title', 'hostname', 'count');
-                            // combineLeftRight(omhof.daily, 'page_title', 'hostname', 'count')
-                            // console.log(omhof)
+
                             let weeklyData = { omoData };
                             Object.assign(weeklyData, { omhof })
                             Object.assign(weeklyData, timberData(cleanData))
-                            console.log(weeklyData)
                             setData(weeklyData);
                             setLoaded(true);
                         })
