@@ -45,11 +45,22 @@ export default function HooksFetchData() {
         })
         //issue with response-users-newusers inconsistant response length where a day can be cut off
         //problem when no new, or returning visisors have used this
-
-        timberDataObj.user = timberData.slice(0, 14)
-        timberDataObj.top5Emoji = timberData.slice(14, 19)
-        timberDataObj.mostPopEmoji = timberData.slice(19, 20)
-        timberDataObj.operatingSystem = timberData.slice(20, 29)
+        if ( timberData.length === 29 ){
+            timberDataObj.user = timberData.slice(0, 14)
+            timberDataObj.top5Emoji = timberData.slice(14, 19)
+            timberDataObj.mostPopEmoji = timberData.slice(19, 20)
+            timberDataObj.operatingSystem = timberData.slice(20, 29)
+        }else if( timberData.length === 28 ){
+            timberDataObj.user = timberData.slice(0, 13)
+            timberDataObj.top5Emoji = timberData.slice(13, 18)
+            timberDataObj.mostPopEmoji = timberData.slice(18, 19)
+            timberDataObj.operatingSystem = timberData.slice(19, 28)
+        }else if( timberData.length === 27 ){
+            timberDataObj.user = timberData.slice(0, 12)
+            timberDataObj.top5Emoji = timberData.slice(12, 17)
+            timberDataObj.mostPopEmoji = timberData.slice(17, 18)
+            timberDataObj.operatingSystem = timberData.slice(18, 27)
+        }
 
         finalTimberData.timberData = timberDataObj
 
@@ -110,8 +121,6 @@ export default function HooksFetchData() {
                         })
                         axios.get(omhofQuery).then((response) => {
                             const omhofResponse = response.data;
-                            console.log(omhofResponse)
-
                             //{outerKey:dataKey:[{someKey: dataValue, kvpToClean: *^*@FOO@@},{..}], outerKey:dataKey:[{},{}]}
                             //sort by value that exists, then remove special characters from a value with optional param
                             let getRelevantData = (outerKey, dataKey, dataValue, kvpToClean = false) => {
@@ -133,11 +142,11 @@ export default function HooksFetchData() {
                                 let returnArray = [];
                                 let objectCheck = {};
 
-                                for (let i in arrayOfObjs) {
-                                    objectCheck[arrayOfObjs[i][duplicateCheck]] = arrayOfObjs[i];
+                                for (let object in arrayOfObjs) {
+                                    objectCheck[arrayOfObjs[object][duplicateCheck]] = arrayOfObjs[object];
                                 }
-                                for (let i in objectCheck) {
-                                    returnArray.push(objectCheck[i]);
+                                for (let object in objectCheck) {
+                                    returnArray.push(objectCheck[object]);
                                 }
                                 return returnArray;
                             }
@@ -156,6 +165,7 @@ export default function HooksFetchData() {
                                         originalArray[i][additionKey] = parseInt(originalArray[i][additionKey]) + parseInt(c[indexOfAdd])
                                         return returnArray[i] = originalArray[i]
                                     }
+                                    return returnArray
                                 })
                                 //reverse order
                                 returnArray.sort((a, b) => (a[additionKey] < b[additionKey]) ? -1 : ((a[additionKey] > b[additionKey]) ? 1 : 0));
@@ -175,6 +185,7 @@ export default function HooksFetchData() {
                             let weeklyData = { omoData };
                             Object.assign(weeklyData, { omhof })
                             Object.assign(weeklyData, timberData(cleanData))
+                            
                             setData(weeklyData);
                             setLoaded(true);
                         })
