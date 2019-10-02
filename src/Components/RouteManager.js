@@ -13,7 +13,6 @@ export default function RouteManager(props) {
     let [route, setRoute] = useState({ route: routesAvailable[dataRoute.routeIterator] });
     let currentKey = dataToCycle[dataRoute.datasetIterator];
 
-
     let propsToPass = [];
     const weeklyData = props.stateHelper;
 
