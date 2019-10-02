@@ -8,7 +8,6 @@ export default function HooksFetchData() {
     const [loaded, setLoaded] = useState(false);
 
     const timberData = (cleanData) => {
-        console.log(cleanData)
         let finalTimberData = {}
         let timberDataObj = {}
         let timberData = [];
@@ -46,11 +45,22 @@ export default function HooksFetchData() {
         })
         //issue with response-users-newusers inconsistant response length where a day can be cut off
         //problem when no new, or returning visisors have used this
-
-        timberDataObj.user = timberData.slice(0, 14)
-        timberDataObj.top5Emoji = timberData.slice(14, 19)
-        timberDataObj.mostPopEmoji = timberData.slice(19, 20)
-        timberDataObj.operatingSystem = timberData.slice(20, 29)
+        if ( timberData.length === 29 ){
+            timberDataObj.user = timberData.slice(0, 14)
+            timberDataObj.top5Emoji = timberData.slice(14, 19)
+            timberDataObj.mostPopEmoji = timberData.slice(19, 20)
+            timberDataObj.operatingSystem = timberData.slice(20, 29)
+        }else if( timberData.length === 28 ){
+            timberDataObj.user = timberData.slice(0, 13)
+            timberDataObj.top5Emoji = timberData.slice(13, 18)
+            timberDataObj.mostPopEmoji = timberData.slice(18, 19)
+            timberDataObj.operatingSystem = timberData.slice(19, 28)
+        }else if( timberData.length === 27 ){
+            timberDataObj.user = timberData.slice(0, 12)
+            timberDataObj.top5Emoji = timberData.slice(12, 17)
+            timberDataObj.mostPopEmoji = timberData.slice(17, 18)
+            timberDataObj.operatingSystem = timberData.slice(18, 27)
+        }
 
         finalTimberData.timberData = timberDataObj
 
@@ -111,46 +121,71 @@ export default function HooksFetchData() {
                         })
                         axios.get(omhofQuery).then((response) => {
                             const omhofResponse = response.data;
-                            console.log(omhofResponse)
-                            let filteredOmhof = (dataKey) => {
+                            //{outerKey:dataKey:[{someKey: dataValue, kvpToClean: *^*@FOO@@},{..}], outerKey:dataKey:[{},{}]}
+                            //sort by value that exists, then remove special characters from a value with optional param
+                            let getRelevantData = (outerKey, dataKey, dataValue, kvpToClean = false) => {
                                 let temp = []
-                                let final = []
-                                Object.keys(omhofResponse[dataKey]).forEach((e) => {
-                                    if (omhofResponse[dataKey][e]['page_path'] === '/detail') {
-                                        omhofResponse[dataKey][e]['page_title'] = omhofResponse[dataKey][e]['page_title'].replace(/[^\w_]/g, " ");
-
-                                        temp.push(omhofResponse[dataKey][e])
+                                Object.keys(omhofResponse[outerKey]).forEach((e) => {
+                                    if (omhofResponse[outerKey][e][dataKey] === dataValue) {
+                                        temp.push(omhofResponse[outerKey][e])
+                                    }
+                                    if (kvpToClean) {
+                                        omhofResponse[outerKey][e][kvpToClean] = omhofResponse[outerKey][e][kvpToClean].replace(/[^\w_]/g, " ");
                                     }
                                 })
 
-                                // need values full array for this
-                                let allTitleValues = temp.map((c) => {
-                                    return [...Object.values(c)]
+                                return temp
+                            }
+
+                            //takes array of objects and looks for kvp's that are duplicated and removes from the top
+                            let combineDuplicates = (arrayOfObjs, duplicateCheck) => {
+                                let returnArray = [];
+                                let objectCheck = {};
+
+                                for (let object in arrayOfObjs) {
+                                    objectCheck[arrayOfObjs[object][duplicateCheck]] = arrayOfObjs[object];
+                                }
+                                for (let object in objectCheck) {
+                                    returnArray.push(objectCheck[object]);
+                                }
+                                return returnArray;
+                            }
+                            //combines duplicate objects when filterKey values are the same, then adds together the addition keys as ints, removes the duplicate objs return decsending order
+                            let combineOmhof = (originalArray, filterKey, additionKey) => {
+                                let tempArray = [];
+                                let returnArray = [];
+
+                                originalArray.map((c) => {
+                                    return tempArray.push(Object.values(c))
                                 })
-
-
-                                temp.reduce((acc, curr, ind, src) => {
-
-                                    let currentHostName = curr['hostname']
-                                    let currentTitle = curr['page_title']
-                                    if (Object.values(acc).indexOf(currentTitle) > 0 && Object.values(acc).indexOf(currentHostName) < 0) {
-                                        acc['count'] = parseInt(acc['count']) + parseInt(curr['count'])
-                                        final.push(acc)
+                                tempArray.map((c, i) => {
+                                    let indexOfFilter = c.indexOf(originalArray[i][filterKey]);
+                                    let indexOfAdd = c.indexOf(originalArray[i][additionKey]);
+                                    if (Object.is(originalArray[i][filterKey], c[indexOfFilter])) {
+                                        originalArray[i][additionKey] = parseInt(originalArray[i][additionKey]) + parseInt(c[indexOfAdd])
+                                        return returnArray[i] = originalArray[i]
                                     }
-                                    return curr
+                                    return returnArray
                                 })
-                                return final;
+                                //reverse order
+                                returnArray.sort((a, b) => (a[additionKey] < b[additionKey]) ? -1 : ((a[additionKey] > b[additionKey]) ? 1 : 0));
+                                //remove duplicates
+                                returnArray = combineDuplicates(returnArray, filterKey)
+                                //return ascending order
+                                return returnArray.sort((a, b) => (b[additionKey] < a[additionKey]) ? -1 : ((a[additionKey] > b[additionKey]) ? 1 : 0));
                             }
 
                             let omhof = {
-                                weekly: filteredOmhof('kiosks-7day'),
-                                daily: filteredOmhof('kiosks-today')
+                                weekly: getRelevantData('kiosks-7day', "page_path", "/detail", "page_title"),
+                                daily: getRelevantData('kiosks-today', "page_path", "/detail", "page_title")
                             }
-                            console.log(omhof)
+                            omhof.weekly = combineOmhof(omhof.weekly, 'page_title', 'count');
+                            omhof.daily = combineOmhof(omhof.daily, 'page_title', 'count');
+
                             let weeklyData = { omoData };
                             Object.assign(weeklyData, { omhof })
                             Object.assign(weeklyData, timberData(cleanData))
-
+                            
                             setData(weeklyData);
                             setLoaded(true);
                         })
