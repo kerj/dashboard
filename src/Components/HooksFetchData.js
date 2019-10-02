@@ -164,21 +164,19 @@ export default function HooksFetchData() {
                                 );
                             }
 
-                            // let combineDuplicates = (array, duplicateCheck, valueToCombine) => {
-                            //     let returnArray = [];
-                            //     let objectCheck = {};
+                            let combineDuplicates = (array, duplicateCheck) => {
+                                let returnArray = [];
+                                let objectCheck = {};
 
-                            //     for (let i in array) {
-                            //         objectCheck[array[i][duplicateCheck]] = array[i];
-                            //         console.log(array[i]);
+                                for (let i in array) {
+                                    objectCheck[array[i][duplicateCheck]] = array[i];
+                                }
 
-                            //     }
-
-                            //     for (let i in objectCheck) {
-                            //         returnArray.push(objectCheck[i]);
-                            //     }
-                            //     return returnArray;
-                            // }
+                                for (let i in objectCheck) {
+                                    returnArray.push(objectCheck[i]);
+                                }
+                                return returnArray;
+                            }
 
 
                             // let combineDupe = (originalArray, kvpDuplicate, valueToCombine) => {
@@ -228,13 +226,13 @@ export default function HooksFetchData() {
                                 temp.reduce((a, c, i) => {
                                     if (a[keyToReference] === c[keyToReference]) {
                                         c[keyToAddTogether] = parseInt(a[keyToAddTogether]) + parseInt(c[keyToAddTogether]);
-                                        temp.splice(i-1, 1)
+                                        temp.splice(i - 1, 1)
                                         return c
                                     } else {
                                         return c
                                     }
                                 })
-                                return temp.sort((a,b) => (b[keyToAddTogether] < a[keyToAddTogether]) ? -1 : ((a[keyToAddTogether] > b[keyToAddTogether]) ? 1 : 0));
+                                return temp.sort((a, b) => (b[keyToAddTogether] < a[keyToAddTogether]) ? -1 : ((a[keyToAddTogether] > b[keyToAddTogether]) ? 1 : 0));
                             }
 
                             // left.sort((a, b) => (b[keyToAddTogether] < a[keyToAddTogether]) ? -1 : ((a[keyToAddTogether] > b[keyToAddTogether]) ? 1 : 0));
@@ -298,17 +296,30 @@ export default function HooksFetchData() {
                             //     console.log(reducedArray)
                             // }
 
-                            let test2 = (originalArray, filterKey, additionKey) => {
+                            let combineOmhof = (originalArray, filterKey, additionKey) => {
                                 let tempArray = [];
-                                originalArray.map((c,i,a) => {
-                                    let cValues = Object.values(c);
-                                    let tempValues = Object.values(tempArray);
-                                    tempArray.push(c)
-                                    if (c[filterKey].contains(tempValues))
-                                    console.log(cValues, tempValues)
-                                    
+                                let returnArray = [];
+
+                                originalArray.map((c) => {
+                                    return tempArray.push(Object.values(c))
                                 })
+                                tempArray.map((c, i) => {
+                                    let indexOfFilter = c.indexOf(originalArray[i][filterKey]);
+                                    let indexOfAdd = c.indexOf(originalArray[i][additionKey]);
+                                    if (Object.is(originalArray[i][filterKey], c[indexOfFilter])) {
+                                        originalArray[i][additionKey] = parseInt(originalArray[i][additionKey]) + parseInt(c[indexOfAdd])
+                                        return returnArray[i] = originalArray[i]
+                                    }
+                                })
+                                //reverse order
+                                returnArray.sort((a, b) => (a[additionKey] < b[additionKey]) ? -1 : ((a[additionKey] > b[additionKey]) ? 1 : 0));
+                                //remove duplicates
+                                returnArray = combineDuplicates(returnArray, filterKey)
+                                //return ascending order
+                                return returnArray.sort((a,b) => (b[additionKey] < a[additionKey]) ? -1 : ((a[additionKey] > b[additionKey]) ? 1 : 0));
                             }
+                            
+
 
 
                             let omhof = {
@@ -318,8 +329,9 @@ export default function HooksFetchData() {
                             // omhof.weekly = splitLeftRight(omhof.weekly, 'page_title', 'hostname', 'count')
                             // omhof.daily = splitLeftRight(omhof.daily, 'page_title', 'hostname', 'count')
 
-                            omhof.weekly = test2(omhof.weekly, 'page_title', 'count');
-
+                            omhof.weekly = combineOmhof(omhof.weekly, 'page_title', 'count');
+                            omhof.daily = combineOmhof(omhof.daily, 'page_title', 'count');
+ 
                             // omhof.weekly = tester(omhof.weekly, 'page_title', 'count')
                             // splitLeftRight(omhof.weekly, 'page_title', 'hostname', 'count');
                             // splitLeftRight(omhof.daily, 'page_title', 'hostname', 'count');
