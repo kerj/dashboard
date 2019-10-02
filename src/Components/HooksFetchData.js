@@ -164,21 +164,6 @@ export default function HooksFetchData() {
                                 );
                             }
 
-
-                            let tester = (oArray, keyRef, propToAdd) => {
-                                let temp = [];
-                                oArray.reduce((a, c) => {
-                                    if (a[keyRef] === c[keyRef]) {
-                                        temp.push(mergeAdd(propToAdd, a, c))
-                                        return c
-                                    } else {
-                                        temp.push(c)
-                                        return c
-                                    }
-                                })
-                                console.log(temp)
-                            }
-
                             // let combineDuplicates = (array, duplicateCheck, valueToCombine) => {
                             //     let returnArray = [];
                             //     let objectCheck = {};
@@ -313,16 +298,29 @@ export default function HooksFetchData() {
                             //     console.log(reducedArray)
                             // }
 
+                            let test2 = (originalArray, filterKey, additionKey) => {
+                                let tempArray = [];
+                                originalArray.map((c,i,a) => {
+                                    let cValues = Object.values(c);
+                                    let tempValues = Object.values(tempArray);
+                                    tempArray.push(c)
+                                    if (c[filterKey].contains(tempValues))
+                                    console.log(cValues, tempValues)
+                                    
+                                })
+                            }
+
 
                             let omhof = {
                                 weekly: getRelevantData('kiosks-7day', "page_path", "/detail", "page_title"),
                                 daily: getRelevantData('kiosks-today', "page_path", "/detail", "page_title")
                             }
-                            omhof.weekly = splitLeftRight(omhof.weekly, 'page_title', 'hostname', 'count')
-                            omhof.daily = splitLeftRight(omhof.daily, 'page_title', 'hostname', 'count')
+                            // omhof.weekly = splitLeftRight(omhof.weekly, 'page_title', 'hostname', 'count')
+                            // omhof.daily = splitLeftRight(omhof.daily, 'page_title', 'hostname', 'count')
+
+                            omhof.weekly = test2(omhof.weekly, 'page_title', 'count');
 
                             // omhof.weekly = tester(omhof.weekly, 'page_title', 'count')
-
                             // splitLeftRight(omhof.weekly, 'page_title', 'hostname', 'count');
                             // splitLeftRight(omhof.daily, 'page_title', 'hostname', 'count');
                             // combineLeftRight(omhof.weekly, 'page_title', 'hostname', 'count');
