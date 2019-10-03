@@ -5,27 +5,29 @@ import HooksFetchData from './Components/HooksFetchData';
 
 function App() {
   d3.select("body")
-  .style("background-color", "rebeccapurple")
-  .transition()
-  .delay(1500)
-  .duration(3000)
-  .style("background-color", "darkblue")
-  .transition()
-  .delay(1500)
-  .duration(3000)
-  .style("background-color", "forestgreen")
-  .transition()
-  .delay(1500)
-  .duration(3000)
-  .style("background-color", "slategrey")
-  .transition()
-  .delay(1500)
-  .duration(3000)
-  .style("background-color", "black")
+    .style("background-color", "rebeccapurple")
+    .transition()
+    .delay(1500)
+    .duration(3000)
+    .style("background-color", "darkblue")
+    .transition()
+    .delay(1500)
+    .duration(3000)
+    .style("background-color", "forestgreen")
+    .transition()
+    .delay(1500)
+    .duration(3000)
+    .style("background-color", "slategrey")
+    .transition()
+    .delay(1500)
+    .duration(3000)
+    .style("background-color", "black")
 
   return (
     <>
-      <HooksFetchData />
+      <React.StrictMode>
+        <HooksFetchData />
+      </React.StrictMode>
     </>
   );
 }

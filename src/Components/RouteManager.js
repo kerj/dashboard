@@ -15,7 +15,7 @@ export default function RouteManager(props) {
 
     let propsToPass = [];
     const weeklyData = props.stateHelper;
-
+    console.log(weeklyData)
     const ROUTES = {
         //omoGames
         'OHS-CHUTES GAME': <BarChart dataToGraph={propsToPass} title={route} />,

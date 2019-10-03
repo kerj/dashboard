@@ -41,25 +41,26 @@ export default function HooksFetchData() {
                 })
                 timberData.push(timberDataObj);
             }
+            console.log(cleanData)
             return timberData
         })
         //issue with response-users-newusers inconsistant response length where a day can be cut off
         //problem when no new, or returning visisors have used this
-        if ( timberData.length === 29 ){
+        if ( cleanData[0]['ga:userType'].length === 14 ){
             timberDataObj.user = timberData.slice(0, 14)
             timberDataObj.top5Emoji = timberData.slice(14, 19)
             timberDataObj.mostPopEmoji = timberData.slice(19, 20)
-            timberDataObj.operatingSystem = timberData.slice(20, 29)
-        }else if( timberData.length === 28 ){
+            timberDataObj.operatingSystem = timberData.slice(20)
+        }else if( cleanData[0]['ga:userType'].length === 13 ){
             timberDataObj.user = timberData.slice(0, 13)
             timberDataObj.top5Emoji = timberData.slice(13, 18)
             timberDataObj.mostPopEmoji = timberData.slice(18, 19)
-            timberDataObj.operatingSystem = timberData.slice(19, 28)
-        }else if( timberData.length === 27 ){
+            timberDataObj.operatingSystem = timberData.slice(19)
+        }else if( cleanData[0]['ga:userType'].length === 12){
             timberDataObj.user = timberData.slice(0, 12)
             timberDataObj.top5Emoji = timberData.slice(12, 17)
             timberDataObj.mostPopEmoji = timberData.slice(17, 18)
-            timberDataObj.operatingSystem = timberData.slice(18, 27)
+            timberDataObj.operatingSystem = timberData.slice(18)
         }
 
         finalTimberData.timberData = timberDataObj
@@ -75,6 +76,7 @@ export default function HooksFetchData() {
             try {
                 await axios.get(timbersQuery).then((response) => {
                     let allKeys = Object.keys(response.data);
+                    console.log(response.data)
                     let cleanData = allKeys.map((c) => {
                         let timberData = {}
                         let currentRows = response.data[`${c}`].rows;
