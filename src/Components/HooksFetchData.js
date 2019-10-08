@@ -41,31 +41,33 @@ export default function HooksFetchData() {
                 })
                 timberData.push(timberDataObj);
             }
-            console.log(cleanData)
             return timberData
         })
         //issue with response-users-newusers inconsistant response length where a day can be cut off
         //problem when no new, or returning visisors have used this
-        if ( cleanData[0]['ga:userType'].length === 14 ){
+        if (cleanData[0]['ga:userType'].length === 14) {
             timberDataObj.user = timberData.slice(0, 14)
             timberDataObj.top5Emoji = timberData.slice(14, 19)
             timberDataObj.mostPopEmoji = timberData.slice(19, 20)
             timberDataObj.operatingSystem = timberData.slice(20)
-        }else if( cleanData[0]['ga:userType'].length === 13 ){
+        } else if (cleanData[0]['ga:userType'].length === 13) {
             timberDataObj.user = timberData.slice(0, 13)
             timberDataObj.top5Emoji = timberData.slice(13, 18)
             timberDataObj.mostPopEmoji = timberData.slice(18, 19)
             timberDataObj.operatingSystem = timberData.slice(19)
-        }else if( cleanData[0]['ga:userType'].length === 12){
+        } else if (cleanData[0]['ga:userType'].length === 12) {
             timberDataObj.user = timberData.slice(0, 12)
             timberDataObj.top5Emoji = timberData.slice(12, 17)
             timberDataObj.mostPopEmoji = timberData.slice(17, 18)
             timberDataObj.operatingSystem = timberData.slice(18)
         }
-
         finalTimberData.timberData = timberDataObj
-
         return finalTimberData;
+    }
+
+    const setDayOfWeek = (dateStr) => {
+        let date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', { weekday: 'long' });
     }
 
     useEffect(() => {
@@ -76,7 +78,6 @@ export default function HooksFetchData() {
             try {
                 await axios.get(timbersQuery).then((response) => {
                     let allKeys = Object.keys(response.data);
-                    console.log(response.data)
                     let cleanData = allKeys.map((c) => {
                         let timberData = {}
                         let currentRows = response.data[`${c}`].rows;
@@ -103,14 +104,22 @@ export default function HooksFetchData() {
                         omoKeys.map((c) => {
                             let tempStory = 0;
                             let tempGame = 0;
-                            weeklyStories[c + "weeklyStories"] = omoData[c].stories.reduce((curr, acc) => {
-                                tempStory += parseInt(curr.finished)
-                                acc.weekFinished = tempStory + parseInt(acc.finished)
+                            weeklyStories[c + "weeklyStories"] = omoData[c].stories.reduce((curr, acc, ind, src) => {
+                                tempStory += parseInt(curr.finished);
+                                acc.weekFinished = tempStory + parseInt(acc.finished);
+                                if (ind === 1) {
+                                    curr.day = setDayOfWeek(curr.day);
+                                }
+                                src[ind].day = setDayOfWeek(src[ind].day);
                                 return acc
                             })
-                            weeklyGames[c + "weeklyGames"] = omoData[c].finishedGames.reduce((curr, acc) => {
-                                tempGame += parseInt(curr.finished)
-                                acc.weekFinished = tempGame + parseInt(acc.finished)
+                            weeklyGames[c + "weeklyGames"] = omoData[c].finishedGames.reduce((curr, acc, ind, src) => {
+                                tempGame += parseInt(curr.finished);
+                                acc.weekFinished = tempGame + parseInt(acc.finished);
+                                if (ind === 1) {
+                                    curr.day = setDayOfWeek(curr.day);
+                                }
+                                src[ind].day = setDayOfWeek(src[ind].day);
                                 return acc
                             })
                             return weeklyGames
@@ -121,6 +130,7 @@ export default function HooksFetchData() {
                             let weekFinished = omoData[c].finishedGames[valueToFetch].weekFinished;
                             return tempObj[c] = { weekFinished }
                         })
+                        console.log(omoData);
                         axios.get(omhofQuery).then((response) => {
                             const omhofResponse = response.data;
                             //{outerKey:dataKey:[{someKey: dataValue, kvpToClean: *^*@FOO@@},{..}], outerKey:dataKey:[{},{}]}
@@ -135,10 +145,8 @@ export default function HooksFetchData() {
                                         omhofResponse[outerKey][e][kvpToClean] = omhofResponse[outerKey][e][kvpToClean].replace(/[^\w_]/g, " ");
                                     }
                                 })
-
                                 return temp
                             }
-
                             //takes array of objects and looks for kvp's that are duplicated and removes from the top
                             let combineDuplicates = (arrayOfObjs, duplicateCheck) => {
                                 let returnArray = [];
@@ -187,7 +195,7 @@ export default function HooksFetchData() {
                             let weeklyData = { omoData };
                             Object.assign(weeklyData, { omhof })
                             Object.assign(weeklyData, timberData(cleanData))
-                            
+
                             setData(weeklyData);
                             setLoaded(true);
                         })

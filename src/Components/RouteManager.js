@@ -151,10 +151,10 @@ export default function RouteManager(props) {
                             })
                             propsToPass.splice(0);
                             return propsToPass.push(highestProp)
-                        })
+                        })   
                         break;
                     case 'OHS-WEEKLY STORIES READ':
-                        Object.keys(gameProps).map((c) => {
+                        Object.keys(gameProps).map((c,i) => {
                             let weeklyTotal = gameProps[c].finishedGames.reduce((acc, curr) => {
                                 let gameName = c
                                 const { weekFinished: dataSet1 = 0, image: dataSet0 = 0, name: labels = gameName } = { ...curr }
@@ -166,6 +166,7 @@ export default function RouteManager(props) {
                             })
                             return propsToPass.push(weeklyTotal);
                         })
+                        
                         break;
                     default:
                 }
@@ -179,6 +180,7 @@ export default function RouteManager(props) {
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
+                       
                         break;
                     case 'OMHOF AWARD OF THE DAY':
                         omhofProps.daily.map((c) => {
