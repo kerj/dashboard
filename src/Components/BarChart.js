@@ -12,7 +12,7 @@ export default class BarChart extends Component {
     }
 
     drawBarChart(data) {
-        var margin = { top: 80, right: 80, bottom: 60, left: 140 }
+        var margin = { top: 100, right: 80, bottom: 100, left: 140 }
         var width = 1060 - margin.left - margin.right
         var height = 1900 - margin.top - margin.bottom
         //container for graph
@@ -53,8 +53,8 @@ export default class BarChart extends Component {
             })])
 
         let y = d3.scaleBand()
-            .range([height, 0])
-            .padding(0.1)
+            .rangeRound([height, 0])
+            .padding([.3])
             .domain(data.map((d) => {
                 return d.labels
             }))
@@ -91,7 +91,6 @@ export default class BarChart extends Component {
             })
             .style('fill', 'whitesmoke')
             .style("font-size", 20)
-            .style("font-family", "Impact, Charcoal, sans-serif")
             .attr('y', -20)
             .attr('x', -175)
 
@@ -102,8 +101,8 @@ export default class BarChart extends Component {
             .append("text")
             .style("fill", "whitesmoke")
             .style("font-size", 50)
-            .style("font-family", "Impact, Charcoal, sans-serif")
             .attr("x", 500)
+            .attr("y", -20)
             .attr("dx", ".71em")
             .attr("transform", "rotate(-360)")
             .style("text-anchor", "end")
@@ -111,20 +110,26 @@ export default class BarChart extends Component {
         //x axis
         svgCanvas.append('g')
             .attr('class', 'x axis')
-            .attr("transform", "translate(0, " + height + ")")
+            .attr("transform", "translate(0, 1720)")
             .style("color", "whitesmoke")
-            .style("font-family", "Impact, Charcoal, sans-serif")
-            .style('font-size', 25)
-            .call(d3.axisBottom(x))
-
+            .style('font-size', 40)
+            .call(d3.axisBottom(x)
+                .ticks(5)
+                .tickSize([0]))
+                .select('path.domain').remove()
         //y axis
         svgCanvas.append('g')
             .attr('class', 'y axis')
-            .style('font-size', 25)
+            .attr("transform", "translate(-20, 0)")
+            .style('font-size', 40)
             .style("color", "whitesmoke")
-            .style("font-family", "Impact, Charcoal, sans-serif")
-            .call(d3.axisLeft(y))
-            .selectAll('text')
+            .call(d3.axisLeft(y)
+            .tickSize([0]))
+            .select('path.domain').remove()
+            .select('text')
+
+        
+
         //Bar Data to graph
         g.selectAll('rect')
             .data((d) => {
