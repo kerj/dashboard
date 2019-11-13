@@ -3,8 +3,8 @@ import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import './../scss/donut.scss';
 
-var width = 960,
-    height = 500,
+var width = 1060,
+    height = 1860,
     outerRadius = Math.min(width, height) * .5 - 10,
     innerRadius = outerRadius * .6,
     transitionIn = true,

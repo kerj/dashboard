@@ -46,13 +46,16 @@ export default function RouteManager(props) {
     //hook to update view when routes change
     function useInterval(callback, delay) {
         const savedCallback = useRef();
+
         useEffect(() => {
             savedCallback.current = callback;
         }, [callback]);
+
         useEffect(() => {
             function tick() {
                 savedCallback.current();
             }
+
             if (delay !== null) {
                 let id = setInterval(tick, delay);
                 return () => clearInterval(id);
@@ -112,7 +115,7 @@ export default function RouteManager(props) {
                             return propsToPass.push(propToPass);
                         })
                         break;
-                    case 'OHS-FLECTCHER STORY':// glitch showing two set of data
+                    case 'OHS-FLECTCHER STORY':
                         gameProps.fletcher.stories.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });

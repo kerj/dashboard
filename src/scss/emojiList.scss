@@ -1,91 +1,118 @@
 ul {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     list-style: none;
-    padding-left: 4em;
+    padding-left: 24em;
     text-align: center;
     list-style-position: inside;
-    width: 240px;
+    width: 300px;
     text-transform: uppercase; 
   }
 h1{
     color: whitesmoke;
+    display: flex;
+    justify-content: center;
+    text-align: center;
 }
 
-// li {
+// li:nth-child(1) {
 //   &:before {
 //     content: '';
 //     display: inline-block;
 //     height: 15em;
 //     width: 15em;
 //     padding-left: 50px;
-//     padding-top: 3px;
-//     margin-top: 10px;
-   
+//     margin-top: 5px;
+//     background: url(./../Assets/1stPlace.jpg);
 //     background-size: contain;
 //     background-repeat: no-repeat;
-//     margin-right:0.5em; 
 //   }
 // }
 
- .vortex {
+// li:nth-child(2) {
+//   &:before {
+//     content: '';
+//     display: inline-block;
+//     height: 15em;
+//     width: 15em;
+//     padding-top: 50px;
+//     margin-top: 5px;
+//     background: url(./../Assets/2ndPlace.jpg);
+//     background-size: contain;
+//     background-repeat: no-repeat;
+//   }
+// }
+
+// li:nth-child(3) {
+//   &:before {
+//     content: '';
+//     display: inline-block;
+//     height: 15em;
+//     width: 15em;
+//     padding-top: 50px;
+//     margin-top: 5px;
+//     background: url(./../Assets/3rdPlace.jpg);
+//     background-size: contain; 
+//     background-repeat: no-repeat;
+//   }
+// }
+
+
+
+ li.vortex {
     &:before {
       content: '';
       display: inline-block;
       height: 15em;
       width: 15em;
-      padding-left: 50px;
-      padding-top: 3px;
-      margin-top: 10px;
+      padding-top: 50px;
+      margin-top: 5px;
       background: url(./../Assets/Vortex.png);
       background-size: contain;
-      background-repeat: no-repeat;
-      margin-right:0.5em; 
+      background-repeat: no-repeat; 
     }
   }
 
-  .chutes {
+  li.chutes {
     &:before {
       content: '';
       display: inline-block;
       height: 15em;
       width: 15em;
-      padding-left: 50px;
-      padding-top: 3px;
-      margin-top: 10px;
+      padding-top: 50px;
+      margin-top: 5px;
       background: url(./../Assets/grandma.png);
       background-size: contain;
-      background-repeat: no-repeat;
-      margin-right:0.5em; 
+      background-repeat: no-repeat; 
     }
   }
 
-  .fletcher {
+  li.fletcher {
     &:before {
       content: '';
       display: inline-block;
       height: 15em;
       width: 15em;
-      padding-left: 50px;
-      padding-top: 3px;
-      margin-top: 10px;
+      padding-top: 50px;
+      margin-top: 5px;
       background: url(./../Assets/Fletcher.png);
       background-size: contain;
-      background-repeat: no-repeat;
-      margin-right:0.5em; 
+      background-repeat: no-repeat; 
     }
   }
 
-  .marie {
+  li.marie {
     &:before {
       content: '';
       display: inline-block;
       height: 15em;
       width: 15em;
-      padding-left: 50px;
-      padding-top: 3px;
-      margin-top: 10px;
+      padding-top: 50px;
+      margin-top: 5px;
       background: url(./../Assets/Marie.png);
       background-size: contain;
-      background-repeat: no-repeat;
-      margin-right:0.5em; 
+      background-repeat: no-repeat; 
     }
   }

@@ -67,7 +67,7 @@ export default function HooksFetchData() {
 
     const setDayOfWeek = (dateStr) => {
         let date = new Date(dateStr);
-        return date.toLocaleDateString('en-US', { weekday: 'long' });
+        return date.toLocaleDateString('en-US', { weekday: 'short' });
     }
 
     useEffect(() => {

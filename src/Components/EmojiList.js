@@ -6,7 +6,6 @@ import './../scss/emojiList.scss';
 export default class EmojiList extends Component {
 
     componentDidMount() {
-        console.log(this.props.dataToGraph)
         this.displayList(this.props.dataToGraph);
     }
 
@@ -22,13 +21,14 @@ export default class EmojiList extends Component {
                 return i * 100 + 100;
             })
             .duration(1000)
-            .ease(d3.easeBounceInOut)
+            .ease(d3.easeElasticOut)
             .text((d) => {
                 return `${d.dataSet1} - ${d.labels}`
             })
             .attr("class", (d) => {
                 return `${d.labels}`
             })
+            .style("font-size", "24px")
             .style("color", "whitesmoke")
             .style("font-family", "Impact, Charcoal, sans-serif")
     }
