@@ -167,9 +167,12 @@ export default function RouteManager(props) {
                                 }
                                 return tempProp
                             })
-                            return propsToPass.push(weeklyTotal);
+                            propsToPass.push(weeklyTotal)
+
+                            
+                            return propsToPass.sort((a, b) => (b.dataSet1 < a.dataSet1) ? -1 : ((a.dataSet1 > b.dataSet1) ? 1 : 0)); ;
                         })
-                        
+                        console.log(propsToPass)
                         break;
                     default:
                 }
