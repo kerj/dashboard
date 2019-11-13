@@ -66,8 +66,8 @@ export default function HooksFetchData() {
     }
 
     const setDayOfWeek = (dateStr) => {
-        let date = new Date(dateStr);
-        return date.toLocaleDateString('en-US', { weekday: 'short' });
+        let newDate = new Date(dateStr);
+        return newDate.toLocaleDateString('en-US', { weekday: 'short' });
     }
 
     useEffect(() => {
@@ -104,23 +104,31 @@ export default function HooksFetchData() {
                         omoKeys.map((c) => {
                             let tempStory = 0;
                             let tempGame = 0;
-                            weeklyStories[c + "weeklyStories"] = omoData[c].stories.reduce((curr, acc, ind, src) => {
-                                tempStory += parseInt(curr.finished);
-                                acc.weekFinished = tempStory + parseInt(acc.finished);
+                            weeklyStories[c + "weeklyStories"] = omoData[c].stories.reduce((acc, curr, ind) => {
+                                tempStory += parseInt(acc.finished);
+                                curr.weekFinished = tempStory + parseInt(curr.finished);
                                 if (ind === 1) {
+                                    acc.day = 'Today';
+                                } else if (ind === 6) {
                                     curr.day = setDayOfWeek(curr.day);
+                                    acc.day = setDayOfWeek(acc.day);
+                                }else {
+                                    acc.day = setDayOfWeek(acc.day);
                                 }
-                                src[ind].day = setDayOfWeek(src[ind].day);
-                                return acc
+                                return curr
                             })
-                            weeklyGames[c + "weeklyGames"] = omoData[c].finishedGames.reduce((curr, acc, ind, src) => {
-                                tempGame += parseInt(curr.finished);
-                                acc.weekFinished = tempGame + parseInt(acc.finished);
+                            weeklyGames[c + "weeklyGames"] = omoData[c].finishedGames.reduce((acc, curr, ind) => {
+                                tempGame += parseInt(acc.finished);
+                                curr.weekFinished = tempGame + parseInt(curr.finished);
                                 if (ind === 1) {
+                                    acc.day = 'Today';
+                                } else if (ind === 6) {
                                     curr.day = setDayOfWeek(curr.day);
+                                    acc.day = setDayOfWeek(acc.day);
+                                }else {
+                                    acc.day = setDayOfWeek(acc.day);
                                 }
-                                src[ind].day = setDayOfWeek(src[ind].day);
-                                return acc
+                                return curr
                             })
                             return weeklyGames
                         })
@@ -130,7 +138,7 @@ export default function HooksFetchData() {
                             let weekFinished = omoData[c].finishedGames[valueToFetch].weekFinished;
                             return tempObj[c] = { weekFinished }
                         })
-                        console.log(omoData);
+                  
                         axios.get(omhofQuery).then((response) => {
                             const omhofResponse = response.data;
                             //{outerKey:dataKey:[{someKey: dataValue, kvpToClean: *^*@FOO@@},{..}], outerKey:dataKey:[{},{}]}
@@ -191,6 +199,9 @@ export default function HooksFetchData() {
                             }
                             omhof.weekly = combineOmhof(omhof.weekly, 'page_title', 'count');
                             omhof.daily = combineOmhof(omhof.daily, 'page_title', 'count');
+
+                            omhof.weekly.length = 5;
+                            omhof.daily.length = 5;
 
                             let weeklyData = { omoData };
                             Object.assign(weeklyData, { omhof })

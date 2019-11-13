@@ -10,7 +10,6 @@ export default class EmojiList extends Component {
     }
 
     displayList(data) {
-        //this shows as text what is displayed in the barchart
         d3.select(this.refs.list)
             .selectAll("li")
             .data(data)
@@ -23,14 +22,13 @@ export default class EmojiList extends Component {
             .duration(1000)
             .ease(d3.easeElasticOut)
             .text((d) => {
-                return `${d.dataSet1} - ${d.labels}`
+                return `${d.labels}: ${d.dataSet1}`
             })
             .attr("class", (d) => {
                 return `${d.labels}`
             })
-            .style("font-size", "24px")
             .style("color", "whitesmoke")
-            .style("font-family", "Impact, Charcoal, sans-serif")
+
     }
 
     render() {
