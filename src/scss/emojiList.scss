@@ -1,30 +1,41 @@
+@font-face {
+  font-family: "dash";
+  src: local("dash"), url(../Assets/Montserrat-Bold.otf) format("otf");
+}
+
 ul {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    list-style: none;
-    padding-left: 24em;
-    text-align: center;
-    list-style-position: inside;
-    width: 300px;
-    text-transform: uppercase; 
-  }
-h1{
-    color: whitesmoke;
-    display: flex;
-    justify-content: center;
-    text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 375px;
+  list-style: none;
+  text-align: center;
+  list-style-position: inside;
+  width: 300px;
+  font-family: "dash";
+  font-family: "dash";
+  font-weight: bolder;
+  text-transform: uppercase;
+  font-size: 40px;
+}
+
+h1 {
+  color: whitesmoke;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-size: 50px;
 }
 
 // li:nth-child(1) {
 //   &:before {
 //     content: '';
-//     display: inline-block;
-//     height: 15em;
-//     width: 15em;
-//     padding-left: 50px;
-//     margin-top: 5px;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     height: 10em;
+//     width: 10em;
 //     background: url(./../Assets/1stPlace.jpg);
 //     background-size: contain;
 //     background-repeat: no-repeat;
@@ -34,11 +45,11 @@ h1{
 // li:nth-child(2) {
 //   &:before {
 //     content: '';
-//     display: inline-block;
-//     height: 15em;
-//     width: 15em;
-//     padding-top: 50px;
-//     margin-top: 5px;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     height: 10em;
+//     width: 10em;
 //     background: url(./../Assets/2ndPlace.jpg);
 //     background-size: contain;
 //     background-repeat: no-repeat;
@@ -48,71 +59,77 @@ h1{
 // li:nth-child(3) {
 //   &:before {
 //     content: '';
-//     display: inline-block;
-//     height: 15em;
-//     width: 15em;
-//     padding-top: 50px;
-//     margin-top: 5px;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     height: 10em;
+//     width: 10em;
 //     background: url(./../Assets/3rdPlace.jpg);
-//     background-size: contain; 
+//     background-size: contain;
 //     background-repeat: no-repeat;
 //   }
 // }
 
+li.vortex {
+  content: "";
+  padding-left: 400px;
+  padding-top: 100px;
+  content: "";
+  display: flex;
+  height: 8em;
+  width: 8em;
+  background: url(./../Assets/omo/Vortex.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
 
+li.chutes {
+  padding-left: 400px;
+  padding-top: 100px;
+  content: "";
+  display: flex;
+  height: 8em;
+  width: 8em;
+  background: url(./../Assets/omo/grandma.png) no-repeat left top;
+  background-size: contain;
+}
 
- li.vortex {
-    &:before {
-      content: '';
-      display: inline-block;
-      height: 15em;
-      width: 15em;
-      padding-top: 50px;
-      margin-top: 5px;
-      background: url(./../Assets/Vortex.png);
-      background-size: contain;
-      background-repeat: no-repeat; 
-    }
-  }
+li.fletcher {
+  content: "";
+  padding-left: 375px;
+  padding-top: 75px;
+  content: "";
+  display: flex;
+  height: 8em;
+  width: 8em;
+  background: url(./../Assets/omo/Fletcher.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
 
-  li.chutes {
-    &:before {
-      content: '';
-      display: inline-block;
-      height: 15em;
-      width: 15em;
-      padding-top: 50px;
-      margin-top: 5px;
-      background: url(./../Assets/grandma.png);
-      background-size: contain;
-      background-repeat: no-repeat; 
-    }
-  }
+li.marie {
+  content: "";
+  padding-left: 400px;
+  padding-top: 100px;
+  content: "";
+  display: flex;
+  height: 8em;
+  width: 8em;
+  background: url(./../Assets/omo/Marie.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
 
-  li.fletcher {
-    &:before {
-      content: '';
-      display: inline-block;
-      height: 15em;
-      width: 15em;
-      padding-top: 50px;
-      margin-top: 5px;
-      background: url(./../Assets/Fletcher.png);
-      background-size: contain;
-      background-repeat: no-repeat; 
-    }
-  }
-
-  li.marie {
-    &:before {
-      content: '';
-      display: inline-block;
-      height: 15em;
-      width: 15em;
-      padding-top: 50px;
-      margin-top: 5px;
-      background: url(./../Assets/Marie.png);
-      background-size: contain;
-      background-repeat: no-repeat; 
-    }
-  }
+li:only-of-type {
+  content: "";
+  margin-top: 40%;
+  padding-top: 450px;
+  padding-left: 0px;
+  display: flex;
+  height: 20em;
+  width: 20em;
+  align-items: center;
+  justify-content: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}

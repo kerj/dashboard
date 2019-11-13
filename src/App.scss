@@ -1,5 +1,13 @@
+@font-face {
+  font-family: 'dash';
+  src: local('dash'), url(../src/Assets/Montserrat-Bold.otf) format('otf');
+}
+
 .App {
   text-align: center;
+  font-family: 'dash';
+  font-style: bold;
+  font-weight: bolder;
 }
 
 .App-logo {
