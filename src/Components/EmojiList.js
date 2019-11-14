@@ -17,19 +17,14 @@ export default class EmojiList extends Component {
             .enter()
             .append("li")
             .transition()
-            .delay((d, i) => {
-                return i * 100 + 100;
-            })
             .duration(1000)
             .ease(d3.easeElasticOut)
             .text((d) => {
                 return `${d.labels}: ${d.dataSet1}`
             })
             .attr("class", (d) => {
-                return `${d.labels}`
+                return this.props.dataToGraph.length === 1 ? `${d.dataSet0} solo` : `${d.dataSet0}`
             })
-            .style("color", "whitesmoke")
-
     }
 
     render() {
