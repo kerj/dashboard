@@ -1,32 +1,32 @@
 //OHS
-.OHS-CHUTES .set0 {
-    fill: rgb(229, 255, 0);
-}
 .OHS-CHUTES .set1 {
-    fill: rgb(131, 168, 168);
+    fill: darkred;
 }
-.OHS-VORTEX .set0 {
-    fill: rgb(141, 108, 19);
+.OHS-CHUTES .set0 {
+    fill: red;
 }
 .OHS-VORTEX .set1 {
-    fill: rgb(115, 42, 138);
+    fill: yellow;
 }
-.OHS-MARIE .set0 {
-    fill: rgb(247, 98, 11);
+.OHS-VORTEX .set0 {
+    fill: cyan;
 }
 .OHS-MARIE .set1 {
-    fill: rgb(22, 178, 199);
+    fill: #508938;
 }
-.OHS-FLECTCHER .set0 {
-    fill: rgb(12, 87, 34);
+.OHS-MARIE .set0 {
+    fill: #dce030;
 }
 .OHS-FLECTCHER .set1 {
-    fill: rgb(197, 47, 172);
+    fill: orange;
+}
+.OHS-FLECTCHER .set0 {
+    fill: yellow;
 }
 //Timbers
-.NEW .set0 {
+.NEW .set1 {
     fill: darkgreen;
 }
-.NEW .set1 {
+.NEW .set0 {
     fill: darksalmon;
 }

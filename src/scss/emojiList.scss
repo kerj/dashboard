@@ -5,19 +5,14 @@
 
 ul {
   display: flex;
-  justify-content: center;
   flex-direction: column;
-  align-items: center;
-  padding-left: 375px;
   list-style: none;
-  text-align: center;
   list-style-position: inside;
-  width: 300px;
-  font-family: "dash";
   font-family: "dash";
   font-weight: bolder;
   text-transform: uppercase;
   font-size: 40px;
+  padding-left: 150px;
 }
 
 h1 {
@@ -27,66 +22,64 @@ h1 {
   text-align: center;
   font-size: 50px;
 }
-
+//padding top affects text pos margin top moves whole element
 @each $name in "chutes" "fletcher" "marie" "vortex" {
-  ul li.#{$name} {
+  .#{$name} {
     background: url(./../Assets/omo/#{$name}.png) no-repeat left top;
     padding-left: 400px;
-    padding-top: 100px;
+    margin-top: 20px;
     content: "";
     display: flex;
-    height: 8em;
-    width: 8em;
+    flex-direction: column;
+    justify-content: center;
+    height: 10em;
+    width: 10em;
+    color: whitesmoke;
     background-size: contain;
   }
 }
+//TODO: colors to match the category at omhof
+@each $name in "album" "artist" "heritage" "hof" {
+  .#{$name} {
+    background: url(./../Assets/omhof/#{$name}.png) no-repeat left top;
+    padding-left: 350px;
+    margin-top: 20px;
+    content: "";
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 8em;
+    width: 10em;
+    background-size: contain
+  }
+}
 
-li:only-of-type {
+.album {
+  color: rgb(146, 146, 156);
+}
+
+.artist {
+  color: #4062a7;
+}
+
+.heritage {
+  color: #736197;
+}
+
+.hof {
+  color: #916f3e;
+}
+
+.solo {
   content: "";
-  margin-top: 40%;
-  padding-top: 450px;
-  padding-left: 0px;
+  margin-top: 50%;
+  padding-top: 30px;
+  padding-left: 400px;
   display: flex;
-  height: 20em;
-  width: 20em;
+  height: 10em;
+  width: 10em;
   align-items: center;
   justify-content: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-li:nth-of-type(1) {
-  content: "";
-  padding-left: 400px;
-  padding-top: 100px;
-  display: flex;
-  height: 8em;
-  width: 8em;
-  background: url(./../Assets/1stPlace.jpg);
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-li:nth-of-type(2) {
-  content: "";
-  padding-left: 400px;
-  padding-top: 100px;
-  display: flex;
-  height: 8em;
-  width: 8em;
-  background: url(./../Assets/2ndPlace.jpg);
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-li:nth-of-type(3) {
-  content: "";
-  padding-left: 400px;
-  padding-top: 100px;
-  display: flex;
-  height: 8em;
-  width: 8em;
-  background: url(./../Assets/3rdPlace.jpg);
   background-size: contain;
   background-repeat: no-repeat;
 }
