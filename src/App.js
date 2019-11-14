@@ -25,9 +25,7 @@ function App() {
 
   return (
     <>
-      <React.StrictMode>
-        <HooksFetchData />
-      </React.StrictMode>
+      <HooksFetchData />
     </>
   );
 }
