@@ -28,96 +28,17 @@ h1 {
   font-size: 50px;
 }
 
-// li:nth-child(1) {
-//   &:before {
-//     content: '';
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     height: 10em;
-//     width: 10em;
-//     background: url(./../Assets/1stPlace.jpg);
-//     background-size: contain;
-//     background-repeat: no-repeat;
-//   }
-// }
-
-// li:nth-child(2) {
-//   &:before {
-//     content: '';
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     height: 10em;
-//     width: 10em;
-//     background: url(./../Assets/2ndPlace.jpg);
-//     background-size: contain;
-//     background-repeat: no-repeat;
-//   }
-// }
-
-// li:nth-child(3) {
-//   &:before {
-//     content: '';
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     height: 10em;
-//     width: 10em;
-//     background: url(./../Assets/3rdPlace.jpg);
-//     background-size: contain;
-//     background-repeat: no-repeat;
-//   }
-// }
-
-li.vortex {
-  content: "";
-  padding-left: 400px;
-  padding-top: 100px;
-  content: "";
-  display: flex;
-  height: 8em;
-  width: 8em;
-  background: url(./../Assets/omo/Vortex.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-li.chutes {
-  padding-left: 400px;
-  padding-top: 100px;
-  content: "";
-  display: flex;
-  height: 8em;
-  width: 8em;
-  background: url(./../Assets/omo/grandma.png) no-repeat left top;
-  background-size: contain;
-}
-
-li.fletcher {
-  content: "";
-  padding-left: 375px;
-  padding-top: 75px;
-  content: "";
-  display: flex;
-  height: 8em;
-  width: 8em;
-  background: url(./../Assets/omo/Fletcher.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-li.marie {
-  content: "";
-  padding-left: 400px;
-  padding-top: 100px;
-  content: "";
-  display: flex;
-  height: 8em;
-  width: 8em;
-  background: url(./../Assets/omo/Marie.png);
-  background-size: contain;
-  background-repeat: no-repeat;
+@each $name in "chutes" "fletcher" "marie" "vortex" {
+  ul li.#{$name} {
+    background: url(./../Assets/omo/#{$name}.png) no-repeat left top;
+    padding-left: 400px;
+    padding-top: 100px;
+    content: "";
+    display: flex;
+    height: 8em;
+    width: 8em;
+    background-size: contain;
+  }
 }
 
 li:only-of-type {
@@ -130,6 +51,42 @@ li:only-of-type {
   width: 20em;
   align-items: center;
   justify-content: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+li:nth-of-type(1) {
+  content: "";
+  padding-left: 400px;
+  padding-top: 100px;
+  display: flex;
+  height: 8em;
+  width: 8em;
+  background: url(./../Assets/1stPlace.jpg);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+li:nth-of-type(2) {
+  content: "";
+  padding-left: 400px;
+  padding-top: 100px;
+  display: flex;
+  height: 8em;
+  width: 8em;
+  background: url(./../Assets/2ndPlace.jpg);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+li:nth-of-type(3) {
+  content: "";
+  padding-left: 400px;
+  padding-top: 100px;
+  display: flex;
+  height: 8em;
+  width: 8em;
+  background: url(./../Assets/3rdPlace.jpg);
   background-size: contain;
   background-repeat: no-repeat;
 }
