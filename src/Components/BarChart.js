@@ -63,14 +63,15 @@ export default class BarChart extends Component {
             .data(stack)
             .enter().append('g')
             .attr("transform", (d, i) => {
-                return "translate(" + (width - 90) + "," + (i * 15) + ")";
+                return "translate(" + (400 + (i * 150)) + "," + (30) + ")";
             })
             .attr("class", "legend")
 
+
         legend.append("rect")
-            .attr("width", 20)
-            .attr("height", 15)
-            .attr('y', -35)
+            .attr("width", 25)
+            .attr("height", 20)
+            .attr('y', -40)
             .attr('x', -200)
             .attr("class", (d, i) => {
                 return 'set' + i
@@ -90,7 +91,7 @@ export default class BarChart extends Component {
                 }
             })
             .style('fill', 'whitesmoke')
-            .style("font-size", 20)
+            .style("font-size", 30)
             .attr('y', -20)
             .attr('x', -175)
 
@@ -101,7 +102,7 @@ export default class BarChart extends Component {
             .append("text")
             .style("fill", "whitesmoke")
             .style("font-size", 50)
-            .attr("x", 500)
+            .attr("x", 550)
             .attr("y", -20)
             .attr("dx", ".71em")
             .attr("transform", "rotate(-360)")
