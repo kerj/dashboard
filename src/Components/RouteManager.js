@@ -28,6 +28,7 @@ export default function RouteManager(props) {
         'OHS-MARIE STORY': <BarChart dataToGraph={propsToPass} title={route} />,
         'OHS-MOST READ TODAY': <EmojiList dataToGraph={propsToPass} title={route} />,
         'OHS-WEEKLY STORIES READ': <EmojiList dataToGraph={propsToPass} title={route} />,
+        'OHS-WEEKLY GAMES VS STORIES': <DonutGraph dataToGraph={propsToPass} title={route} />,
         //omhof
         'OMHOF TOP AWARDS': <EmojiList dataToGraph={propsToPass} title={route} />,
         'OMHOF AWARD OF THE DAY': <EmojiList dataToGraph={propsToPass} title={route} />,
@@ -42,7 +43,7 @@ export default function RouteManager(props) {
     useInterval(() => {
         updateRoute();
         setPropsToPass();
-    }, 15000)
+    }, 3000)
     //hook to update view when routes change
     function useInterval(callback, delay) {
         const savedCallback = useRef();
@@ -67,9 +68,9 @@ export default function RouteManager(props) {
         setRoute(allRoutes[`${dataToCycle[dataRoute.datasetIterator]}`].routes[dataRoute.routeIterator]);
 
         dataRoute.routeIterator + 1 > routesAvailable.length - 1 || !routesAvailable.length === 2 ?
-            (dataRoute.datasetIterator + 1 > dataToCycle.length - 1 ? 
-                setDataRoute({ routeIterator: 0, datasetIterator: 0 }) 
-                : setDataRoute({ routeIterator: 0, datasetIterator: dataRoute.datasetIterator + 1 })) 
+            (dataRoute.datasetIterator + 1 > dataToCycle.length - 1 ?
+                setDataRoute({ routeIterator: 0, datasetIterator: 0 })
+                : setDataRoute({ routeIterator: 0, datasetIterator: dataRoute.datasetIterator + 1 }))
             : setDataRoute({ routeIterator: dataRoute.routeIterator + 1, datasetIterator: dataRoute.datasetIterator })
     }
 
@@ -155,10 +156,10 @@ export default function RouteManager(props) {
                             })
                             propsToPass.splice(0);
                             return propsToPass.push(highestProp)
-                        })   
+                        })
                         break;
                     case 'OHS-WEEKLY STORIES READ':
-                        Object.keys(gameProps).map((c,i) => {
+                        Object.keys(gameProps).map((c, i) => {
                             let weeklyTotal = gameProps[c].finishedGames.reduce((acc, curr) => {
                                 let gameName = c
                                 const { weekFinished: dataSet1 = 0, name: dataSet0 = gameName, name: labels = gameName } = { ...curr }
@@ -169,7 +170,31 @@ export default function RouteManager(props) {
                                 return tempProp
                             })
                             propsToPass.push(weeklyTotal)
-                            return propsToPass.sort((a, b) => (b.dataSet1 < a.dataSet1) ? -1 : ((a.dataSet1 > b.dataSet1) ? 1 : 0)); ;
+                            return propsToPass.sort((a, b) => (b.dataSet1 < a.dataSet1) ? -1 : ((a.dataSet1 > b.dataSet1) ? 1 : 0));;
+                        })
+                        break;
+                    case 'OHS-WEEKLY GAMES VS STORIES':
+                        let highProp;
+                        Object.keys(gameProps).map((c) => {
+                            highProp = gameProps[c].finishedGames.reduce((prev, curr) => {
+                                highProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
+                                highProp.name = c;
+                                return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
+                            })
+                            const { weekFinished: dataSet0, dataSet1 = 'Game', name: labels } = { ...highProp }
+                            let tempProp = Object.assign({}, {dataSet1, dataSet0,  labels });
+                            return propsToPass.push(tempProp)
+                        })
+
+                        Object.keys(gameProps).map((c, i) => {
+                            highProp = gameProps[c].stories.reduce((prev, curr) => {
+                                highProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
+                                highProp.name = c;
+                                return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
+                            })
+                            const {dataSet0 = 'Story', weekFinished: dataSet1, name: labels } = { ...highProp }
+                            let tempProp = Object.assign({}, {dataSet0, dataSet1, labels })
+                            return propsToPass.push(tempProp)
                         })
                         break;
                     default:

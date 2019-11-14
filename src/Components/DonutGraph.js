@@ -8,18 +8,20 @@ var width = 1060,
     outerRadius = Math.min(width, height) * .5 - 10,
     innerRadius = outerRadius * .6,
     transitionIn = true,
+    dataLength = null,
     activeData = [],
     queuedData = [];
 
 export default class DonutGraph extends Component {
 
     componentDidMount() {
-        this.props.dataToGraph.map((data1) => {
-            queuedData.push(0);
-            return activeData.push(data1.dataSet0);
+        dataLength = this.props.dataToGraph.length/2;
+        this.props.dataToGraph.map((data,i) => {
+            return i >= dataLength ? queuedData.push(data.dataSet1) : activeData.push(data.dataSet0);    
         });
-        activeData.splice(6, activeData.length);
-        queuedData.splice(6, queuedData.length);
+        activeData.splice(dataLength, activeData.length);
+        queuedData.splice(dataLength, queuedData.length);
+     
         this.phaseDonut();
     }
 
@@ -36,7 +38,7 @@ export default class DonutGraph extends Component {
             arcs1 = pie(activeData),
             i = -1,
             currentArc;
-        while (++i < 6) {
+        while (++i < dataLength) {
             currentArc = arcs0[i];
             currentArc.innerRadius = innerRadius;
             currentArc.outerRadius = outerRadius;
