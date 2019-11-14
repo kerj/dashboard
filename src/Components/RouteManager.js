@@ -141,7 +141,7 @@ export default function RouteManager(props) {
                         Object.keys(gameProps).map((c) => {
                             gameProps[c].stories.reduce((prev, curr) => {
                                 let gameName = c
-                                const { weekFinished: dataSet1 = 0, image: dataSet0 = 0, name: labels = gameName } = { ...curr }
+                                const { weekFinished: dataSet1 = 0, name: dataSet0 = gameName, name: labels = gameName } = { ...curr }
                                 let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
                                 if (tempProp.dataSet1 < curr.weekFinished) {
                                     tempProp.dataSet1 = curr.weekFinished
@@ -161,7 +161,7 @@ export default function RouteManager(props) {
                         Object.keys(gameProps).map((c,i) => {
                             let weeklyTotal = gameProps[c].finishedGames.reduce((acc, curr) => {
                                 let gameName = c
-                                const { weekFinished: dataSet1 = 0, image: dataSet0 = 0, name: labels = gameName } = { ...curr }
+                                const { weekFinished: dataSet1 = 0, name: dataSet0 = gameName, name: labels = gameName } = { ...curr }
                                 let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
                                 if (tempProp.dataSet1 < curr.weekFinished) {
                                     tempProp.dataSet1 = curr.weekFinished
