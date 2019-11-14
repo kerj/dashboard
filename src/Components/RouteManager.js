@@ -72,6 +72,7 @@ export default function RouteManager(props) {
                 : setDataRoute({ routeIterator: 0, datasetIterator: dataRoute.datasetIterator + 1 })) 
             : setDataRoute({ routeIterator: dataRoute.routeIterator + 1, datasetIterator: dataRoute.datasetIterator })
     }
+
     function setPropsToPass() {
         propsToPass.length = 0;
 
@@ -137,7 +138,7 @@ export default function RouteManager(props) {
                         })
                         break;
                     case 'OHS-MOST READ TODAY':
-                        Object.keys(gameProps).map((c, i, a) => {
+                        Object.keys(gameProps).map((c) => {
                             gameProps[c].stories.reduce((prev, curr) => {
                                 let gameName = c
                                 const { weekFinished: dataSet1 = 0, image: dataSet0 = 0, name: labels = gameName } = { ...curr }
@@ -168,13 +169,11 @@ export default function RouteManager(props) {
                                 return tempProp
                             })
                             propsToPass.push(weeklyTotal)
-
-                            
                             return propsToPass.sort((a, b) => (b.dataSet1 < a.dataSet1) ? -1 : ((a.dataSet1 > b.dataSet1) ? 1 : 0)); ;
                         })
-                        console.log(propsToPass)
                         break;
                     default:
+                        break;
                 }
                 break;
             case 'omhof':
@@ -186,7 +185,6 @@ export default function RouteManager(props) {
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
-                       
                         break;
                     case 'OMHOF AWARD OF THE DAY':
                         omhofProps.daily.map((c) => {
@@ -194,8 +192,11 @@ export default function RouteManager(props) {
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
+                        console.log(propsToPass)
+                        propsToPass.splice(1)
                         break;
                     default:
+                        break;
                 }
                 break
             case 'timbersData':
@@ -239,6 +240,7 @@ export default function RouteManager(props) {
                         })
                         break;
                     default:
+                        break;
                 }
                 //Add more data sets here
                 break
