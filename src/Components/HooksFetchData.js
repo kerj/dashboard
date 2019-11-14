@@ -195,8 +195,8 @@ export default function HooksFetchData() {
                                 returnArray.map((c) => {
                                    return c['page_title'].includes('Artist') ? c['page_path'] = 'artist' :
                                         c['page_title'].includes('Album') ? c['page_path'] = 'album' :
-                                            c['page_title'].includes('Industry') ? c['page_path'] = 'industry' :
-                                                c['page_title'].includes('Band') ? c['page_path'] = 'band' : c['page_path'] = 'unhandled'
+                                            c['page_title'].includes('Industry') ? c['page_path'] = 'hof' :
+                                                c['page_title'].includes('Band') ? c['page_path'] = 'artist' : c['page_path'] = 'hof'
                                 })
                                 return returnArray
                             }
