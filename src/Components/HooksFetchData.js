@@ -112,7 +112,7 @@ export default function HooksFetchData() {
                                 } else if (ind === 6) {
                                     curr.day = setDayOfWeek(curr.day);
                                     acc.day = setDayOfWeek(acc.day);
-                                }else {
+                                } else {
                                     acc.day = setDayOfWeek(acc.day);
                                 }
                                 return curr
@@ -125,7 +125,7 @@ export default function HooksFetchData() {
                                 } else if (ind === 6) {
                                     curr.day = setDayOfWeek(curr.day);
                                     acc.day = setDayOfWeek(acc.day);
-                                }else {
+                                } else {
                                     acc.day = setDayOfWeek(acc.day);
                                 }
                                 return curr
@@ -138,7 +138,7 @@ export default function HooksFetchData() {
                             let weekFinished = omoData[c].finishedGames[valueToFetch].weekFinished;
                             return tempObj[c] = { weekFinished }
                         })
-                  
+
                         axios.get(omhofQuery).then((response) => {
                             const omhofResponse = response.data;
                             //{outerKey:dataKey:[{someKey: dataValue, kvpToClean: *^*@FOO@@},{..}], outerKey:dataKey:[{},{}]}
@@ -190,7 +190,15 @@ export default function HooksFetchData() {
                                 //remove duplicates
                                 returnArray = combineDuplicates(returnArray, filterKey)
                                 //return ascending order
-                                return returnArray.sort((a, b) => (b[additionKey] < a[additionKey]) ? -1 : ((a[additionKey] > b[additionKey]) ? 1 : 0));
+                                returnArray.sort((a, b) => (b[additionKey] < a[additionKey]) ? -1 : ((a[additionKey] > b[additionKey]) ? 1 : 0));
+                                //change page_path field to type of award for scss class
+                                returnArray.map((c) => {
+                                   return c['page_title'].includes('Artist') ? c['page_path'] = 'artist' :
+                                        c['page_title'].includes('Album') ? c['page_path'] = 'album' :
+                                            c['page_title'].includes('Industry') ? c['page_path'] = 'industry' :
+                                                c['page_title'].includes('Band') ? c['page_path'] = 'band' : c['page_path'] = 'unhandled'
+                                })
+                                return returnArray
                             }
 
                             let omhof = {
@@ -202,6 +210,7 @@ export default function HooksFetchData() {
 
                             omhof.weekly.length = 5;
                             omhof.daily.length = 5;
+
 
                             let weeklyData = { omoData };
                             Object.assign(weeklyData, { omhof })
