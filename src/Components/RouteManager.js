@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import BarChart from './BarChart';
-import DonutGraph from './DonutGraph';
+import { DonutGraph } from './DonutGraph';
 import EmojiList from './EmojiList';
 import { allRoutes } from './DataRoutes';
 

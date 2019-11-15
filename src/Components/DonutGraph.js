@@ -1,37 +1,42 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import './../scss/donut.scss';
 
-var width = 1060,
-    height = 1860,
-    outerRadius = Math.min(width, height) * .5 - 10,
-    innerRadius = outerRadius * .6,
-    transitionIn = true,
-    dataLength = null,
-    activeData = [],
-    queuedData = [];
 
-export default class DonutGraph extends Component {
+export const DonutGraph = ({ dataToGraph, title }) => {
+    var width = 1060,
+        height = 1860,
+        outerRadius = Math.min(width, height) * .5 - 10,
+        innerRadius = outerRadius * .6,
+        transitionIn = true,
+        dataLength = null,
+        activeData = [],
+        queuedData = [];
 
-    componentDidMount() {
-        dataLength = this.props.dataToGraph.length/2;
-        this.props.dataToGraph.map((data,i) => {
-            return i >= dataLength ? queuedData.push(data.dataSet1) : activeData.push(data.dataSet0);    
-        });
+    const donutCanvas = React.createRef()
+    useEffect(() => {
+        dataLength = dataToGraph.length / 2;
+        dataToGraph.map((data, i) => {
+            return i >= dataLength ? queuedData.push(data.dataSet1) : activeData.push(data.dataSet0);
+        })
+
         activeData.splice(dataLength, activeData.length);
         queuedData.splice(dataLength, queuedData.length);
-     
-        this.phaseDonut();
-    }
 
-    componentWillUnmount() {
-        activeData = [];
-        queuedData = [];
-        transitionIn = true;
-    }
+        phaseDonut();
+    }, [])
 
-    arcs(queuedData, activeData) {
+
+    useEffect(() => {
+        return () => {
+            activeData = [];
+            queuedData = [];
+            transitionIn = true;
+        }
+    }, [])
+
+    const arcs = (queuedData, activeData) => {
         let pie = d3.pie()
             .sort(null);
         let arcs0 = pie(queuedData),
@@ -47,7 +52,7 @@ export default class DonutGraph extends Component {
         return arcs0
     }
 
-    tweenArc(b) {
+    const tweenArc = (b) => {
         return (a, i) => {
             let d = b.call(this, a, i)
             let interp = d3.interpolateObject(a, d);
@@ -76,26 +81,26 @@ export default class DonutGraph extends Component {
         }
     }
 
-    phaseDonut() {
-        let svg = d3.select(this.refs.donutCanvas)
+    const phaseDonut = () => {
+        let svg = d3.select(donutCanvas.current)
             .append("svg")
             .attr("width", width)
             .attr("height", height)
 
         svg.selectAll(".arc")
-            .data(this.arcs(queuedData, activeData))
+            .data(arcs(queuedData, activeData))
             .enter().append("g")
             .attr("class", "arc")
             .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
             .append("path")
             .attr("d", d3.arc())
-            .attr("class", (d,i) => {
-                return this.props.dataToGraph[i]['dataSet1'] + i
+            .attr("class", (d, i) => {
+                return dataToGraph[i]['dataSet1'] + i
             })
-            
+
         //TODO add legend    
         let legendSvg = svg.selectAll(".legend")
-            .data(this.arcs(activeData, queuedData))
+            .data(arcs(activeData, queuedData))
             .enter().append("g")
             .attr("transform", (d, i) => {
                 return "translate(" + (width - 110) + "," + (i * 15 + 20) + ")";
@@ -105,14 +110,14 @@ export default class DonutGraph extends Component {
         legendSvg.append("rect")
             .attr("width", 10)
             .attr("height", 10)
-            .attr("class", (d,i) => {
-                return this.props.dataToGraph[i]['dataSet1'] + i
+            .attr("class", (d, i) => {
+                return dataToGraph[i]['dataSet1'] + i
             })
 
         legendSvg.append("text")
             .text((d, i) => {
                 if (transitionIn) {
-                    return d.value + " " + this.props.dataToGraph[i]['dataSet1'] + " " + this.props.dataToGraph[i]['labels']
+                    return d.value + " " + dataToGraph[i]['dataSet1'] + " " + dataToGraph[i]['labels']
                 } else {
                     return d.next.value
                 }
@@ -122,17 +127,18 @@ export default class DonutGraph extends Component {
             .attr("y", 10)
             .attr("x", 11);
         // //TODO add logos for center of Donut
-        this.transition(transitionIn)
+        transition(transitionIn)
     }
 
-    transition(inOrOut) {
+    const transition = (inOrOut) => {
         let path = d3.selectAll(".arc > path")
-            .data(inOrOut ? this.arcs(queuedData, activeData) :
-                this.arcs(activeData, queuedData))
+            .data(inOrOut ? arcs(queuedData, activeData) :
+                arcs(activeData, queuedData))
             //Wedges Split into two rings
             .transition()
+            .delay(7500)
             .duration(750)
-            .attrTween("d", this.tweenArc((d, i) => {
+            .attrTween("d", tweenArc((d, i) => {
                 return {
                     innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
                     outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
@@ -140,7 +146,7 @@ export default class DonutGraph extends Component {
             }))
             //wedges to be centered on final position
             .transition()
-            .attrTween("d", this.tweenArc((d, i) => {
+            .attrTween("d", tweenArc((d, i) => {
                 let a0 = d.next.startAngle + d.next.endAngle,
                     a1 = d.startAngle - d.endAngle;
                 return {
@@ -150,7 +156,7 @@ export default class DonutGraph extends Component {
             }))
             //wedges then update values, change size
             .transition()
-            .attrTween("d", this.tweenArc((d, i) => {
+            .attrTween("d", tweenArc((d, i) => {
                 return {
                     startAngle: d.next.startAngle,
                     endAngle: d.next.endAngle
@@ -158,7 +164,7 @@ export default class DonutGraph extends Component {
             }))
             //wedges reunite into a single ring
             .transition()
-            .attrTween("d", this.tweenArc((d, i) => {
+            .attrTween("d", tweenArc((d, i) => {
                 return {
                     innerRadius: innerRadius,
                     outerRadius: outerRadius
@@ -170,19 +176,16 @@ export default class DonutGraph extends Component {
         } else {
             transitionIn = false;
             setTimeout(() => {
-                this.transition(transitionIn)
+                transition(transitionIn)
             }, 12200);
         }
     }
-
-    render() {
-        return (
-            <>
-                <h1>{this.props.title}</h1>
-                <div ref="donutCanvas"></div>
-            </>
-        )
-    }
+    return (
+        <>
+            <h1>{title}</h1>
+            <div ref={donutCanvas}></div>
+        </>
+    )
 }
 
 DonutGraph.propTypes = {
