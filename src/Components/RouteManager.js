@@ -181,8 +181,8 @@ export default function RouteManager(props) {
                                 highProp.name = c;
                                 return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
                             })
-                            const { weekFinished: dataSet0, dataSet1 = 'Game', name: labels } = { ...highProp }
-                            let tempProp = Object.assign({}, {dataSet1, dataSet0,  labels });
+                            const {dataSet0 = 'Game', weekFinished : dataSet1, name: labels } = { ...highProp }
+                            let tempProp = Object.assign({}, {dataSet0, dataSet1,  labels });
                             return propsToPass.push(tempProp)
                         })
 

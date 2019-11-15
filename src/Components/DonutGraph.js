@@ -1,29 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import './../scss/donut.scss';
 
 
 export const DonutGraph = ({ dataToGraph, title }) => {
+    console.log(dataToGraph)
     var width = 1060,
         height = 1860,
         outerRadius = Math.min(width, height) * .5 - 10,
         innerRadius = outerRadius * .6,
-        transitionIn = true,
+ 
         dataLength = null,
         activeData = [],
         queuedData = [];
-
+    const [transitionIn, setTransitionIn ] = useState('true');
     const donutCanvas = React.createRef()
     useEffect(() => {
         dataLength = dataToGraph.length / 2;
         dataToGraph.map((data, i) => {
-            return i >= dataLength ? queuedData.push(data.dataSet1) : activeData.push(data.dataSet0);
+            return i >= dataLength ? queuedData.push(data.dataSet1) : activeData.push(data.dataSet1);
         })
-
         activeData.splice(dataLength, activeData.length);
         queuedData.splice(dataLength, queuedData.length);
-
         phaseDonut();
     }, [])
 
@@ -116,10 +115,12 @@ export const DonutGraph = ({ dataToGraph, title }) => {
 
         legendSvg.append("text")
             .text((d, i) => {
+                console.log(d)
+                console.log(transitionIn)
                 if (transitionIn) {
-                    return d.value + " " + dataToGraph[i]['dataSet1'] + " " + dataToGraph[i]['labels']
+                    return d.value + " " + dataToGraph[i]['dataSet0'] + " " + dataToGraph[i]['labels']
                 } else {
-                    return d.next.value
+                    return d.next.value + " " + dataToGraph[i + dataLength]['dataSet0'] + " " + dataToGraph[i+dataLength]['labels']
                 }
             })
             .style('fill', 'whitesmoke')
@@ -136,7 +137,6 @@ export const DonutGraph = ({ dataToGraph, title }) => {
                 arcs(activeData, queuedData))
             //Wedges Split into two rings
             .transition()
-            .delay(7500)
             .duration(750)
             .attrTween("d", tweenArc((d, i) => {
                 return {
@@ -171,13 +171,13 @@ export const DonutGraph = ({ dataToGraph, title }) => {
                 }
             }))
         //this could be used as an exit transition with another call to run
+        
         if (!transitionIn) {
             clearTimeout();
         } else {
-            transitionIn = false;
             setTimeout(() => {
-                transition(transitionIn)
-            }, 12200);
+               setTransitionIn('false')
+            }, 7500);
         }
     }
     return (
