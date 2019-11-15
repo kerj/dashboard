@@ -216,7 +216,6 @@ export default function RouteManager(props) {
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
-                        console.log(propsToPass)
                         propsToPass.splice(1)
                         break;
                     default:

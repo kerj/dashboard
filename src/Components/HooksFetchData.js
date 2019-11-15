@@ -66,8 +66,9 @@ export default function HooksFetchData() {
     }
 
     const setDayOfWeek = (dateStr) => {
+        let today = new Date();
         let newDate = new Date(dateStr);
-        return newDate.toLocaleDateString('en-US', { weekday: 'short' });
+        return  today.toLocaleDateString('en-US', { weekday: 'short' }) === newDate.toLocaleDateString('en-US', { weekday: 'short' }) ? 'Today' : newDate.toLocaleDateString('en-US', { weekday: 'short' });
     }
 
     useEffect(() => {
@@ -104,27 +105,29 @@ export default function HooksFetchData() {
                         omoKeys.map((c) => {
                             let tempStory = 0;
                             let tempGame = 0;
-                            weeklyStories[c + "weeklyStories"] = omoData[c].stories.reduce((acc, curr, ind) => {
+                            weeklyStories[c + "weeklyStories"] = omoData[c].stories.reduce((acc, curr, ind, src) => {
+
                                 tempStory += parseInt(acc.finished);
                                 curr.weekFinished = tempStory + parseInt(curr.finished);
                                 if (ind === 1) {
-                                    acc.day = 'Today';
-                                } else if (ind === 6) {
-                                    curr.day = setDayOfWeek(curr.day);
                                     acc.day = setDayOfWeek(acc.day);
+                                } else if (ind === src.length - 1) {
+                                    acc.day = setDayOfWeek(acc.day);
+                                    curr.day = setDayOfWeek(curr.day);
                                 } else {
                                     acc.day = setDayOfWeek(acc.day);
                                 }
+
                                 return curr
                             })
-                            weeklyGames[c + "weeklyGames"] = omoData[c].finishedGames.reduce((acc, curr, ind) => {
+                            weeklyGames[c + "weeklyGames"] = omoData[c].finishedGames.reduce((acc, curr, ind, src) => {
                                 tempGame += parseInt(acc.finished);
                                 curr.weekFinished = tempGame + parseInt(curr.finished);
                                 if (ind === 1) {
-                                    acc.day = 'Today';
-                                } else if (ind === 6) {
-                                    curr.day = setDayOfWeek(curr.day);
                                     acc.day = setDayOfWeek(acc.day);
+                                } else if (ind === src.length - 1) {
+                                    acc.day = setDayOfWeek(acc.day);
+                                    curr.day = setDayOfWeek(curr.day);
                                 } else {
                                     acc.day = setDayOfWeek(acc.day);
                                 }
@@ -193,7 +196,7 @@ export default function HooksFetchData() {
                                 returnArray.sort((a, b) => (b[additionKey] < a[additionKey]) ? -1 : ((a[additionKey] > b[additionKey]) ? 1 : 0));
                                 //change page_path field to type of award for scss class
                                 returnArray.map((c) => {
-                                   return c['page_title'].includes('Artist') ? c['page_path'] = 'artist' :
+                                    return c['page_title'].includes('Artist') ? c['page_path'] = 'artist' :
                                         c['page_title'].includes('Album') ? c['page_path'] = 'album' :
                                             c['page_title'].includes('Industry') ? c['page_path'] = 'hof' :
                                                 c['page_title'].includes('Band') ? c['page_path'] = 'artist' : c['page_path'] = 'hof'
