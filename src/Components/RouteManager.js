@@ -15,7 +15,6 @@ export default function RouteManager(props) {
 
     let propsToPass = [];
     const weeklyData = props.stateHelper;
-    console.log(weeklyData)
     const ROUTES = {
         //omoGames
         'OHS-CHUTES GAME': <BarChart dataToGraph={propsToPass} title={route} />,
@@ -43,7 +42,7 @@ export default function RouteManager(props) {
     useInterval(() => {
         updateRoute();
         setPropsToPass();
-    }, 3000)
+    }, 15000)
     //hook to update view when routes change
     function useInterval(callback, delay) {
         const savedCallback = useRef();

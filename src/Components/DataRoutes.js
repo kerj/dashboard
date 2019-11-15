@@ -8,11 +8,11 @@ export const allRoutes = {
             // 'OHS-VORTEX GAME',
             // 'OHS-VORTEX STORY',
             // 'OHS-MARIE GAME',
-            // 'OHS-MARIE STORY',
+            'OHS-MARIE STORY',
             //'stackedBarDorian',
             'OHS-WEEKLY GAMES VS STORIES',
-            // 'OHS-WEEKLY STORIES READ',
-            // 'OHS-MOST READ TODAY',
+            'OHS-WEEKLY STORIES READ',
+            'OHS-MOST READ TODAY',
         ]
     },
     // omhof: {
