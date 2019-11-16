@@ -66,9 +66,10 @@ export default function HooksFetchData() {
     }
 
     const setDayOfWeek = (dateStr) => {
+        //replace - for / so the actual date is returned
         let today = new Date();
-        let newDate = new Date(dateStr);
-        return  today.toLocaleDateString('en-US', { weekday: 'short' }) === newDate.toLocaleDateString('en-US', { weekday: 'short' }) ? 'Today' : newDate.toLocaleDateString('en-US', { weekday: 'short' });
+        let newDate = new Date(dateStr.replace(/-/g, '\/'));
+        return  today.toLocaleDateString('en-US') === newDate.toLocaleDateString('en-US') ? 'Today' : newDate.toLocaleDateString('en-US', { weekday: 'short' });
     }
 
     useEffect(() => {
