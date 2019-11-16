@@ -96,7 +96,7 @@ export const DonutGraph = ({ dataToGraph, title }) => {
             .style('fill', 'whitesmoke')
             .style("font-size", 32)
             .attr("y", 30)
-            .attr("x", 60)
+            .attr("x", 45)
     }
 
     const arcs = (dataStart, dataEnd) => {
