@@ -129,7 +129,6 @@ export default class BarChart extends Component {
             .select('path.domain').remove()
             .select('text')
 
-        
 
         //Bar Data to graph
         g.selectAll('rect')
@@ -137,12 +136,6 @@ export default class BarChart extends Component {
                 return d;
             })
             .enter().append('rect')
-            .transition()
-            .delay((d, i) => {
-                return i * 100;
-            })
-            .duration(1000)
-            .ease(d3.easeSinInOut)
             .attr('x', (d, i) => {
                 if (this.props.title === "NEW VS. RETURNING VISITORS") {
                     return x(d[0])
@@ -153,10 +146,15 @@ export default class BarChart extends Component {
             .attr('y', (d) => {
                 return y(d.data.labels)
             })
+            .attr('height', y.bandwidth())
+            .transition()
+            .delay(250)
+            .duration(500)
+            .ease(d3.easeLinear)
             .attr('width', (d) => {
                 return x((d[1] - d[0]))
             })
-            .attr('height', y.bandwidth())
+          
     }
     render() {
         return (
