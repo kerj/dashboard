@@ -1,10 +1,10 @@
 @font-face {
-  font-family: "dash";
-  src: local("dash"), url(../Assets/Montserrat-Bold.otf) format("otf");
+  font-family: 'Montserrat';
+  src: local('Montserrat'), url(../Assets/Montserrat-Black.otf) format("otf");
 }
 
 * {
-  font-family: 'dash';
+  font-family: 'Montserrat', sans-serif;
   letter-spacing: 5px;
   font-weight: bold;
 }
@@ -15,7 +15,7 @@ ul {
   flex-direction: column;
   list-style: none;
   list-style-position: inside;
-  font-family: "dash";
+  font-family: 'Montserrate', sans-serif;
   font-weight: bolder;
   text-transform: uppercase;
   font-size: 40px;
@@ -33,9 +33,10 @@ h1 {
 @each $name in "chutes" "fletcher" "marie" "vortex" {
   .#{$name} {
     background: url(./../Assets/omo/#{$name}.png) no-repeat left top;
+    margin-left: 200px;
     padding-left: 400px;
     margin-top: 20px;
-    content: "";
+    font-size: 40px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -43,6 +44,10 @@ h1 {
     width: 10em;
     color: whitesmoke;
     background-size: contain;
+    opacity: 0;
+    overflow: hidden;
+    transform: rotateX(-90deg);
+    transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
   }
 }
 //TODO: colors to match the category at omhof
@@ -58,6 +63,11 @@ h1 {
     height: 8em;
     width: 10em;
     background-size: contain;
+    perspective: 1000px;
+    opacity: 0;
+    overflow: hidden;
+    transform: rotateX(-90deg);
+    transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
   }
 }
 
@@ -89,4 +99,10 @@ h1 {
   justify-content: center;
   background-size: contain;
   background-repeat: no-repeat;
+}
+
+.reveal {
+  opacity: 1;
+  transform: none;
+  transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
 }
