@@ -21,7 +21,7 @@ function App() {
     .transition()
     .delay(1500)
     .duration(3000)
-    .style("background-color", "#0b181b")
+    .style("background-color", "black")
 
   return (
     <>

@@ -42,7 +42,7 @@ export default function RouteManager(props) {
     useInterval(() => {
         updateRoute();
         setPropsToPass();
-    }, 3000)
+    }, 15000)
     //hook to update view when routes change
     function useInterval(callback, delay) {
         const savedCallback = useRef();
@@ -85,56 +85,56 @@ export default function RouteManager(props) {
                         gameProps.chutes.finishedGames.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                            return propsToPass.push(propToPass);
+                            return propsToPass.unshift(propToPass);
                         })
                         break;
                     case 'OHS-FLECTCHER GAME':
                         gameProps.fletcher.finishedGames.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                            return propsToPass.push(propToPass);
+                            return propsToPass.unshift(propToPass);
                         })
                         break;
                     case 'OHS-VORTEX GAME':
                         gameProps.marie.finishedGames.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                            return propsToPass.push(propToPass);
+                            return propsToPass.unshift(propToPass);
                         })
                         break;
                     case 'OHS-MARIE GAME':
                         gameProps.vortex.finishedGames.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                            return propsToPass.push(propToPass);
+                            return propsToPass.unshift(propToPass);
                         })
                         break;
                     case 'OHS-CHUTES STORY':
                         gameProps.chutes.stories.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                            return propsToPass.push(propToPass);
+                            return propsToPass.unshift(propToPass);
                         })
                         break;
                     case 'OHS-FLECTCHER STORY':
                         gameProps.fletcher.stories.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                            return propsToPass.push(propToPass);
+                            return propsToPass.unshift(propToPass);
                         })
                         break;
                     case 'OHS-VORTEX STORY':
                         gameProps.vortex.stories.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                            return propsToPass.push(propToPass);
+                            return propsToPass.unshift(propToPass);
                         })
                         break;
                     case 'OHS-MARIE STORY':
                         gameProps.marie.stories.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                            return propsToPass.push(propToPass);
+                            return propsToPass.unshift(propToPass);
                         })
                         break;
                     case 'OHS-MOST READ TODAY':
