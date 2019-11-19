@@ -6,6 +6,7 @@
 .App {
   text-align: center;
   font-family: 'dash';
+  letter-spacing: 5px;
   font-style: bold;
   font-weight: bolder;
 }
@@ -17,7 +18,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #0b181b;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

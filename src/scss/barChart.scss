@@ -1,4 +1,15 @@
 //OHS
+@font-face {
+    font-family: 'dash';
+    src: local('dash'), url(../Assets/Montserrat-Bold.otf) format('otf');
+  }
+
+* {
+    font-family: 'dash';
+    letter-spacing: 5px;
+    font-weight: bold;
+}
+
 .OHS-CHUTES .set1 {
     fill: darkred;
 }

@@ -1,3 +1,14 @@
+@font-face {
+    font-family: 'dash';
+    src: local('dash'), url(../Assets/Montserrat-Bold.otf) format('otf');
+  }
+
+  * {
+    font-family: 'dash';
+    letter-spacing: 5px;
+    text-transform: uppercase;
+}
+
 //IOS colors
 .iOS0 {
     fill: blue;

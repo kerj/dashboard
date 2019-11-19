@@ -52,6 +52,7 @@ export const DonutGraph = ({ dataToGraph, title }) => {
         d3.select('svg').remove()
         let svg = d3.select(legend.current)
             .append('svg')
+            .attr('width', '450')
             .attr("transform", (d, i) => {
                 return "translate(" + ((width / 2) - 150) + "," + (i * 15 + (height / 2) - 60) + ")";
             })
@@ -94,7 +95,7 @@ export const DonutGraph = ({ dataToGraph, title }) => {
                 }
             })
             .style('fill', 'whitesmoke')
-            .style("font-size", 32)
+            .style("font-size", 30)
             .attr("y", 30)
             .attr("x", 45)
     }
