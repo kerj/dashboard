@@ -20,7 +20,6 @@ export const DonutGraph = ({ dataToGraph, title }) => {
     //TODO: add entry fold-out/exit fold-up
     // const start = useRef(true);
 
-    
 
     useEffect(() => {
         dataLength = dataToGraph.length / 2;

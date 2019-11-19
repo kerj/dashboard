@@ -25,7 +25,7 @@ export default class BarChart extends Component {
             .attr('transform', 'translate(0,10)')
             .append('g')
             //moves info inside of canvas
-            .attr('transform', 'translate(140,' + margin.top + ')')
+            .attr('transform', 'translate(200,' + margin.top + ')')
         //get the data to stack bars keys need to become variable
 
         let stack = d3.stack()
@@ -63,7 +63,7 @@ export default class BarChart extends Component {
             .data(stack)
             .enter().append('g')
             .attr("transform", (d, i) => {
-                return "translate(" + (400 + (i * 150)) + "," + (30) + ")";
+                return "translate(" + (400 + (i * 275)) + "," + (30) + ")";
             })
             .attr("class", "legend")
 
@@ -72,7 +72,7 @@ export default class BarChart extends Component {
             .attr("width", 25)
             .attr("height", 20)
             .attr('y', -40)
-            .attr('x', -200)
+            .attr('x', -340)
             .attr("class", (d, i) => {
                 return 'set' + i
             })
@@ -86,14 +86,14 @@ export default class BarChart extends Component {
                     } return 'RETURNING'
                 } else {
                     if (d.key === 'dataSet0') {
-                        return 'STARTED'
+                        return 'STARTED V.S '
                     } return 'COMPLETED'
                 }
             })
             .style('fill', 'whitesmoke')
             .style("font-size", 30)
             .attr('y', -20)
-            .attr('x', -175)
+            .attr('x', -315)
 
         //title at the top of barchart
         svgCanvas.append('g')
@@ -102,7 +102,7 @@ export default class BarChart extends Component {
             .append("text")
             .style("fill", "whitesmoke")
             .style("font-size", 50)
-            .attr("x", 550)
+            .attr("x", 500)
             .attr("y", -20)
             .attr("dx", ".71em")
             .attr("transform", "rotate(-360)")
