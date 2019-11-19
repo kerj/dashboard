@@ -1,10 +1,10 @@
 @font-face {
-    font-family: 'dash';
-    src: local('dash'), url(../Assets/Montserrat-Bold.otf) format('otf');
+    font-family: 'Montserrat';
+    src: url(../Assets/Montserrat-Black.otf) format('otf');
   }
 
   * {
-    font-family: 'dash';
+    font-family: 'Montserrat', sans-serif;
     letter-spacing: 5px;
     text-transform: uppercase;
 }
@@ -49,17 +49,17 @@
 }
 
 .chutes  {
-    fill: darkred;
+    fill: rgb(255,54,40);
 }
 
 .vortex  {
-    fill: cyan;
+    fill: rgb(128, 207, 154);
 }
 
 .marie  {
-    fill: #508938;
+    fill: rgb(107,155,45);
 }
 
 .fletcher  {
-    fill: orange;
+    fill: rgb(255,172,26);
 }
