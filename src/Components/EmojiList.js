@@ -10,7 +10,7 @@ export default class EmojiList extends Component {
     }
 
     displayList(data) {
-        d3.select(this.refs.list)
+        const item = d3.select(this.refs.list)
             .selectAll("div")
             .data(data)
             .enter()
@@ -18,10 +18,17 @@ export default class EmojiList extends Component {
             .attr("class", (d) => {
                 return this.props.dataToGraph.length === 1 ? `${d.dataSet0} solo` : `${d.dataSet0}`
             })
-            .text((d) => {
-                return `${d.labels}: ${d.dataSet1}`
-            })
-            .transition()
+
+        item.append('p')
+          .text((d) => {
+              return `${d.labels}`
+          })
+        item.append('h1')
+          .text((d) => {
+              return `${d.dataSet1}`
+          })
+
+          item.transition()
             .delay((d, i) => {
                 return i * 600 + 100
             })
