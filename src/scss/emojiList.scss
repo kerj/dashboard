@@ -1,5 +1,10 @@
-
 .emoji-list {
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
   //padding top affects text pos margin top moves whole element
   @each $name in "chutes" "fletcher" "marie" "vortex" {
@@ -43,7 +48,7 @@
     }
   }
 
-  .item > p {
+  .item > * {
     font-size: 48px;
   }
 
@@ -64,18 +69,24 @@
   }
 
   .solo {
-    content: "";
-    margin-top: 50%;
-    padding-top: 30px;
-    padding-left: 400px;
     display: flex;
     flex-direction: column;
-    height: 10em;
-    width: 10em;
-    align-items: center;
-    justify-content: center;
-    background-size: contain;
-    background-repeat: no-repeat;
+    margin: 0 15px;
+    .label {
+      order: -1;
+      font-size: 95px;
+      letter-spacing: 0.1px;
+    }
+
+    .pic {
+      width: 400px;
+      height: 400px;
+    }
+
+    h1 {
+      font-size: 95px;
+      letter-spacing: 0.1px;
+    }
   }
 
   .reveal {

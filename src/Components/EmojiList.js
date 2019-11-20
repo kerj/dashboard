@@ -51,8 +51,12 @@ export default class EmojiList extends Component {
     render() {
         return (
             <div className={'emoji-list'}>
-                <h1>{this.props.title}</h1>
-                <div ref="list">
+                <div className={'title'}>
+                  <h1>{this.props.title}</h1>
+                  <h2>{this.props.subtitle}</h2>
+                </div>
+                <div className={'content'}>
+                  <div ref="list" />
                 </div>
             </div>
         )
@@ -61,6 +65,7 @@ export default class EmojiList extends Component {
 
 EmojiList.propTypes = {
     dataToGraph: PropTypes.array.isRequired,
-    title: PropTypes.any
+    title: PropTypes.any,
+    subtitle: PropTypes.any,
 }
 

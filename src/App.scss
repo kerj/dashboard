@@ -13,25 +13,42 @@
   src: local('Montserrat'), url(../src/Assets/fonts/Montserrat-Black.otf) format('opentype');
   font-weight: 900;
 }
+
+body {
+  color: whitesmoke;
+  margin: 0 10%;
+  font-family: Montserrat, sans-serif;
+  font-weight: bold;
+  letter-spacing: 5px;
+  text-transform: uppercase;
 }
 
 .App {
   text-align: center;
   font-family: 'Montserrat', sans-serif;
   letter-spacing: 5px;
-  font-style: bold;
-  font-weight: bolder;
+  font-weight: bold;
   margin: 0 10%;
 }
 
-h1 {
-  color: whitesmoke;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  font-size: 50px;
+.title {
+  height: 10vh;
+  margin-top: 90px;
+
+  h1 {
+    font-size: 80px;
+    letter-spacing: 2px;
+    margin-bottom: 2px;
+  }
+
+  h2 {
+    font-size: 36.9px;
+    letter-spacing: 5.3px;
+    margin: 0;
+  }
 }
 
-body {
-  margin: 0 10%;
+.content {
+  height: 78vh;
 }
+
