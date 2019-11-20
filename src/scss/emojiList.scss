@@ -9,100 +9,90 @@
   font-weight: bold;
 }
 
+.emoji-list {
 
-ul {
-  display: flex;
-  flex-direction: column;
-  list-style: none;
-  list-style-position: inside;
-  font-family: 'Montserrate', sans-serif;
-  font-weight: bolder;
-  text-transform: uppercase;
-  font-size: 40px;
-  padding-left: 150px;
-}
+  //padding top affects text pos margin top moves whole element
+  @each $name in "chutes" "fletcher" "marie" "vortex" {
+    .#{$name} {
+      background: url(./../Assets/omo/#{$name}.png) no-repeat left top;
+      margin-left: 200px;
+      padding-left: 130px;
+      margin-top: 20px;
+      font-size: 40px;
+      height: 10em;
+    }
+  }
+  //TODO: colors to match the category at omhof
+  @each $name in "album" "artist" "heritage" "hof" {
+    .#{$name} {
+      .pic {
+        background: url(./../Assets/omhof/#{$name}.png) no-repeat left top;
+        background-size: contain;
+        width: 175px;
+        height: 175px;
+        flex-shrink: 0;
+        perspective: 1000px;
+      }
+    }
+  }
 
-h1 {
-  color: whitesmoke;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  font-size: 50px;
-}
-//padding top affects text pos margin top moves whole element
-@each $name in "chutes" "fletcher" "marie" "vortex" {
-  .#{$name} {
-    background: url(./../Assets/omo/#{$name}.png) no-repeat left top;
-    margin-left: 200px;
+  .item {
+    align-items: center;
+    background-size: contain;
+    display: flex;
+    justify-content: space-between;
+    opacity: 0;
+    overflow: hidden;
+    margin: 25px 80px;
+    transform: rotateX(-90deg);
+    transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
+
+    .label {
+      text-align: center;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+
+  .item > p {
+    font-size: 48px;
+  }
+
+  .album {
+    color: rgb(146, 146, 156);
+  }
+
+  .artist {
+    color: #4062a7;
+  }
+
+  .heritage {
+    color: #736197;
+  }
+
+  .hof {
+    color: #916f3e;
+  }
+
+  .solo {
+    content: "";
+    margin-top: 50%;
+    padding-top: 30px;
     padding-left: 400px;
-    margin-top: 20px;
-    font-size: 40px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     height: 10em;
     width: 10em;
-    color: whitesmoke;
-    background-size: contain;
-    opacity: 0;
-    overflow: hidden;
-    transform: rotateX(-90deg);
-    transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
-  }
-}
-//TODO: colors to match the category at omhof
-@each $name in "album" "artist" "heritage" "hof" {
-  .#{$name} {
-    background: url(./../Assets/omhof/#{$name}.png) no-repeat left top;
-    padding-left: 350px;
-    margin-top: 20px;
-    content: "";
-    display: flex;
-    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    height: 8em;
-    width: 10em;
     background-size: contain;
-    perspective: 1000px;
-    opacity: 0;
-    overflow: hidden;
-    transform: rotateX(-90deg);
+    background-repeat: no-repeat;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
     transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
   }
-}
-
-.album {
-  color: rgb(146, 146, 156);
-}
-
-.artist {
-  color: #4062a7;
-}
-
-.heritage {
-  color: #736197;
-}
-
-.hof {
-  color: #916f3e;
-}
-
-.solo {
-  content: "";
-  margin-top: 50%;
-  padding-top: 30px;
-  padding-left: 400px;
-  display: flex;
-  height: 10em;
-  width: 10em;
-  align-items: center;
-  justify-content: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-.reveal {
-  opacity: 1;
-  transform: none;
-  transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
 }
