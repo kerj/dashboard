@@ -17,17 +17,17 @@ export default function RouteManager(props) {
     const weeklyData = props.stateHelper;
     const ROUTES = {
         //omoGames
-        'OHS-CHUTES GAME': <BarChart dataToGraph={propsToPass} title={route} />,
-        'OHS-FLECTCHER GAME': <BarChart dataToGraph={propsToPass} title={route} />,
-        'OHS-VORTEX GAME': <BarChart dataToGraph={propsToPass} title={route} />,
-        'OHS-MARIE GAME': <BarChart dataToGraph={propsToPass} title={route} />,
-        'OHS-CHUTES STORY': <BarChart dataToGraph={propsToPass} title={route} />,
-        'OHS-FLECTCHER STORY': <BarChart dataToGraph={propsToPass} title={route} />,
-        'OHS-VORTEX STORY': <BarChart dataToGraph={propsToPass} title={route} />,
-        'OHS-MARIE STORY': <BarChart dataToGraph={propsToPass} title={route} />,
-        'OHS-MOST READ TODAY': <EmojiList dataToGraph={propsToPass} title={route} />,
-        'OHS-WEEKLY STORIES READ': <EmojiList dataToGraph={propsToPass} title={route} />,
-        'OHS-WEEKLY GAMES VS STORIES': <DonutGraph dataToGraph={propsToPass} title={route} />,
+        'OHS-CHUTES GAME': <BarChart dataToGraph={propsToPass} title={'OHS'} subtitle={''} />,
+        'OHS-FLECTCHER GAME': <BarChart dataToGraph={propsToPass} title={'OHS'} subtitle={''} />,
+        'OHS-VORTEX GAME': <BarChart dataToGraph={propsToPass} title={'OHS'} subtitle={''} />,
+        'OHS-MARIE GAME': <BarChart dataToGraph={propsToPass} title={'OHS'} subtitle={''} />,
+        'OHS-CHUTES STORY': <BarChart dataToGraph={propsToPass} title={'OHS'} subtitle={''} />,
+        'OHS-FLECTCHER STORY': <BarChart dataToGraph={propsToPass} title={'OHS'} subtitle={''} />,
+        'OHS-VORTEX STORY': <BarChart dataToGraph={propsToPass} title={'OHS'} subtitle={''} />,
+        'OHS-MARIE STORY': <BarChart dataToGraph={propsToPass} title={'OHS'} subtitle={''} />,
+        'OHS-MOST READ THIS WEEK': <EmojiList dataToGraph={propsToPass} title={'OHS'} subtitle={'COMPLETED - THIS WEEK'} />,
+        'OHS-WEEKLY STORIES READ': <EmojiList dataToGraph={propsToPass} title={'OHS'} subtitle={'MOST READ STORY - THIS WEEK'} />,
+        'OHS-WEEKLY GAMES VS STORIES': <DonutGraph dataToGraph={propsToPass} title={'OHS'} subtitle={''} />,
         //omhof
         'OMHOF TOP AWARDS': <EmojiList dataToGraph={propsToPass} title={'OMHOF'} subtitle={'Popular Awards - This Week'} />,
         'OMHOF AWARD OF THE DAY': <EmojiList dataToGraph={propsToPass} title={'OMHOF'} subtitle={'Most Popular Award - Today'} />,
@@ -137,7 +137,7 @@ export default function RouteManager(props) {
                             return propsToPass.unshift(propToPass);
                         })
                         break;
-                    case 'OHS-MOST READ TODAY':
+                    case 'OHS-MOST READ THIS WEEK':
                         Object.keys(gameProps).map((c) => {
                             gameProps[c].stories.reduce((prev, curr) => {
                                 let gameName = c

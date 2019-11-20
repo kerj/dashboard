@@ -4,17 +4,24 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    :only-child {
+      display: flex;
+      flex-direction: column;
+      align-content: space-evenly;
+    }
   }
 
   //padding top affects text pos margin top moves whole element
   @each $name in "chutes" "fletcher" "marie" "vortex" {
     .#{$name} {
-      background: url(./../Assets/omo/#{$name}.png) no-repeat left top;
-      margin-left: 200px;
-      padding-left: 130px;
-      margin-top: 20px;
-      font-size: 40px;
-      height: 10em;
+      .pic {
+        background: url(./../Assets/omo/#{$name}.png) no-repeat left top;
+        background-size: contain;
+        width: 200px;
+        height: 200px;
+        flex-shrink: 0;
+        perspective: 1000px;
+      }
     }
   }
   //TODO: colors to match the category at omhof
