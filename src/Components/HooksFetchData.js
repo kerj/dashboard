@@ -36,7 +36,7 @@ export default function HooksFetchData() {
                         } else if (curr === 'ga:sessions' && timberDataObj.new === null) {
                             timberDataObj.return = c[curr][k]
                         }
-                    //adds i for cases where names are the same 
+                    //adds i for cases where names are the same
                     timberDataObj[curr + i] = c[curr][k]
                 })
                 timberData.push(timberDataObj);
@@ -150,11 +150,13 @@ export default function HooksFetchData() {
                             let getRelevantData = (outerKey, dataKey, dataValue, kvpToClean = false) => {
                                 let temp = []
                                 Object.keys(omhofResponse[outerKey]).forEach((e) => {
-                                    if (omhofResponse[outerKey][e][dataKey] === dataValue) {
-                                        temp.push(omhofResponse[outerKey][e])
+                                    if (omhofResponse[outerKey][e][dataKey] !== dataValue) {
+                                        return
                                     }
+                                    temp.push(omhofResponse[outerKey][e])
                                     if (kvpToClean) {
-                                        omhofResponse[outerKey][e][kvpToClean] = omhofResponse[outerKey][e][kvpToClean].replace(/[^\w_]/g, " ");
+                                        let awardInfo = _processTitle(omhofResponse[outerKey][e][kvpToClean])
+                                        omhofResponse[outerKey][e][kvpToClean + '-cleaned'] = `${awardInfo['name']} (${awardInfo['year']})`
                                     }
                                 })
                                 return temp
@@ -247,4 +249,18 @@ export default function HooksFetchData() {
             }
         </>
     )
+}
+
+function _processTitle(fulltitle) {
+    const split= fulltitle.split('-:+:-')
+
+    return {
+        year: split[0],
+        award: split[1],
+        name: _truncateName(split[2]) }
+}
+
+function _truncateName (name) {
+    const limit = 15
+    return name.length > limit ? name.substr(0, limit - 1) + '…' : name
 }

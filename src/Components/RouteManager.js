@@ -205,7 +205,7 @@ export default function RouteManager(props) {
                 switch (route) {
                     case 'OMHOF TOP AWARDS':
                         omhofProps.weekly.map((c) => {
-                            const { page_path: dataSet0, count: dataSet1 = 0, page_title: labels } = { ...c }
+                            const { page_path: dataSet0, count: dataSet1 = 0, 'page_title-cleaned': labels } = { ...c }
                             const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                             return propsToPass.push(propToPass);
                         })
