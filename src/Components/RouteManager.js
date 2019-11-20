@@ -29,8 +29,8 @@ export default function RouteManager(props) {
         'OHS-WEEKLY STORIES READ': <EmojiList dataToGraph={propsToPass} title={route} />,
         'OHS-WEEKLY GAMES VS STORIES': <DonutGraph dataToGraph={propsToPass} title={route} />,
         //omhof
-        'OMHOF TOP AWARDS': <EmojiList dataToGraph={propsToPass} title={route} />,
-        'OMHOF AWARD OF THE DAY': <EmojiList dataToGraph={propsToPass} title={route} />,
+        'OMHOF TOP AWARDS': <EmojiList dataToGraph={propsToPass} title={'OMHOF'} subtitle={'Popular Awards - This Week'} />,
+        'OMHOF AWARD OF THE DAY': <EmojiList dataToGraph={propsToPass} title={'OMHOF'} subtitle={'Most Popular Award - Today'} />,
         //timbers
         'TIMBERS WEEKLY TOP EMOJIS': <EmojiList dataToGraph={propsToPass} title={route} />,
         'NEW VS. RETURNING VISITORS': <BarChart dataToGraph={propsToPass} title={route} />,
