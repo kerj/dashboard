@@ -1,6 +1,18 @@
 @font-face {
-  font-family: 'Montserrat';
-  src: local('Montserrat'), url(../src/Assets/Montserrat-Black.otf) format('otf');
+  font-family: Montserrat;
+  src: local('Montserrat'), url(../src/Assets/fonts/Montserrat-Regular.otf) format('opentype');
+  font-weight: normal;
+}
+@font-face {
+  font-family: Montserrat;
+  src: local('Montserrat'), url(../src/Assets/fonts/Montserrat-Bold.otf) format('opentype');
+  font-weight: bold;
+}
+@font-face {
+  font-family: Montserrat;
+  src: local('Montserrat'), url(../src/Assets/fonts/Montserrat-Black.otf) format('opentype');
+  font-weight: 900;
+}
 }
 
 .App {
