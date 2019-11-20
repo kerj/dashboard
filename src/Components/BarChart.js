@@ -13,9 +13,9 @@ export default class BarChart extends Component {
 
 
     drawBarChart(data) {
-        var margin = { top: 400, right: 200, bottom: 400, left: 200 }
+        var margin = { top: 350, right: 200, bottom: 355, left: 200 }
         var width = 1080 - margin.left - margin.right
-        var height = 1920 - margin.top - margin.bottom
+        var height = 1910 - margin.top - margin.bottom
         //container for graph
         let svgCanvas = d3.select(this.refs.canvas)
             .append("svg")
@@ -26,7 +26,7 @@ export default class BarChart extends Component {
             .attr('transform', 'translate(0,10)')
             .append('g')
             //moves info inside of canvas
-            .attr('transform', 'translate(200,' + margin.top + ')')
+            .attr('transform', 'translate(338, 385)')
         //get the data to stack bars keys need to become variable
 
         let stack = d3.stack()
@@ -52,7 +52,7 @@ export default class BarChart extends Component {
 
         let y = d3.scaleBand()
             .rangeRound([height, 0])
-            .padding([.3])
+            .padding([.55])
             .domain(data.map((d) => {
                 return d.labels
             }))
@@ -60,19 +60,25 @@ export default class BarChart extends Component {
         //x axis
         svgCanvas.append('g')
             .attr('class', 'x axis')
-            .attr("transform", "translate(0, 1120)")
+            .attr("transform", "translate(0, 1217)")
+            .style('font-family', 'Montserrat')
+            .style('font-weight', 'bold')
+            .style('font-size', 48)
+            .style('letter-spacing', 2)
             .style("color", "whitesmoke")
-            .style('font-size', 40)
             .call(d3.axisBottom(x)
-                .ticks(5)
+                .ticks(3)
                 .tickSize([0]))
             .select('path.domain').remove()
 
         //y axis
         svgCanvas.append('g')
             .attr('class', 'y axis')
-            .attr("transform", "translate(-20, 0)")
-            .style('font-size', 40)
+            .attr("transform", "translate(-60, 0)")
+            .style('font-family', 'Montserrat')
+            .style('font-weight', 'bold')
+            .style('font-size', 48)
+            .style('letter-spacing', 0)
             .style("color", "whitesmoke")
             .call(d3.axisLeft(y)
                 .tickSize([0]))
