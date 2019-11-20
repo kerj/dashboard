@@ -11,10 +11,11 @@ export default class BarChart extends Component {
         this.drawBarChart(this.props.dataToGraph)
     }
 
+
     drawBarChart(data) {
-        var margin = { top: 100, right: 80, bottom: 100, left: 140 }
-        var width = 1060 - margin.left - margin.right
-        var height = 1900 - margin.top - margin.bottom
+        var margin = { top: 400, right: 200, bottom: 400, left: 200 }
+        var width = 1080 - margin.left - margin.right
+        var height = 1920 - margin.top - margin.bottom
         //container for graph
         let svgCanvas = d3.select(this.refs.canvas)
             .append("svg")
@@ -37,10 +38,7 @@ export default class BarChart extends Component {
             .attr("class", this.props.title)
             .data(stack)
             .enter()
-            .append('g')
-            .attr("class", (d, i) => {
-                return 'set' + i;
-            })
+            .append('g');
 
         let x = d3.scaleLinear()
             .rangeRound([0, width - 20])
@@ -59,65 +57,17 @@ export default class BarChart extends Component {
                 return d.labels
             }))
 
-        let legend = svgCanvas.selectAll(".legend")
-            .data(stack)
-            .enter().append('g')
-            .attr("transform", (d, i) => {
-                return "translate(" + (400 + (i * 275)) + "," + (30) + ")";
-            })
-            .attr("class", "legend")
-
-
-        legend.append("rect")
-            .attr("width", 25)
-            .attr("height", 20)
-            .attr('y', -40)
-            .attr('x', -340)
-            .attr("class", (d, i) => {
-                return 'set' + i
-            })
-        // svf = start vs finish, nvr = new vs returning
-        legend.append('text')
-            .attr('class', `${this.props.title === "NEW VS. RETURNING VISITORS" ? 'NVR' : 'SVF'}`)
-            .text((d) => {
-                if (d3.select('text').classed('NVR')) {
-                    if (d.key === 'dataSet1') {
-                        return 'NEW'
-                    } return 'RETURNING'
-                } else {
-                    if (d.key === 'dataSet0') {
-                        return 'STARTED V.S '
-                    } return 'COMPLETED'
-                }
-            })
-            .style('fill', 'whitesmoke')
-            .style("font-size", 30)
-            .attr('y', -20)
-            .attr('x', -315)
-
-        //title at the top of barchart
-        svgCanvas.append('g')
-            .attr("class", "x axis")
-            .call(x)
-            .append("text")
-            .style("fill", "whitesmoke")
-            .style("font-size", 50)
-            .attr("x", 500)
-            .attr("y", -20)
-            .attr("dx", ".71em")
-            .attr("transform", "rotate(-360)")
-            .style("text-anchor", "end")
-            .text(`${this.props.title}`)
         //x axis
         svgCanvas.append('g')
             .attr('class', 'x axis')
-            .attr("transform", "translate(0, 1720)")
+            .attr("transform", "translate(0, 1120)")
             .style("color", "whitesmoke")
             .style('font-size', 40)
             .call(d3.axisBottom(x)
                 .ticks(5)
                 .tickSize([0]))
-                .select('path.domain').remove()
+            .select('path.domain').remove()
+
         //y axis
         svgCanvas.append('g')
             .attr('class', 'y axis')
@@ -125,7 +75,7 @@ export default class BarChart extends Component {
             .style('font-size', 40)
             .style("color", "whitesmoke")
             .call(d3.axisLeft(y)
-            .tickSize([0]))
+                .tickSize([0]))
             .select('path.domain').remove()
             .select('text')
 
@@ -136,6 +86,10 @@ export default class BarChart extends Component {
                 return d;
             })
             .enter().append('rect')
+            .style('fill', (d) => {
+                //when starting data at zero, prop.props.colorOne
+                return d[0] === 0 ? `${this.props.colorOne}` : `${this.props.colorTwo}`
+            })
             .attr('x', (d, i) => {
                 if (this.props.title === "NEW VS. RETURNING VISITORS") {
                     return x(d[0])
@@ -154,11 +108,27 @@ export default class BarChart extends Component {
             .attr('width', (d) => {
                 return x((d[1] - d[0]))
             })
-          
     }
+
+
     render() {
+        const styles = {
+            colorOne: {
+                backgroundColor: `${this.props.colorOne}`
+            },
+            colorTwo: {
+                backgroundColor: `${this.props.colorTwo}`
+
+            }
+        }
         return (
-            <div ref='canvas'>
+            <div className={`${this.props.title} barChart`}>
+                <div className='title'>
+                    <h1>{this.props.title}</h1>
+                    <h2><div className='set' style={styles.colorOne} />{this.props.labelOne}<div className='set' style={styles.colorTwo} />{this.props.labelTwo}</h2>
+                </div>
+                <div ref='canvas'>
+                </div>
             </div>
         )
     }

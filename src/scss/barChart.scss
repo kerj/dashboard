@@ -1,27 +1,35 @@
 //OHS
 .OHS-CHUTES .set1 {
     fill: rgb(162,54,40);
+    background-color: rgb(162,54,40);
 }
 .OHS-CHUTES .set0 {
     fill: rgb(255,45,29);
+    background-color: rgb(255,45,29)
 }
 .OHS-VORTEX .set1 {
     fill: rgb(128, 207, 154);
+    background-color: rgb(128, 207, 154)
 }
 .OHS-VORTEX .set0 {
     fill: rgb(255,172,6);
+    background-color: rgb(255,172,6);
 }
 .OHS-MARIE .set1 {
     fill: rgb(107,155,45);
+    background-color: rgb(107,155,45);
 }
 .OHS-MARIE .set0 {
     fill: rgb(186,206,44);
+    background-color: rgb(186,206,44);
 }
 .OHS-FLECTCHER .set1 {
     fill: rgb(255,172,26);
+    background-color: rgb(255,172,26);
 }
 .OHS-FLECTCHER .set0 {
     fill: rgb(255,111,3);
+    background-color: rgb(255,111,3);
 }
 //Timbers
 .NEW .set1 {
@@ -29,4 +37,22 @@
 }
 .NEW .set0 {
     fill: darksalmon;
+}
+
+.barChart {
+    svg {
+        position: absolute;
+        overflow: hidden;
+        margin: 0px;
+        padding: 0px;
+        left: 0px;
+        top: 0px;
+    }
+    .title {
+        .set {
+            display: inline-block;
+            height: .7em;
+            width: .7em;
+        }
+    } 
 }
