@@ -15,6 +15,7 @@ export default function RouteManager(props) {
 
     let propsToPass = [];
     const weeklyData = props.stateHelper;
+
     const ROUTES = {
         //omoGames
         'OHS - CHUTES GAME': <BarChart dataToGraph={propsToPass} title={'OHS - CHUTES'} labelOne={' GAME STARTED VS ' } labelTwo={ ' FINISHED'} colorOne={'rgb(255,45,29)'} colorTwo={'rgb(162,54,40)'} />,
@@ -25,9 +26,9 @@ export default function RouteManager(props) {
         'OHS - FLECTCHER STORY': <BarChart dataToGraph={propsToPass} title={'OHS - FLECTCHER'} labelOne={' STORY STARTED VS ' } labelTwo={ ' FINISHED'}  colorOne={'rgb(255,111,3)'} colorTwo={'rgb(255,172,26)'}  />,
         'OHS - VORTEX STORY': <BarChart dataToGraph={propsToPass} title={'OHS - VORTEX'} labelOne={' STORY STARTED VS ' } labelTwo={ ' FINISHED'} colorOne={'rgb(255,172,6)'} colorTwo={'rgb(128, 207, 154)'} />,
         'OHS - MARIE STORY': <BarChart dataToGraph={propsToPass} title={'OHS - MARIE'} labelOne={' STORY STARTED VS ' } labelTwo={ ' FINISHED'} colorOne={'rgb(186,206,44)'} colorTwo={'rgb(107,155,45)'} />,
-        'OHS - MOST READ THIS WEEK': <EmojiList dataToGraph={propsToPass} title={'OHS'} subtitle={'COMPLETED - THIS WEEK'} />,
-        'OHS - WEEKLY STORIES READ': <EmojiList dataToGraph={propsToPass} title={'OHS'} subtitle={'MOST READ STORY - THIS WEEK'} />,
         'OHS - WEEKLY GAMES VS STORIES': <DonutGraph dataToGraph={propsToPass} title={'OHS'} subtitle={'GAMES VS STORIES'} />,
+        'OHS - WEEKLY STORIES READ': <EmojiList dataToGraph={propsToPass} title={'OHS'} subtitle={'COMPLETED - THIS WEEK'} />, 
+        'OHS - MOST READ THIS WEEK': <EmojiList dataToGraph={propsToPass} title={'OHS'} subtitle={'MOST READ STORY - THIS WEEK'} />,
         //omhof
         'OMHOF TOP AWARDS': <EmojiList dataToGraph={propsToPass} title={'OMHOF'} subtitle={'Popular Awards - This Week'} />,
         'OMHOF AWARD OF THE DAY': <EmojiList dataToGraph={propsToPass} title={'OMHOF'} subtitle={'Most Popular Award - Today'} />,
@@ -38,13 +39,11 @@ export default function RouteManager(props) {
         'MOBILE OPERATING SYSTEMS': <DonutGraph dataToGraph={propsToPass} title={route} />,
     }
 
-
-
     //routes change every 15 seconds
     useInterval(() => {
         updateRoute();
         setPropsToPass();
-    }, 15000)
+    }, 3000)
     //hook to update view when routes change
     function useInterval(callback, delay) {
         const savedCallback = useRef();

@@ -41,7 +41,7 @@ export default class EmojiList extends Component {
             })
             .transition()
             .delay((d, i) => {
-                return i * 100 + 99999999
+                return this.props.dataToGraph.length != 1 ? (13000 - i * 100) - (100*this.props.dataToGraph.length) + i * 100 - 600 : 13600
             })
             .attr('class', (d) => {
                 return this.props.dataToGraph.length === 1 ? `${d.dataSet0} solo item` : `${d.dataSet0} item`
