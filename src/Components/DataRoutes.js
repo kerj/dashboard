@@ -14,12 +14,12 @@ export const allRoutes = {
             'OHS - MOST READ TODAY',
         ]
     },
-    // omhof: {
-    //     routes: [
-    //         'OMHOF TOP AWARDS',
-    //         'OMHOF AWARD OF THE DAY',
-    //     ]
-    // },
+    omhof: {
+        routes: [
+            'OMHOF TOP AWARDS',
+            'OMHOF AWARD OF THE DAY',
+        ]
+    },
     //   timbersData: {
     //       routes: [
     //         //   'TIMBERS WEEKLY TOP EMOJIS',
