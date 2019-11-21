@@ -27,7 +27,7 @@ export default function RouteManager(props) {
         'OHS - MARIE STORY': <BarChart dataToGraph={propsToPass} title={'OHS - MARIE'} labelOne={' STORY STARTED VS ' } labelTwo={ ' FINISHED'} colorOne={'rgb(186,206,44)'} colorTwo={'rgb(107,155,45)'} />,
         'OHS - MOST READ THIS WEEK': <EmojiList dataToGraph={propsToPass} title={'OHS'} subtitle={'COMPLETED - THIS WEEK'} />,
         'OHS - WEEKLY STORIES READ': <EmojiList dataToGraph={propsToPass} title={'OHS'} subtitle={'MOST READ STORY - THIS WEEK'} />,
-        'OHS - WEEKLY GAMES VS STORIES': <DonutGraph dataToGraph={propsToPass} title={route} subtitle={''} />,
+        'OHS - WEEKLY GAMES VS STORIES': <DonutGraph dataToGraph={propsToPass} title={'OHS'} subtitle={'GAMES VS STORIES'} />,
         //omhof
         'OMHOF TOP AWARDS': <EmojiList dataToGraph={propsToPass} title={'OMHOF'} subtitle={'Popular Awards - This Week'} />,
         'OMHOF AWARD OF THE DAY': <EmojiList dataToGraph={propsToPass} title={'OMHOF'} subtitle={'Most Popular Award - Today'} />,
