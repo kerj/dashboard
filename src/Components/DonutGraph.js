@@ -1,37 +1,40 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import './../scss/donut.scss';
 
 
 export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
-    var width = 1060,
-        height = 1600,
+    var width = 1000,
+        height = 1000,
         outerRadius = Math.min(width, height) * .5 - 10,
         innerRadius = outerRadius * .6,
-        dataLength = null;
+        dataLength = useRef();
 
-    const transitionIn = useRef(true);
+    const transitionBetweenSets = useRef(true);
     const donutCanvas = useRef();
     const legend = useRef();
     const activeData = useRef([]);
     const queuedData = useRef([]);
+    const dataQueue = useRef([]);
+    const arcRef = useRef();
 
     //TODO: add entry fold-out/exit fold-up
-    // const start = useRef(true);
 
-    useEffect(() => {
-        dataLength = dataToGraph.length / 2;
+
+    useLayoutEffect(() => {
+        dataLength.current = dataToGraph.length / 2;
         dataToGraph.map((data, i) => {
-            if (transitionIn.current) {
-                return i >= dataLength ? queuedData.current.push(data.dataSet1) : activeData.current.push(data.dataSet1);
+            if (transitionBetweenSets.current) {
+                return i >= dataLength.current ? activeData.current.push(data.dataSet1) : queuedData.current.push(data.dataSet1);
             }
             return null;
         })
-        activeData.current.splice(dataLength, activeData.current.length);
-        queuedData.current.splice(dataLength, queuedData.current.length);
-
-        if (transitionIn.current) {
+        console.log(activeData.current, queuedData.current)
+        activeData.current.splice(dataLength.current, activeData.current.length);
+        queuedData.current.splice(dataLength.current, queuedData.current.length);
+        console.log(activeData.current, queuedData.current)
+        if (transitionBetweenSets.current) {
             setLegendDisplay();
             phaseDonut();
             setTimeout(() => {
@@ -39,10 +42,10 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
                 setLegendDisplay();
             }, 6500)
         }
-        if (!transitionIn.current) {
+        if (!transitionBetweenSets.current) {
             d3.select('svg.false').remove()
         }
-    }, [transitionIn.current])
+    }, [transitionBetweenSets])
 
 
     const setLegendDisplay = () => {
@@ -50,18 +53,20 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
         let svg = d3.select(legend.current)
             .append('svg')
             .attr('width', 450)
-            .attr('height', 600)
+            .attr('height', (d, i) => {
+                return dataLength.current * 60
+            })
         svg.selectAll(".legend")
-            .data(arcs(activeData.current, queuedData.current))
+            .data(arcs(queuedData.current, activeData.current))
             .enter().append("g")
             .attr("transform", (d, i) => {
-                return "translate(" + (20) + "," + (i * 65) + ")";
+                return "translate(" + (20) + "," + ((i * 65) + 3) + ")";
             })
             .attr("class", (d, i) => {
-                if (transitionIn.current) {
+                if (transitionBetweenSets.current) {
                     return dataToGraph[i]['labels'];
                 } else {
-                    return dataToGraph[i + dataLength]['labels'];
+                    return dataToGraph[i + dataLength.current]['labels'];
                 }
             })
             .append("rect")
@@ -69,13 +74,13 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
             .attr("height", 30)
 
         svg.selectAll("svg")
-            .data(arcs(activeData.current, queuedData.current))
+            .data(arcs(queuedData.current, activeData.current))
             .enter().append('g')
             .attr("class", (d, i) => {
-                if (transitionIn.current) {
+                if (transitionBetweenSets.current) {
                     return dataToGraph[i]['labels'];
                 } else {
-                    return dataToGraph[i + dataLength]['labels'];
+                    return dataToGraph[i + dataLength.current]['labels'];
                 }
             })
             .attr("transform", (d, i) => {
@@ -83,10 +88,10 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
             })
             .append("text")
             .text((d, i) => {
-                if (transitionIn.current) {
-                    return d.value + " " + dataToGraph[i]['dataSet0'] + " " + dataToGraph[i]['labels'];
+                if (transitionBetweenSets.current) {
+                    return dataToGraph[i]['labels'] + " " + dataToGraph[i]['dataSet0'];
                 } else {
-                    return d.value + ' ' + dataToGraph[i + dataLength]['dataSet0'] + ' ' + dataToGraph[i + dataLength]['labels']
+                    return dataToGraph[i + dataLength.current]['labels'] + ' ' + dataToGraph[i + dataLength.current]['dataSet0']
                 }
             })
             .style('fill', 'whitesmoke')
@@ -98,11 +103,11 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
     const arcs = (dataStart, dataEnd) => {
         let pie = d3.pie()
             .sort(null);
-        let arcs0 = transitionIn.current ? pie(dataStart) : pie(dataEnd),
-            arcs1 = transitionIn.current ? pie(dataEnd) : pie(dataStart),
+        let arcs0 = transitionBetweenSets.current ? pie(dataStart) : pie(dataEnd),
+            arcs1 = transitionBetweenSets.current ? pie(dataEnd) : pie(dataStart),
             i = -1,
             currentArc;
-        while (++i < dataLength) {
+        while (++i < dataLength.current) {
             currentArc = arcs0[i];
             currentArc.innerRadius = innerRadius;
             currentArc.outerRadius = outerRadius;
@@ -144,24 +149,23 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
         let svg = d3.select(donutCanvas.current)
             .append("svg")
             .attr('viewBox', `0 0 ${width} ${height}`)
+            .attr('width', `${width / 2}`)
+            .attr('height', `${height / 2}`)
             .attr('class', (d, i) => {
-                return transitionIn.current
+                return 'donut'
             })
-            .attr("width", 500)
-            .attr("height", 700)
-
         svg.selectAll(".arc")
             .data(arcs(queuedData.current, activeData.current))
             .enter().append("g")
             .attr("class", "arc")
-            .attr("transform", "translate(500,700)")
+            .attr("transform", "translate(500,500)")
             .append("path")
             .attr("d", d3.arc())
             .attr("class", (d, i) => {
-                if (transitionIn.current) {
+                if (transitionBetweenSets.current) {
                     return dataToGraph[i]['labels'];
                 } else {
-                    return dataToGraph[i + dataLength]['labels'];
+                    return dataToGraph[i + dataLength.current]['labels'];
                 }
             })
         // //TODO add logos for center of Donut
@@ -207,11 +211,11 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
                 }
             }))
     }
-    if (!transitionIn.current) {
+    if (!transitionBetweenSets.current) {
         clearTimeout();
     } else {
         setTimeout(() => {
-            transitionIn.current = false;
+            transitionBetweenSets.current = false;
         }, 6500);
     }
     return (
@@ -221,9 +225,8 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
                 <h2>{subtitle}</h2>
             </div>
             <div className='graph'>
-            <div ref={legend}></div>
-            <div ref={donutCanvas}></div>
-
+                <div ref={legend}></div>
+                <div ref={donutCanvas}></div>
             </div>
         </div>
     )
