@@ -1,5 +1,6 @@
 {
   "name": "stickydashboard",
+  "main": "electron.js",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -19,7 +20,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "coverage": "npm test -- --coverage",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron": "electron build/electron.js"
   },
   "eslintConfig": {
     "extends": "react-app"
