@@ -114,6 +114,12 @@ export default class BarChart extends Component {
             .attr('width', (d) => {
                 return x((d[1] - d[0]))
             })
+            .transition()
+            .delay(13250)
+            .ease(d3.easeLinear)
+            .attr('width', (d) => {
+                return 0;
+            })
     }
 
 
