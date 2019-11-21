@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './../scss/donut.scss';
 
 
-export const DonutGraph = ({ dataToGraph, title }) => {
+export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
     var width = 1060,
         height = 1600,
         outerRadius = Math.min(width, height) * .5 - 10,
@@ -20,7 +20,6 @@ export const DonutGraph = ({ dataToGraph, title }) => {
     //TODO: add entry fold-out/exit fold-up
     // const start = useRef(true);
 
-
     useEffect(() => {
         dataLength = dataToGraph.length / 2;
         dataToGraph.map((data, i) => {
@@ -31,12 +30,11 @@ export const DonutGraph = ({ dataToGraph, title }) => {
         })
         activeData.current.splice(dataLength, activeData.current.length);
         queuedData.current.splice(dataLength, queuedData.current.length);
-       
+
         if (transitionIn.current) {
             setLegendDisplay();
             phaseDonut();
             setTimeout(() => {
-
                 transition();
                 setLegendDisplay();
             }, 6500)
@@ -51,15 +49,13 @@ export const DonutGraph = ({ dataToGraph, title }) => {
         d3.select('svg').remove()
         let svg = d3.select(legend.current)
             .append('svg')
-            .attr('width', '450')
-            .attr("transform", (d, i) => {
-                return "translate(" + ((width / 2) - 150) + "," + (i * 15 + (height / 2) - 60) + ")";
-            })
+            .attr('width', 450)
+            .attr('height', 600)
         svg.selectAll(".legend")
             .data(arcs(activeData.current, queuedData.current))
             .enter().append("g")
             .attr("transform", (d, i) => {
-                return "translate(" + (20) + "," + (i * 35) + ")";
+                return "translate(" + (20) + "," + (i * 65) + ")";
             })
             .attr("class", (d, i) => {
                 if (transitionIn.current) {
@@ -83,7 +79,7 @@ export const DonutGraph = ({ dataToGraph, title }) => {
                 }
             })
             .attr("transform", (d, i) => {
-                return "translate(" + (10) + "," + (i * 35) + ")";
+                return "translate(" + (10) + "," + (i * 65) + ")";
             })
             .append("text")
             .text((d, i) => {
@@ -147,17 +143,18 @@ export const DonutGraph = ({ dataToGraph, title }) => {
     const phaseDonut = () => {
         let svg = d3.select(donutCanvas.current)
             .append("svg")
+            .attr('viewBox', `0 0 ${width} ${height}`)
             .attr('class', (d, i) => {
                 return transitionIn.current
             })
-            .attr("width", width)
-            .attr("height", height)
+            .attr("width", 500)
+            .attr("height", 700)
 
         svg.selectAll(".arc")
             .data(arcs(queuedData.current, activeData.current))
             .enter().append("g")
             .attr("class", "arc")
-            .attr("transform", "translate(" + ((width / 2) + 10 ) + "," + (height - 300) / 2 + ")")
+            .attr("transform", "translate(500,700)")
             .append("path")
             .attr("d", d3.arc())
             .attr("class", (d, i) => {
@@ -218,15 +215,22 @@ export const DonutGraph = ({ dataToGraph, title }) => {
         }, 6500);
     }
     return (
-        <>
-            <h1>{title}</h1>
+        <div className='donutChart'>
+            <div className='title'>
+                <h1>{title}</h1>
+                <h2>{subtitle}</h2>
+            </div>
+            <div className='graph'>
             <div ref={legend}></div>
             <div ref={donutCanvas}></div>
-        </>
+
+            </div>
+        </div>
     )
 }
 
 DonutGraph.propTypes = {
     dataToGraph: PropTypes.array.isRequired,
-    title: PropTypes.any
+    title: PropTypes.any,
+    subtitle: PropTypes.any
 }
