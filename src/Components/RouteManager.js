@@ -15,6 +15,10 @@ export default function RouteManager(props) {
     let currentKey = dataToCycle[dataRoute.datasetIterator];
 
     let propsToPass = [];
+    //used for multiple sets of data being shown on charts/graphs
+    let data0 = [];
+    let data1 = [];
+
     const weeklyData = props.stateHelper;
 
     const ROUTES = {
@@ -27,7 +31,7 @@ export default function RouteManager(props) {
         'OHS - FLECTCHER STORY': <BarChart dataToGraph={propsToPass} title={'OHS - FLECTCHER'} labelOne={' STORY STARTED VS ' } labelTwo={ ' FINISHED'}  colorOne={'rgb(255,111,3)'} colorTwo={'rgb(255,172,26)'}  />,
         'OHS - VORTEX STORY': <BarChart dataToGraph={propsToPass} title={'OHS - VORTEX'} labelOne={' STORY STARTED VS ' } labelTwo={ ' FINISHED'} colorOne={'rgb(255,172,6)'} colorTwo={'rgb(128, 207, 154)'} />,
         'OHS - MARIE STORY': <BarChart dataToGraph={propsToPass} title={'OHS - MARIE'} labelOne={' STORY STARTED VS ' } labelTwo={ ' FINISHED'} colorOne={'rgb(186,206,44)'} colorTwo={'rgb(107,155,45)'} />,
-        'OHS - WEEKLY GAMES VS STORIES': <DonutGraph dataToGraph={propsToPass} title={'OHS'} subtitle={'GAMES VS STORIES'} />,
+        'OHS - WEEKLY GAMES VS STORIES': <DonutGraph data0={data0} data1={data1} title={'OHS'} subtitle={'GAMES VS STORIES'} />,
         'OHS - WEEKLY STORIES READ': <EmojiList dataToGraph={propsToPass} title={'OHS'} subtitle={'COMPLETED - THIS WEEK'} />, 
         'OHS - MOST READ THIS WEEK': <EmojiList dataToGraph={propsToPass} title={'OHS'} subtitle={'MOST READ STORY - THIS WEEK'} />,
         //omhof
@@ -157,6 +161,8 @@ export default function RouteManager(props) {
                         break;
                     case 'OHS - WEEKLY GAMES VS STORIES':
                         let highProp;
+                        data0.length = 0
+                        data1.length = 0
                         Object.keys(gameProps).map((c) => {
                             highProp = gameProps[c].finishedGames.reduce((prev, curr) => {
                                 highProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
@@ -165,9 +171,8 @@ export default function RouteManager(props) {
                             })
                             const {dataSet0 = 'Game', weekFinished : dataSet1, name: labels } = { ...highProp }
                             let tempProp = Object.assign({}, {dataSet0, dataSet1,  labels });
-                            return propsToPass.push(tempProp)
+                            return data0.push(tempProp)
                         })
-
                         Object.keys(gameProps).map((c, i) => {
                             highProp = gameProps[c].stories.reduce((prev, curr) => {
                                 highProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
@@ -176,7 +181,7 @@ export default function RouteManager(props) {
                             })
                             const {dataSet0 = 'Story', weekFinished: dataSet1, name: labels } = { ...highProp }
                             let tempProp = Object.assign({}, {dataSet0, dataSet1, labels })
-                            return propsToPass.push(tempProp)
+                            return data1.push(tempProp)
                         })
                         break;
                     default:
