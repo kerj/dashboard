@@ -11,7 +11,7 @@ export const allRoutes = {
             'OHS - MARIE STORY',
             'OHS - WEEKLY GAMES VS STORIES',
             'OHS - WEEKLY STORIES READ',
-            'OHS - MOST READ TODAY',
+            'OHS - MOST READ THIS WEEK',
         ]
     },
     omhof: {
