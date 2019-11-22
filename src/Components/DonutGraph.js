@@ -1,73 +1,53 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
-import {useInterval} from '../Hooks/useInterval'
+import { useInterval } from '../Hooks/useInterval'
 import './../scss/donut.scss';
 
 
-export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
+export const DonutGraph = ({ data0, data1, title, subtitle }) => {
     var width = 1000,
         height = 1000,
         outerRadius = Math.min(width, height) * .5 - 10,
-        innerRadius = outerRadius * .6,
-        dataLength = useRef();
+        innerRadius = outerRadius * .6;
 
-    const transitionBetweenSets = useRef(true);
     const donutCanvas = useRef();
     const legend = useRef();
-    const activeData = useRef([]);
-    const queuedData = useRef([]);
-    const dataQueue = useRef([]);
+
     const arcRef = useRef([[], []]);
 
     //TODO: add entry fold-out/exit fold-up
 
     const lastData = useRef(null)
     useEffect(() => {
+        console.log(lastData.current)
         // This check shouldn't be necessary, but we've temporarily got some
         // issues of potentially getting passed the same props over and over, making dev hard.
-        let isChanged = tempNewDataCheck(lastData.current, dataToGraph)
+        let isChanged = tempNewDataCheck(lastData.current, data0)
         if (!isChanged) { return }
 
-        if (lastData.current !== dataToGraph) {
-            lastData.current = dataToGraph
+        if (lastData.current !== data0) {
+            lastData.current = data0
         }
 
-        dataLength.current = dataToGraph.length / 2;
         arcRef.current = [
-          new Array(dataLength.current).fill(0),
-          new Array(dataLength.current).fill(0)
+            new Array(data0.length).fill(0),
+            new Array(data0.length).fill(0)
         ]
-    }, [dataToGraph])
+    }, [data0])
 
 
     useEffect(() => {
-        dataLength.current = dataToGraph.length / 2;
-        dataToGraph.map((data, i) => {
-            if (transitionBetweenSets.current) {
-                return i >= dataLength.current ? activeData.current.push(data.dataSet1) : queuedData.current.push(data.dataSet1);
-            }
-            return null;
-        })
-
-        activeData.current.splice(dataLength.current, activeData.current.length);
-        queuedData.current.splice(dataLength.current, queuedData.current.length);
-
         // Pass 1: Enter
         if (currentState === STATES.INIT) {
-            pushOntoArcData(activeData.current)
-            phaseDonut();
+            pushOntoArcData(data0)
+            phaseDonut(data0);
             transition();
-            setLegendDisplay();
+            setLegendDisplay(data0);
             // Logic here
             setCurrentState(STATES.ENTER)
         }
-
-        console.log(activeData.current, queuedData.current)
-        if (!transitionBetweenSets.current) {
-            d3.select('svg.false').remove()
-        }
-    }, [transitionBetweenSets])
+    }, [])
 
 
     const STATES = {
@@ -82,20 +62,20 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
 
         // Pass 2: Display 2nd data (if available)
         if (currentState === STATES.ENTER) {
-            if (!queuedData.current || queuedData.current.length === 0) {
+            if (!data1 || data1.length === 0) {
                 setCurrentState(STATES.NEXT)
                 return
             }
 
-            pushOntoArcData(queuedData.current)
+            pushOntoArcData(data1)
             transition();
-            setLegendDisplay();
+            setLegendDisplay(data1);
             setCurrentState(STATES.NEXT)
         }
 
         // Pass 3: Exit Animate
         if (currentState === STATES.NEXT) {
-            pushOntoArcData([0,0,0,0])
+            pushOntoArcData(new Array(data0.length).fill(0))
             transition();
             setLegendDisplay();
 
@@ -105,39 +85,37 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
     }, 6500)
 
     const pushOntoArcData = (data) => {
-
+        if (!data) return
         console.log('before', arcRef.current.toString())
         console.log('shift', arcRef.current.shift().toString())
-        arcRef.current.push(data)
+        arcRef.current.push(data.map(c => c.dataSet1));
         console.log('after', arcRef.current.toString())
     }
 
-    const setLegendDisplay = () => {
+    const setLegendDisplay = (data = []) => {
 
         d3.select('svg.legend').remove()
         let svg = d3.select(legend.current)
             .append('svg')
             .attr('width', 450)
             .attr('height', (d, i) => {
-                return dataLength.current * 60
+                return data.length * 60
             })
             .attr('class', 'legend')
 
         // Legend Rectangles
         svg.selectAll(".legend")
-            .data(arcRef.current[0])
+            .data(data)
             .enter().append("g")
             .attr("transform", (d, i) => {
-                console.log(d)
-
                 return "translate(" + (20) + "," + ((i * 65) + 3) + ")";
             })
-            .attr("class", (d, i) => {
+            .attr("class", (d) => {
                 switch (currentState) {
                     case STATES.INIT:
-                        return dataToGraph[i]['labels'] + " " + dataToGraph[i]['dataSet0'];
+                        return d['labels'] + " " + d['dataSet0'];
                     case STATES.ENTER:
-                        return dataToGraph[i + dataLength.current]['labels'] + ' ' + dataToGraph[i + dataLength.current]['dataSet0']
+                        return d['labels'] + ' ' + d['dataSet0']
                     default:
                         return '';
                 }
@@ -148,28 +126,18 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
 
         // Legend Texts
         svg.selectAll("svg")
-            .data(arcs(arcRef.current[0], arcRef.current[1]))
+            .data(data)
             .enter().append('g')
-            .attr("class", (d, i) => {
-                switch (currentState) {
-                    case STATES.INIT:
-                        return dataToGraph[i]['labels'] + " " + dataToGraph[i]['dataSet0'];
-                    case STATES.ENTER:
-                        return dataToGraph[i + dataLength.current]['labels'] + ' ' + dataToGraph[i + dataLength.current]['dataSet0']
-                    default:
-                        return '';
-                }
-            })
             .attr("transform", (d, i) => {
                 return "translate(" + (10) + "," + (i * 65) + ")";
             })
             .append("text")
-            .text((d, i) => {
+            .text((d) => {
                 switch (currentState) {
                     case STATES.INIT:
-                        return dataToGraph[i]['labels'] + " " + dataToGraph[i]['dataSet0'];
+                        return d['labels'] + " " + d['dataSet0'];
                     case STATES.ENTER:
-                        return dataToGraph[i + dataLength.current]['labels'] + ' ' + dataToGraph[i + dataLength.current]['dataSet0']
+                        return d['labels'] + ' ' + d['dataSet0']
                     default:
                         return '';
                 }
@@ -188,7 +156,7 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
             arcs1 = pie(dataEnd),
             i = -1,
             currentArc;
-        while (++i < dataLength.current) {
+        while (++i < data0.length) {
             currentArc = arcs0[i];
             currentArc.innerRadius = innerRadius;
             currentArc.outerRadius = outerRadius;
@@ -226,33 +194,27 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
         }
     }
 
-    const phaseDonut = () => {
+    const phaseDonut = (data) => {
         let svg = d3.select(donutCanvas.current)
             .append("svg")
             .attr('viewBox', `0 0 ${width} ${height}`)
             .attr('width', `${width / 2}`)
             .attr('height', `${height / 2}`)
-            .attr('class', (d, i) => {
-                return 'donut'
-            })
+            .attr('class', 'donut')
         svg.selectAll(".arc")
             .data(arcs(arcRef.current[0], arcRef.current[1]))
             .enter().append("g")
             .attr("class", "arc")
             .attr("transform", "translate(500,500)")
             .append("path")
-            .attr("d", d3.arc())
-            .attr("class", (d, i) => {
-                if (transitionBetweenSets.current) {
-                    return dataToGraph[i]['labels'];
-                } else {
-                    return dataToGraph[i + dataLength.current]['labels'];
-                }
+            .attr('class', (d, i) => {
+                return data[i]['labels']
             })
+            .attr("d", d3.arc())
         // //TODO add logos for center of Donut
     }
 
-    const transition = (inOrOut) => {
+    const transition = () => {
         let path = d3.selectAll(".arc > path")
             .data(arcs(arcRef.current[0], arcRef.current[1]))
             //Wedges Split into two rings
@@ -291,13 +253,7 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
                 }
             }))
     }
-    if (!transitionBetweenSets.current) {
-        clearTimeout();
-    } else {
-        setTimeout(() => {
-            //transitionBetweenSets.current = false;
-        }, 6500);
-    }
+
     return (
         <div className='donutChart'>
             <div className='title'>
@@ -312,7 +268,7 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
     )
 }
 
-function tempNewDataCheck (oldData, newData) {
+function tempNewDataCheck(oldData, newData) {
     // This check shouldn't be necessary, but we've temporarily got some
     // issues of potentially getting passed the same props over and over, making dev hard.
     if (!oldData || oldData.length !== newData.length) return true
@@ -332,7 +288,8 @@ function tempNewDataCheck (oldData, newData) {
 }
 
 DonutGraph.propTypes = {
-    dataToGraph: PropTypes.array.isRequired,
+    data0: PropTypes.array,
+    data1: PropTypes.array,
     title: PropTypes.any,
     subtitle: PropTypes.any
 }
