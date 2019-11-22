@@ -4,8 +4,9 @@ import BarChart from './BarChart';
 import { DonutGraph } from './DonutGraph';
 import EmojiList from './EmojiList';
 import { allRoutes } from './DataRoutes';
+import {useInterval} from '../Hooks/useInterval'
 
-export default function RouteManager(props) { 
+export default function RouteManager(props) {
 
     const dataToCycle = Object.keys(allRoutes);
     let [dataRoute, setDataRoute] = useState({ routeIterator: 0, datasetIterator: 0 })
@@ -44,25 +45,6 @@ export default function RouteManager(props) {
         updateRoute();
         setPropsToPass();
     }, 3000)
-    //hook to update view when routes change
-    function useInterval(callback, delay) {
-        const savedCallback = useRef();
-
-        useEffect(() => {
-            savedCallback.current = callback;
-        }, [callback]);
-
-        useEffect(() => {
-            function tick() {
-                savedCallback.current();
-            }
-
-            if (delay !== null) {
-                let id = setInterval(tick, delay);
-                return () => clearInterval(id);
-            }
-        }, [delay])
-    }
     //cycles through each route then change to next dataset and repeats
     function updateRoute() {
         setRoute(allRoutes[`${dataToCycle[dataRoute.datasetIterator]}`].routes[dataRoute.routeIterator]);

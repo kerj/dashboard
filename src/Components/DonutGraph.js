@@ -1,6 +1,7 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
+import {useInterval} from '../Hooks/useInterval'
 import './../scss/donut.scss';
 
 
@@ -17,12 +18,30 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
     const activeData = useRef([]);
     const queuedData = useRef([]);
     const dataQueue = useRef([]);
-    const arcRef = useRef();
+    const arcRef = useRef([[], []]);
 
     //TODO: add entry fold-out/exit fold-up
 
+    const lastData = useRef(null)
+    useEffect(() => {
+        // This check shouldn't be necessary, but we've temporarily got some
+        // issues of potentially getting passed the same props over and over, making dev hard.
+        let isChanged = tempNewDataCheck(lastData.current, dataToGraph)
+        if (!isChanged) { return }
 
-    useLayoutEffect(() => {
+        if (lastData.current !== dataToGraph) {
+            lastData.current = dataToGraph
+        }
+
+        dataLength.current = dataToGraph.length / 2;
+        arcRef.current = [
+          new Array(dataLength.current).fill(0),
+          new Array(dataLength.current).fill(0)
+        ]
+    }, [dataToGraph])
+
+
+    useEffect(() => {
         dataLength.current = dataToGraph.length / 2;
         dataToGraph.map((data, i) => {
             if (transitionBetweenSets.current) {
@@ -30,25 +49,70 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
             }
             return null;
         })
-        console.log(activeData.current, queuedData.current)
+
         activeData.current.splice(dataLength.current, activeData.current.length);
         queuedData.current.splice(dataLength.current, queuedData.current.length);
-        console.log(activeData.current, queuedData.current)
-        if (transitionBetweenSets.current) {
-            setLegendDisplay();
+
+        // Pass 1: Enter
+        if (currentState === STATES.ENDED) {
+            pushOntoArcData(activeData.current)
             phaseDonut();
-            setTimeout(() => {
-                transition();
-                setLegendDisplay();
-            }, 6500)
+            transition();
+            setLegendDisplay();
+            // Logic here
+            setCurrentState(STATES.ENTER)
         }
+
+        console.log(activeData.current, queuedData.current)
         if (!transitionBetweenSets.current) {
             d3.select('svg.false').remove()
         }
     }, [transitionBetweenSets])
 
 
+    const STATES = {
+        STARTING: 'st',
+        ENTER: 'en',
+        NEXT: 'n',
+        ENDED: 'ex',
+    }
+    const [currentState, setCurrentState] = useState(STATES.ENDED)
+    useInterval(() => {
+
+        // Pass 2: Display 2nd data (if available)
+        if (currentState === STATES.ENTER) {
+            if (!queuedData.current || queuedData.current.length > 0) {
+                setCurrentState(STATES.NEXT)
+                return
+            }
+
+            pushOntoArcData(queuedData.current)
+            transition();
+            setLegendDisplay();
+            setCurrentState(STATES.NEXT)
+        }
+
+        // Pass 3: Exit Animate
+        if (currentState === STATES.NEXT) {
+            pushOntoArcData([0,0,0,0])
+            transition();
+            setLegendDisplay();
+
+            // Logic here
+            setCurrentState(STATES.ENDED)
+        }
+    }, 6500)
+
+    const pushOntoArcData = (data) => {
+
+        console.log('before', arcRef.current.toString())
+        console.log('shift', arcRef.current.shift().toString())
+        arcRef.current.push(data)
+        console.log('after', arcRef.current.toString())
+    }
+
     const setLegendDisplay = () => {
+        return
         d3.select('svg').remove()
         let svg = d3.select(legend.current)
             .append('svg')
@@ -74,7 +138,7 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
             .attr("height", 30)
 
         svg.selectAll("svg")
-            .data(arcs(queuedData.current, activeData.current))
+            .data(arcs(arcRef.current[0], arcRef.current[1]))
             .enter().append('g')
             .attr("class", (d, i) => {
                 if (transitionBetweenSets.current) {
@@ -101,10 +165,11 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
     }
 
     const arcs = (dataStart, dataEnd) => {
+        console.warn('arcscall', dataStart, dataEnd)
         let pie = d3.pie()
             .sort(null);
-        let arcs0 = transitionBetweenSets.current ? pie(dataStart) : pie(dataEnd),
-            arcs1 = transitionBetweenSets.current ? pie(dataEnd) : pie(dataStart),
+        let arcs0 = pie(dataStart),
+            arcs1 = pie(dataEnd),
             i = -1,
             currentArc;
         while (++i < dataLength.current) {
@@ -155,7 +220,7 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
                 return 'donut'
             })
         svg.selectAll(".arc")
-            .data(arcs(queuedData.current, activeData.current))
+            .data(arcs(arcRef.current[0], arcRef.current[1]))
             .enter().append("g")
             .attr("class", "arc")
             .attr("transform", "translate(500,500)")
@@ -173,8 +238,7 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
 
     const transition = (inOrOut) => {
         let path = d3.selectAll(".arc > path")
-            .data(inOrOut ? arcs(queuedData.current, activeData.current) :
-                arcs(activeData.current, queuedData.current))
+            .data(arcs(arcRef.current[0], arcRef.current[1]))
             //Wedges Split into two rings
             .transition()
             .duration(500)
@@ -215,7 +279,7 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
         clearTimeout();
     } else {
         setTimeout(() => {
-            transitionBetweenSets.current = false;
+            //transitionBetweenSets.current = false;
         }, 6500);
     }
     return (
@@ -225,11 +289,30 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
                 <h2>{subtitle}</h2>
             </div>
             <div className='graph'>
-                <div ref={legend}></div>
-                <div ref={donutCanvas}></div>
+                <div ref={legend} />
+                <div ref={donutCanvas} />
             </div>
         </div>
     )
+}
+
+function tempNewDataCheck (oldData, newData) {
+    // This check shouldn't be necessary, but we've temporarily got some
+    // issues of potentially getting passed the same props over and over, making dev hard.
+    if (!oldData || oldData.length !== newData.length) return true
+
+    let isChanged = false
+
+    for (let i = 0; i < newData.length; i++) {
+        let lastVals = Object.values(oldData[i])
+        let newVals = Object.values(newData[i])
+
+        for (let j = 0; j < newVals.length; j++) {
+            console.log(newVals[j], lastVals[j])
+            isChanged = isChanged && newVals[j] !== lastVals[j]
+        }
+    }
+    return isChanged
 }
 
 DonutGraph.propTypes = {
