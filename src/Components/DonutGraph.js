@@ -54,7 +54,7 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
         queuedData.current.splice(dataLength.current, queuedData.current.length);
 
         // Pass 1: Enter
-        if (currentState === STATES.ENDED) {
+        if (currentState === STATES.INIT) {
             pushOntoArcData(activeData.current)
             phaseDonut();
             transition();
@@ -71,17 +71,18 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
 
 
     const STATES = {
+        INIT: 'init',
         STARTING: 'st',
         ENTER: 'en',
         NEXT: 'n',
         ENDED: 'ex',
     }
-    const [currentState, setCurrentState] = useState(STATES.ENDED)
+    const [currentState, setCurrentState] = useState(STATES.INIT)
     useInterval(() => {
 
         // Pass 2: Display 2nd data (if available)
         if (currentState === STATES.ENTER) {
-            if (!queuedData.current || queuedData.current.length > 0) {
+            if (!queuedData.current || queuedData.current.length === 0) {
                 setCurrentState(STATES.NEXT)
                 return
             }
@@ -112,39 +113,51 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
     }
 
     const setLegendDisplay = () => {
-        return
-        d3.select('svg').remove()
+
+        d3.select('svg.legend').remove()
         let svg = d3.select(legend.current)
             .append('svg')
             .attr('width', 450)
             .attr('height', (d, i) => {
                 return dataLength.current * 60
             })
+            .attr('class', 'legend')
+
+        // Legend Rectangles
         svg.selectAll(".legend")
-            .data(arcs(queuedData.current, activeData.current))
+            .data(arcRef.current[0])
             .enter().append("g")
             .attr("transform", (d, i) => {
+                console.log(d)
+
                 return "translate(" + (20) + "," + ((i * 65) + 3) + ")";
             })
             .attr("class", (d, i) => {
-                if (transitionBetweenSets.current) {
-                    return dataToGraph[i]['labels'];
-                } else {
-                    return dataToGraph[i + dataLength.current]['labels'];
+                switch (currentState) {
+                    case STATES.INIT:
+                        return dataToGraph[i]['labels'] + " " + dataToGraph[i]['dataSet0'];
+                    case STATES.ENTER:
+                        return dataToGraph[i + dataLength.current]['labels'] + ' ' + dataToGraph[i + dataLength.current]['dataSet0']
+                    default:
+                        return '';
                 }
             })
             .append("rect")
             .attr("width", 30)
             .attr("height", 30)
 
+        // Legend Texts
         svg.selectAll("svg")
             .data(arcs(arcRef.current[0], arcRef.current[1]))
             .enter().append('g')
             .attr("class", (d, i) => {
-                if (transitionBetweenSets.current) {
-                    return dataToGraph[i]['labels'];
-                } else {
-                    return dataToGraph[i + dataLength.current]['labels'];
+                switch (currentState) {
+                    case STATES.INIT:
+                        return dataToGraph[i]['labels'] + " " + dataToGraph[i]['dataSet0'];
+                    case STATES.ENTER:
+                        return dataToGraph[i + dataLength.current]['labels'] + ' ' + dataToGraph[i + dataLength.current]['dataSet0']
+                    default:
+                        return '';
                 }
             })
             .attr("transform", (d, i) => {
@@ -152,10 +165,13 @@ export const DonutGraph = ({ dataToGraph, title, subtitle }) => {
             })
             .append("text")
             .text((d, i) => {
-                if (transitionBetweenSets.current) {
-                    return dataToGraph[i]['labels'] + " " + dataToGraph[i]['dataSet0'];
-                } else {
-                    return dataToGraph[i + dataLength.current]['labels'] + ' ' + dataToGraph[i + dataLength.current]['dataSet0']
+                switch (currentState) {
+                    case STATES.INIT:
+                        return dataToGraph[i]['labels'] + " " + dataToGraph[i]['dataSet0'];
+                    case STATES.ENTER:
+                        return dataToGraph[i + dataLength.current]['labels'] + ' ' + dataToGraph[i + dataLength.current]['dataSet0']
+                    default:
+                        return '';
                 }
             })
             .style('fill', 'whitesmoke')
@@ -308,7 +324,7 @@ function tempNewDataCheck (oldData, newData) {
         let newVals = Object.values(newData[i])
 
         for (let j = 0; j < newVals.length; j++) {
-            console.log(newVals[j], lastVals[j])
+            //console.log(newVals[j], lastVals[j])
             isChanged = isChanged && newVals[j] !== lastVals[j]
         }
     }
