@@ -14,8 +14,8 @@ export default class BarChart extends Component {
 
     drawBarChart(data) {
         var margin = { top: 350, right: 200, bottom: 355, left: 200 }
-        var width = 1080 - margin.left - margin.right
-        var height = 1910 - margin.top - margin.bottom
+        var width = 1060 - margin.left - margin.right
+        var height = 1900 - margin.top - margin.bottom
         //container for graph
         let svgCanvas = d3.select(this.refs.canvas)
             .append("svg")

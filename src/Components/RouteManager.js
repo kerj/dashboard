@@ -48,7 +48,7 @@ export default function RouteManager(props) {
     useInterval(() => {
         updateRoute();
         setPropsToPass();
-    }, 3000)
+    }, 15000)
     //cycles through each route then change to next dataset and repeats
     function updateRoute() {
         setRoute(allRoutes[`${dataToCycle[dataRoute.datasetIterator]}`].routes[dataRoute.routeIterator]);
