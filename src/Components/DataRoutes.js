@@ -9,7 +9,7 @@ export const allRoutes = {
             'OHS - VORTEX STORY',
             'OHS - MARIE GAME',
             'OHS - MARIE STORY',
-            'OHS - WEEKLY GAMES VS STORIES',
+            // 'OHS - WEEKLY GAMES VS STORIES',
             'OHS - WEEKLY STORIES READ',
             'OHS - MOST READ THIS WEEK',
         ]
