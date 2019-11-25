@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 import { timbersQuery, omoQuery, omhofQuery } from '../Constants/ApiCalls';
-import RouteManager from './RouteManager';
 
-export default function HooksFetchData() {
-    const [data, setData] = useState(null);
-    const [loaded, setLoaded] = useState(false);
+export default function useFetchData() {
+    const [data, setData] = useState({retrievedOn: ''});
+    const [isLoading, setIsLoading] = useState(false)
+
+    // TODO: Use an argument passed into this hook to grab from a URL.  Just triggers updates for now.
+    const [url, setUrl] = useState('')
 
     const timberData = (cleanData) => {
         let finalTimberData = {}
@@ -31,11 +33,11 @@ export default function HooksFetchData() {
                         timberDataObj.iOS = null;
                         timberDataObj.android = c[curr][k];
                     } else
-                        if (curr === 'ga:sessions' && timberDataObj.new != null) {
-                            timberDataObj.new = c[curr][k]
-                        } else if (curr === 'ga:sessions' && timberDataObj.new === null) {
-                            timberDataObj.return = c[curr][k]
-                        }
+                    if (curr === 'ga:sessions' && timberDataObj.new != null) {
+                        timberDataObj.new = c[curr][k]
+                    } else if (curr === 'ga:sessions' && timberDataObj.new === null) {
+                        timberDataObj.return = c[curr][k]
+                    }
                     //adds i for cases where names are the same
                     timberDataObj[curr + i] = c[curr][k]
                 })
@@ -77,6 +79,7 @@ export default function HooksFetchData() {
         const source = CancelToken.source();
 
         const fetchData = async () => {
+            setIsLoading(true)
             try {
                 await axios.get(timbersQuery).then((response) => {
                     let allKeys = Object.keys(response.data);
@@ -222,8 +225,9 @@ export default function HooksFetchData() {
                             Object.assign(weeklyData, { omhof })
                             Object.assign(weeklyData, timberData(cleanData))
 
+                            weeklyData.retrievedOn = Date.now()
                             setData(weeklyData);
-                            setLoaded(true);
+                            setIsLoading(false)
                         })
                     })
                 })
@@ -240,15 +244,13 @@ export default function HooksFetchData() {
         return () => {
             source.cancel();
         };
-    }, [])
+    }, [url])
 
-    return (
-        <>
-            {
-                loaded ? <RouteManager stateHelper={data} /> : <h1>Loading. . .</h1>
-            }
-        </>
-    )
+    const fetchData = useCallback(() => {
+        // Just trigger a value change so that fetching happens again.
+        setUrl(Math.random())
+    }, [setUrl])
+    return [{ data, isLoading }, fetchData];
 }
 
 function _processTitle(fulltitle) {
