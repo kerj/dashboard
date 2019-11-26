@@ -24,7 +24,7 @@ function App() {
     // .duration(3000)
     .style("background-color", "black")
 
-  const [{ data, isLoading }, doFetch] = useFetchData();
+  const [{ data, isLoading }, doFetch] = useFetchData()
 
   // All of this state management is about only showing "Loading..." one time the entire time the app runs...
   const [firstLoadFinished, setFirstLoadFinished] = useState(false)
