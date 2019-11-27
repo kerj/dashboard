@@ -4,8 +4,7 @@ import * as d3 from 'd3';
 import './../scss/emojiList.scss';
 
 export default class EmojiList extends Component {
-
-    componentDidMount() {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         this.displayList(this.props.dataToGraph);
     }
 

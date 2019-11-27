@@ -6,11 +6,9 @@ import './../scss/barChart.scss'
 //there are two types of stacked bar graphs need a way to tell between the two
 //one has an addition of the stacks the other has to show the difference between the stacks
 export default class BarChart extends Component {
-
-    componentDidMount() {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         this.drawBarChart(this.props.dataToGraph)
     }
-
 
     drawBarChart(data) {
         var margin = { top: 350, right: 200, bottom: 355, left: 200 }
