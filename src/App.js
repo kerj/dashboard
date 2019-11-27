@@ -3,6 +3,9 @@ import './App.scss';
 import * as d3 from 'd3';
 import useFetchData from './Components/useFetchData';
 import RouteManager from './Components/RouteManager'
+import {useInterval} from './Hooks/useInterval'
+
+const DATA_REFRESH_DELAY = 60 * 15 * 1000;  // 15 mins
 
 function App() {
   d3.select("body")
@@ -40,6 +43,10 @@ function App() {
       setFirstLoadFinished(true)
     }
   }, [firstLoadStarted, isLoading])
+
+  useInterval(() => {
+    doFetch()
+  }, DATA_REFRESH_DELAY)
 
   return (
     <>
