@@ -7,12 +7,11 @@ import { allRoutes } from './DataRoutes';
 import {useInterval} from '../Hooks/useInterval'
 
 export default function RouteManager(props) {
-
-    const dataToCycle = Object.keys(allRoutes);
-    let [dataRoute, setDataRoute] = useState({ routeIterator: 0, datasetIterator: 0 })
-    let routesAvailable = allRoutes[`${dataToCycle[dataRoute.datasetIterator]}`].routes;
-    let [route, setRoute] = useState({ route: routesAvailable[dataRoute.routeIterator] });
-    let currentKey = dataToCycle[dataRoute.datasetIterator];
+    let routesAvailable = allRoutes.routes;
+    let [routes, setRoutes] = useState({
+        dataIndex: 0,
+        route: routesAvailable[0],
+    });
 
     let propsToPass = [];
     //used for multiple sets of data being shown on charts/graphs
@@ -38,36 +37,42 @@ export default function RouteManager(props) {
         'OMHOF TOP AWARDS': <EmojiList dataToGraph={propsToPass} title={'OMHOF'} subtitle={'Popular Awards - This Week'} />,
         'OMHOF AWARD OF THE DAY': <EmojiList dataToGraph={propsToPass} title={'OMHOF'} subtitle={'Most Popular Award - Today'} />,
         //timbers
-        'TIMBERS WEEKLY TOP EMOJIS': <EmojiList dataToGraph={propsToPass} title={route} />,
-        'NEW VS. RETURNING VISITORS': <BarChart dataToGraph={propsToPass} title={route} />,
-        'MOST POPULAR EMOJI TODAY': <EmojiList dataToGraph={propsToPass} title={route} />,
-        'MOBILE OPERATING SYSTEMS': <DonutGraph dataToGraph={propsToPass} title={route} />,
+        'TIMBERS WEEKLY TOP EMOJIS': <EmojiList dataToGraph={propsToPass} title={routes.route} />,
+        'NEW VS. RETURNING VISITORS': <BarChart dataToGraph={propsToPass} title={routes.route} />,
+        'MOST POPULAR EMOJI TODAY': <EmojiList dataToGraph={propsToPass} title={routes.route} />,
+        'MOBILE OPERATING SYSTEMS': <DonutGraph dataToGraph={propsToPass} title={routes.route} />,
     }
 
     //routes change every 15 seconds
     useInterval(() => {
         updateRoute();
-        setPropsToPass();
     }, 15000)
+
+    useEffect(() => {
+        // Sanity check; route and data route should be matches.
+        if (routes.route !== allRoutes.routes[routes.dataIndex]) {
+            console.warn('Display route and data routes are mismatched!',routes.route, allRoutes.routes[routes.dataIndex])
+        }
+        setPropsToPass()
+    }, [routes, setPropsToPass])
     //cycles through each route then change to next dataset and repeats
     function updateRoute() {
-        setRoute(allRoutes[`${dataToCycle[dataRoute.datasetIterator]}`].routes[dataRoute.routeIterator]);
-
-        dataRoute.routeIterator + 1 > routesAvailable.length - 1 || !routesAvailable.length === 2 ?
-            (dataRoute.datasetIterator + 1 > dataToCycle.length - 1 ?
-                setDataRoute({ routeIterator: 0, datasetIterator: 0 })
-                : setDataRoute({ routeIterator: 0, datasetIterator: dataRoute.datasetIterator + 1 }))
-            : setDataRoute({ routeIterator: dataRoute.routeIterator + 1, datasetIterator: dataRoute.datasetIterator })
+        const nextIndex = (routes.dataIndex + 1) % routesAvailable.length
+        setRoutes(allRoutes.routes[nextIndex])
+        setRoutes({
+            dataIndex: nextIndex,
+            route: routesAvailable[nextIndex],
+        })
     }
 
     function setPropsToPass() {
         propsToPass.length = 0;
 
         //assigns graphable objects to propsToPass array
-        switch (currentKey) {
-            case 'omoData':
                 let gameProps = weeklyData.omoData;
-                switch (route) {
+        let timberProps = weeklyData.timberData;
+        let omhofProps = weeklyData.omhof;
+        switch (routes.route) {
                     case 'OHS - CHUTES GAME':
                         gameProps.chutes.finishedGames.map((c) => {
                             const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
@@ -184,13 +189,6 @@ export default function RouteManager(props) {
                             return data1.push(tempProp)
                         })
                         break;
-                    default:
-                        break;
-                }
-                break;
-            case 'omhof':
-                let omhofProps = weeklyData.omhof;
-                switch (route) {
                     case 'OMHOF TOP AWARDS':
                         omhofProps.weekly.map((c) => {
                             const { page_path: dataSet0, count: dataSet1 = 0, 'page_title-cleaned': labels } = { ...c }
@@ -206,13 +204,6 @@ export default function RouteManager(props) {
                         })
                         propsToPass.splice(1)
                         break;
-                    default:
-                        break;
-                }
-                break
-            case 'timbersData':
-                let timberProps = weeklyData.timberData;
-                switch (route) {
                     case 'TIMBERS WEEKLY TOP EMOJIS':
                         timberProps.top5Emoji.map((c) => {
                             const { 'ga:eventLabel1': dataSet0, 'ga:eventLabel1': dataSet1, 'ga:totalEvents1': labels = ':D' } = { ...c }
@@ -253,14 +244,10 @@ export default function RouteManager(props) {
                     default:
                         break;
                 }
-                //Add more data sets here
-                break
-            default:
-        }
         //returns the view for the graph
         return (
-            <div key={route}>
-                {ROUTES[route]}
+            <div key={routes.route}>
+                {ROUTES[routes.route]}
             </div>
         )
     }

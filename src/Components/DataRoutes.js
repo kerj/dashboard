@@ -1,5 +1,4 @@
 export const allRoutes = {
-    omoData: {
         routes: [
             'OHS - CHUTES GAME',
             'OHS - CHUTES STORY',
@@ -12,20 +11,7 @@ export const allRoutes = {
             // 'OHS - WEEKLY GAMES VS STORIES',
             'OHS - WEEKLY STORIES READ',
             'OHS - MOST READ THIS WEEK',
-        ]
-    },
-    omhof: {
-        routes: [
             'OMHOF TOP AWARDS',
-            'OMHOF AWARD OF THE DAY',
+        'OMHOF AWARD OF THE DAY'
         ]
-    },
-    //   timbersData: {
-    //       routes: [
-    //         //   'TIMBERS WEEKLY TOP EMOJIS',
-    //         //   'NEW VS. RETURNING VISITORS',
-    //         //   'MOST POPULAR EMOJI TODAY',
-    //         //   'MOBILE OPERATING SYSTEMS'
-    //       ]
-    //   },
 }
