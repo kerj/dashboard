@@ -43,7 +43,7 @@
     "coverage": "npm test -- --coverage",
     "eject": "react-scripts eject",
     "electron": "electron build/electron.js",
-    "package-win": "npm run build && electron-builder build --win --x64 && mv releases/win-unpacked releases/project-dashboard"
+    "package-win": "npm run build && electron-builder build --win --ia32 && mv releases/win-ia32-unpacked releases/project-dashboard"
   },
   "eslintConfig": {
     "extends": "react-app"
