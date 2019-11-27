@@ -55,6 +55,6 @@ export const OmoGames = {
 const setDayOfWeek = (dateStr) => {
   //replace - for / so the actual date is returned
   let today = new Date();
-  let newDate = new Date(dateStr.replace(/-/g, '\/'));
+  let newDate = new Date(dateStr.replace(/-/g, '/'));
   return  today.toLocaleDateString('en-US') === newDate.toLocaleDateString('en-US') ? 'Today' : newDate.toLocaleDateString('en-US', { weekday: 'short' });
 }

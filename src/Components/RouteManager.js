@@ -55,7 +55,7 @@ export default function RouteManager(props) {
         // Deliberately excluding makeNewChartData because it will cause an infinite loop,
         // and we're probably making it go away eventually, anyway.
     }, [routes])
-    //cycles through each route then change to next dataset and repeats
+        //cycles through each route then change to next dataset and repeats
     function updateRoute() {
         const nextIndex = (routes.dataIndex + 1) % routesAvailable.length
         setRoutes(allRoutes.routes[nextIndex])
@@ -63,206 +63,206 @@ export default function RouteManager(props) {
             dataIndex: nextIndex,
             route: routesAvailable[nextIndex],
         })
-    }
+        }
 
 
     function makeNewChartData() {
         const newChartData = []
 
         //assigns graphable objects to propsToPass array
-                let gameProps = weeklyData.omoData;
+        let gameProps = weeklyData.omoData;
         let timberProps = weeklyData.timberData;
         let omhofProps = weeklyData.omhof;
         switch (routes.route) {
-                    case 'OHS - CHUTES GAME':
-                        gameProps.chutes.finishedGames.map((c) => {
-                            const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+            case 'OHS - CHUTES GAME':
+                gameProps.chutes.finishedGames.map((c) => {
+                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     return newChartData.unshift(propToPass);
-                        })
+                })
                 setChartData(newChartData)
-                        break;
-                    case 'OHS - FLECTCHER GAME':
-                        gameProps.fletcher.finishedGames.map((c) => {
-                            const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                break;
+            case 'OHS - FLECTCHER GAME':
+                gameProps.fletcher.finishedGames.map((c) => {
+                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     return newChartData.unshift(propToPass);
-                        })
+                })
                 setChartData(newChartData)
-                        break;
-                    case 'OHS - VORTEX GAME':
-                        gameProps.marie.finishedGames.map((c) => {
-                            const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                break;
+            case 'OHS - VORTEX GAME':
+                gameProps.marie.finishedGames.map((c) => {
+                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     return newChartData.unshift(propToPass);
-                        })
+                })
                 setChartData(newChartData)
-                        break;
-                    case 'OHS - MARIE GAME':
-                        gameProps.vortex.finishedGames.map((c) => {
-                            const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                break;
+            case 'OHS - MARIE GAME':
+                gameProps.vortex.finishedGames.map((c) => {
+                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     return newChartData.unshift(propToPass);
-                        })
+                })
                 setChartData(newChartData)
-                        break;
-                    case 'OHS - CHUTES STORY':
-                        gameProps.chutes.stories.map((c) => {
-                            const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                break;
+            case 'OHS - CHUTES STORY':
+                gameProps.chutes.stories.map((c) => {
+                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     return newChartData.unshift(propToPass);
-                        })
+                })
                 setChartData(newChartData)
-                        break;
-                    case 'OHS - FLECTCHER STORY':
-                        gameProps.fletcher.stories.map((c) => {
-                            const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                break;
+            case 'OHS - FLECTCHER STORY':
+                gameProps.fletcher.stories.map((c) => {
+                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     return newChartData.unshift(propToPass);
-                        })
+                })
                 setChartData(newChartData)
-                        break;
-                    case 'OHS - VORTEX STORY':
-                        gameProps.vortex.stories.map((c) => {
-                            const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                break;
+            case 'OHS - VORTEX STORY':
+                gameProps.vortex.stories.map((c) => {
+                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     return newChartData.unshift(propToPass);
-                        })
+                })
                 setChartData(newChartData)
-                        break;
-                    case 'OHS - MARIE STORY':
-                        gameProps.marie.stories.map((c) => {
-                            const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                break;
+            case 'OHS - MARIE STORY':
+                gameProps.marie.stories.map((c) => {
+                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     return newChartData.unshift(propToPass);
-                        })
+                })
                 setChartData(newChartData)
-                        break;
-                    case 'OHS - MOST READ THIS WEEK':
-                        Object.keys(gameProps).map((c) => {
-                            gameProps[c].stories.reduce((prev, curr) => {
-                                let gameName = c
-                                const { weekFinished: dataSet1 = 0, name: dataSet0 = gameName, name: labels = gameName } = { ...curr }
-                                let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
-                                if (tempProp.dataSet1 < curr.weekFinished) {
-                                    tempProp.dataSet1 = curr.weekFinished
-                                }
+                break;
+            case 'OHS - MOST READ THIS WEEK':
+                Object.keys(gameProps).map((c) => {
+                    gameProps[c].stories.reduce((prev, curr) => {
+                        let gameName = c
+                        const { weekFinished: dataSet1 = 0, name: dataSet0 = gameName, name: labels = gameName } = { ...curr }
+                        let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
+                        if (tempProp.dataSet1 < curr.weekFinished) {
+                            tempProp.dataSet1 = curr.weekFinished
+                        }
                         return newChartData.push(tempProp)
-                            })
-                            let highestProp;
+                    })
+                    let highestProp;
                     newChartData.reduce((prev, curr) => {
-                                highestProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
-                                return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
-                            })
+                        highestProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
+                        return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
+                    })
                     newChartData.splice(0);
                     return newChartData.push(highestProp)
-                        })
+                })
                 setChartData(newChartData)
-                        break;
-                    case 'OHS - WEEKLY STORIES READ':
-                        Object.keys(gameProps).map((c, i) => {
-                            let weeklyTotal = gameProps[c].finishedGames.reduce((acc, curr) => {
-                                let gameName = c
-                                const { weekFinished: dataSet1 = 0, name: dataSet0 = gameName, name: labels = gameName } = { ...curr }
-                                let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
-                                if (tempProp.dataSet1 < curr.weekFinished) {
-                                    tempProp.dataSet1 = curr.weekFinished
-                                }
-                                return tempProp
-                            })
+                break;
+            case 'OHS - WEEKLY STORIES READ':
+                Object.keys(gameProps).map((c, i) => {
+                    let weeklyTotal = gameProps[c].finishedGames.reduce((acc, curr) => {
+                        let gameName = c
+                        const { weekFinished: dataSet1 = 0, name: dataSet0 = gameName, name: labels = gameName } = { ...curr }
+                        let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
+                        if (tempProp.dataSet1 < curr.weekFinished) {
+                            tempProp.dataSet1 = curr.weekFinished
+                        }
+                        return tempProp
+                    })
                     newChartData.push(weeklyTotal)
                     return newChartData.sort((a, b) => (b.dataSet1 < a.dataSet1) ? -1 : ((a.dataSet1 > b.dataSet1) ? 1 : 0));;
-                        })
+                })
                 setChartData(newChartData)
-                        break;
-                    case 'OHS - WEEKLY GAMES VS STORIES':
-                        let highProp;
+                break;
+            case 'OHS - WEEKLY GAMES VS STORIES':
+                let highProp;
                 const newData0 = []
                 const newData1 = []
-                        Object.keys(gameProps).map((c) => {
-                            highProp = gameProps[c].finishedGames.reduce((prev, curr) => {
-                                highProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
-                                highProp.name = c;
-                                return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
-                            })
-                            const {dataSet0 = 'Game', weekFinished : dataSet1, name: labels } = { ...highProp }
-                            let tempProp = Object.assign({}, {dataSet0, dataSet1,  labels });
+                Object.keys(gameProps).map((c) => {
+                    highProp = gameProps[c].finishedGames.reduce((prev, curr) => {
+                        highProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
+                        highProp.name = c;
+                        return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
+                    })
+                    const {dataSet0 = 'Game', weekFinished : dataSet1, name: labels } = { ...highProp }
+                    let tempProp = Object.assign({}, {dataSet0, dataSet1,  labels });
                     return newData0.push(tempProp)
-                        })
-                        Object.keys(gameProps).map((c, i) => {
-                            highProp = gameProps[c].stories.reduce((prev, curr) => {
-                                highProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
-                                highProp.name = c;
-                                return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
-                            })
-                            const {dataSet0 = 'Story', weekFinished: dataSet1, name: labels } = { ...highProp }
-                            let tempProp = Object.assign({}, {dataSet0, dataSet1, labels })
+                })
+                Object.keys(gameProps).map((c, i) => {
+                    highProp = gameProps[c].stories.reduce((prev, curr) => {
+                        highProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
+                        highProp.name = c;
+                        return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
+                    })
+                    const {dataSet0 = 'Story', weekFinished: dataSet1, name: labels } = { ...highProp }
+                    let tempProp = Object.assign({}, {dataSet0, dataSet1, labels })
                     return newData1.push(tempProp)
-                        })
+                })
                 setData0(newData0)
                 setData1(newData1)
-                        break;
-                    case 'OMHOF TOP AWARDS':
-                        omhofProps.weekly.map((c) => {
-                            const { page_path: dataSet0, count: dataSet1 = 0, 'page_title-cleaned': labels } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                break;
+            case 'OMHOF TOP AWARDS':
+                omhofProps.weekly.map((c) => {
+                    const { page_path: dataSet0, count: dataSet1 = 0, 'page_title-cleaned': labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     return newChartData.push(propToPass);
-                        })
+                })
                 setChartData(newChartData)
-                        break;
-                    case 'OMHOF AWARD OF THE DAY':
-                        omhofProps.daily.map((c) => {
-                            const { page_path: dataSet0, count: dataSet1 = 0, 'page_title-cleaned': labels } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                break;
+            case 'OMHOF AWARD OF THE DAY':
+                omhofProps.daily.map((c) => {
+                    const { page_path: dataSet0, count: dataSet1 = 0, 'page_title-cleaned': labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     return newChartData.push(propToPass);
-                        })
+                })
                 newChartData.splice(1)
                 setChartData(newChartData)
-                        break;
-                    case 'TIMBERS WEEKLY TOP EMOJIS':
-                        timberProps.top5Emoji.map((c) => {
-                            const { 'ga:eventLabel1': dataSet0, 'ga:eventLabel1': dataSet1, 'ga:totalEvents1': labels = ':D' } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                break;
+            case 'TIMBERS WEEKLY TOP EMOJIS':
+                timberProps.top5Emoji.map((c) => {
+                    const { 'ga:eventLabel1': dataSet0, 'ga:eventLabel1': dataSet1, 'ga:totalEvents1': labels = ':D' } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     return newChartData.push(propToPass);
-                        })
+                })
                 setChartData(newChartData)
-                        break;
-                    case 'NEW VS. RETURNING VISITORS':
-                        timberProps.user.map((c) => {
-                            const { 'new': dataSet0, 'return': dataSet1, 'ga:dayOfWeekName0': labels } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                break;
+            case 'NEW VS. RETURNING VISITORS':
+                timberProps.user.map((c) => {
+                    const { 'new': dataSet0, 'return': dataSet1, 'ga:dayOfWeekName0': labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     return newChartData.push(propToPass);
-                        })
+                })
                 newChartData.reduce((curr, acc) => {
-                            curr['dataSet0'] !== "null" ?
-                                curr['dataSet1'] = acc['dataSet1'] :
-                                curr['dataSet0'] = acc['dataSet0'];
-                            return acc
-                        })
+                    curr['dataSet0'] !== "null" ?
+                      curr['dataSet1'] = acc['dataSet1'] :
+                      curr['dataSet0'] = acc['dataSet0'];
+                    return acc
+                })
                 for (let i = 0; i < newChartData.length; i++) {
                     newChartData.splice(i + 1, 1)
-                        }
-                setChartData(newChartData)
-                        break;
-                    case 'MOST POPULAR EMOJI TODAY':
-                        timberProps.mostPopEmoji.map((c) => {
-                            const { 'ga:eventLabel2': dataSet0 = 'none used', 'ga:totalEvents2': dataSet1 = "today", 'ga:eventLabel2': labels = ':D' } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.push(propToPass);
-                        })
-                setChartData(newChartData)
-                        break;
-                    case 'MOBILE OPERATING SYSTEMS':
-                        timberProps.operatingSystem.map((c) => {
-                            const { 'ga:sessions3': dataSet0, 'ga:operatingSystem3': dataSet1, 'ga:operatingSystemVersion3': labels } = { ...c }
-                            const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.push(propToPass);
-                        })
-                setChartData(newChartData)
-                        break;
-                    default:
-                        break;
                 }
+                setChartData(newChartData)
+                break;
+            case 'MOST POPULAR EMOJI TODAY':
+                timberProps.mostPopEmoji.map((c) => {
+                    const { 'ga:eventLabel2': dataSet0 = 'none used', 'ga:totalEvents2': dataSet1 = "today", 'ga:eventLabel2': labels = ':D' } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                    return newChartData.push(propToPass);
+                })
+                setChartData(newChartData)
+                break;
+            case 'MOBILE OPERATING SYSTEMS':
+                timberProps.operatingSystem.map((c) => {
+                    const { 'ga:sessions3': dataSet0, 'ga:operatingSystem3': dataSet1, 'ga:operatingSystemVersion3': labels } = { ...c }
+                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
+                    return newChartData.push(propToPass);
+                })
+                setChartData(newChartData)
+                break;
+            default:
+                break;
+        }
     }
 
     return (

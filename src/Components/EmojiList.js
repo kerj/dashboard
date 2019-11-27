@@ -5,10 +5,10 @@ import './../scss/emojiList.scss';
 
 export default class EmojiList extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
-        this.displayList(this.props.dataToGraph);
+      this.displayList(this.props.dataToGraph);
     }
 
-    displayList(data) {
+  displayList(data) {
         const item = d3.select(this.refs.list)
             .selectAll("div")
             .data(data)
@@ -40,7 +40,7 @@ export default class EmojiList extends Component {
             })
             .transition()
             .delay((d, i) => {
-                return this.props.dataToGraph.length != 1 ? (13000 - i * 100) - (100*this.props.dataToGraph.length) + i * 100 - 600 : 13600
+                return this.props.dataToGraph.length !== 1 ? (13000 - i * 100) - (100*this.props.dataToGraph.length) + i * 100 - 600 : 13600
             })
             .attr('class', (d) => {
                 return this.props.dataToGraph.length === 1 ? `${d.dataSet0} solo item` : `${d.dataSet0} item`
