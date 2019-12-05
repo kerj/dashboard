@@ -44,7 +44,7 @@ export default function RouteManager(props) {
     //routes change every 15 seconds
     useInterval(() => {
         updateRoute();
-    }, 3000)
+    }, 15000)
 
     useEffect(() => {
         // Sanity check; route and data route should be matches.
