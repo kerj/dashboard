@@ -4,7 +4,7 @@ import BarChart from './BarChart';
 import { DonutGraph } from './DonutGraph';
 import EmojiList from './EmojiList';
 import { allRoutes } from './DataRoutes';
-import {useInterval} from '../Hooks/useInterval'
+import { useInterval } from '../Hooks/useInterval'
 
 export default function RouteManager(props) {
     let routesAvailable = allRoutes.routes;
@@ -20,16 +20,16 @@ export default function RouteManager(props) {
 
     const ROUTES = {
         //omoGames
-        'OHS - CHUTES GAME': <BarChart dataToGraph={chartData} title={'OHS - CHUTES'} labelOne={' GAME STARTED VS ' } labelTwo={ ' FINISHED'} colorOne={'rgb(255,45,29)'} colorTwo={'rgb(162,54,40)'} />,
-        'OHS - FLECTCHER GAME': <BarChart dataToGraph={chartData} title={ 'OHS - FLECTCHER'} labelOne={' GAME STARTED VS ' } labelTwo={ ' FINISHED'} colorOne={'rgb(255,111,3)'} colorTwo={'rgb(255,172,26)'} />,
-        'OHS - VORTEX GAME': <BarChart dataToGraph={chartData} title={'OHS - VORTEX'} labelOne={' GAME STARTED VS ' } labelTwo={ ' FINISHED'} colorOne={'rgb(255,172,6)'} colorTwo={'rgb(128, 207, 154)'} />,
-        'OHS - MARIE GAME': <BarChart dataToGraph={chartData} title={'OHS - MARIE'} labelOne={' GAME STARTED VS ' } labelTwo={ ' FINISHED'} colorOne={'rgb(186,206,44)'} colorTwo={'rgb(107,155,45)'} />,
-        'OHS - CHUTES STORY': <BarChart dataToGraph={chartData} title={'OHS - CHUTES'} labelOne={' STORY STARTED VS ' } labelTwo={ ' FINISHED'} colorOne={'rgb(255,45,29)'} colorTwo={'rgb(162,54,40)'} />,
-        'OHS - FLECTCHER STORY': <BarChart dataToGraph={chartData} title={'OHS - FLECTCHER'} labelOne={' STORY STARTED VS ' } labelTwo={ ' FINISHED'}  colorOne={'rgb(255,111,3)'} colorTwo={'rgb(255,172,26)'}  />,
-        'OHS - VORTEX STORY': <BarChart dataToGraph={chartData} title={'OHS - VORTEX'} labelOne={' STORY STARTED VS ' } labelTwo={ ' FINISHED'} colorOne={'rgb(255,172,6)'} colorTwo={'rgb(128, 207, 154)'} />,
-        'OHS - MARIE STORY': <BarChart dataToGraph={chartData} title={'OHS - MARIE'} labelOne={' STORY STARTED VS ' } labelTwo={ ' FINISHED'} colorOne={'rgb(186,206,44)'} colorTwo={'rgb(107,155,45)'} />,
+        'OHS - CHUTES GAME': <BarChart dataToGraph={chartData} title={'OHS - CHUTES'} labelOne={' GAME STARTED VS '} labelTwo={' FINISHED'} colorOne={'rgb(255,45,29)'} colorTwo={'rgb(162,54,40)'} />,
+        'OHS - FLECTCHER GAME': <BarChart dataToGraph={chartData} title={'OHS - FLECTCHER'} labelOne={' GAME STARTED VS '} labelTwo={' FINISHED'} colorOne={'rgb(255,111,3)'} colorTwo={'rgb(255,172,26)'} />,
+        'OHS - VORTEX GAME': <BarChart dataToGraph={chartData} title={'OHS - VORTEX'} labelOne={' GAME STARTED VS '} labelTwo={' FINISHED'} colorOne={'rgb(255,172,6)'} colorTwo={'rgb(128, 207, 154)'} />,
+        'OHS - MARIE GAME': <BarChart dataToGraph={chartData} title={'OHS - MARIE'} labelOne={' GAME STARTED VS '} labelTwo={' FINISHED'} colorOne={'rgb(186,206,44)'} colorTwo={'rgb(107,155,45)'} />,
+        'OHS - CHUTES STORY': <BarChart dataToGraph={chartData} title={'OHS - CHUTES'} labelOne={' STORY STARTED VS '} labelTwo={' FINISHED'} colorOne={'rgb(255,45,29)'} colorTwo={'rgb(162,54,40)'} />,
+        'OHS - FLECTCHER STORY': <BarChart dataToGraph={chartData} title={'OHS - FLECTCHER'} labelOne={' STORY STARTED VS '} labelTwo={' FINISHED'} colorOne={'rgb(255,111,3)'} colorTwo={'rgb(255,172,26)'} />,
+        'OHS - VORTEX STORY': <BarChart dataToGraph={chartData} title={'OHS - VORTEX'} labelOne={' STORY STARTED VS '} labelTwo={' FINISHED'} colorOne={'rgb(255,172,6)'} colorTwo={'rgb(128, 207, 154)'} />,
+        'OHS - MARIE STORY': <BarChart dataToGraph={chartData} title={'OHS - MARIE'} labelOne={' STORY STARTED VS '} labelTwo={' FINISHED'} colorOne={'rgb(186,206,44)'} colorTwo={'rgb(107,155,45)'} />,
         'OHS - WEEKLY GAMES VS STORIES': <DonutGraph data0={data0} data1={data1} title={'OHS'} subtitle={'GAMES VS STORIES'} />,
-        'OHS - WEEKLY STORIES READ': <EmojiList dataToGraph={chartData} title={'OHS'} subtitle={'COMPLETED - THIS WEEK'} />,
+        'OHS - WEEKLY GAMES FINISHED': <EmojiList dataToGraph={chartData} title={'OHS'} subtitle={'COMPLETED - THIS WEEK'} />,
         'OHS - MOST READ THIS WEEK': <EmojiList dataToGraph={chartData} title={'OHS'} subtitle={'MOST READ STORY - THIS WEEK'} />,
         //omhof
         'OMHOF TOP AWARDS': <EmojiList dataToGraph={chartData} title={'OMHOF'} subtitle={'Popular Awards - This Week'} />,
@@ -49,13 +49,13 @@ export default function RouteManager(props) {
     useEffect(() => {
         // Sanity check; route and data route should be matches.
         if (routes.route !== allRoutes.routes[routes.dataIndex]) {
-            console.warn('Display route and data routes are mismatched!',routes.route, allRoutes.routes[routes.dataIndex])
+            console.warn('Display route and data routes are mismatched!', routes.route, allRoutes.routes[routes.dataIndex])
         }
         makeNewChartData()
         // Deliberately excluding makeNewChartData because it will cause an infinite loop,
         // and we're probably making it go away eventually, anyway.
     }, [routes])
-        //cycles through each route then change to next dataset and repeats
+    //cycles through each route then change to next dataset and repeats
     function updateRoute() {
         const nextIndex = (routes.dataIndex + 1) % routesAvailable.length
         setRoutes(allRoutes.routes[nextIndex])
@@ -63,7 +63,7 @@ export default function RouteManager(props) {
             dataIndex: nextIndex,
             route: routesAvailable[nextIndex],
         })
-        }
+    }
 
 
     function makeNewChartData() {
@@ -140,37 +140,31 @@ export default function RouteManager(props) {
                 break;
             case 'OHS - MOST READ THIS WEEK':
                 Object.keys(gameProps).map((c) => {
-                    gameProps[c].stories.reduce((prev, curr) => {
+                    let weeklyTotals = gameProps[c].stories.reduce((acc, curr) => {
                         let gameName = c
-                        const { weekFinished: dataSet1 = 0, name: dataSet0 = gameName, name: labels = gameName } = { ...curr }
+                        curr.highProp = acc.dataSet1 ? (parseInt(acc.dataSet1) + parseInt(curr.finished)) : curr.finished
+                        const { highProp: dataSet1 = 0, name: dataSet0 = gameName, name: labels = gameName } = { ...curr }
                         let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
-                        if (tempProp.dataSet1 < curr.weekFinished) {
-                            tempProp.dataSet1 = curr.weekFinished
-                        }
-                        return newChartData.push(tempProp)
+                        return tempProp
                     })
-                    let highestProp;
-                    newChartData.reduce((prev, curr) => {
-                        highestProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
-                        return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
-                    })
-                    newChartData.splice(0);
-                    return newChartData.push(highestProp)
+                    newChartData.push(weeklyTotals)
                 })
-                setChartData(newChartData)
+                const mostReadWeekly = newChartData.reduce((acc, curr) => {
+                    return acc.dataSet1 >= curr.dataSet1 ? acc : curr
+                })
+                setChartData([mostReadWeekly])
                 break;
-            case 'OHS - WEEKLY STORIES READ':
+            case 'OHS - WEEKLY GAMES FINISHED':
                 Object.keys(gameProps).map((c, i) => {
                     let weeklyTotal = gameProps[c].finishedGames.reduce((acc, curr) => {
                         let gameName = c
-                        const { weekFinished: dataSet1 = 0, name: dataSet0 = gameName, name: labels = gameName } = { ...curr }
+                        curr.highProp = acc.dataSet1 ? (parseInt(acc.dataSet1) + parseInt(curr.finished)) : curr.finished
+                        const { highProp: dataSet1 = 0, name: dataSet0 = gameName, name: labels = gameName } = { ...curr }
                         let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
-                        if (tempProp.dataSet1 < curr.weekFinished) {
-                            tempProp.dataSet1 = curr.weekFinished
-                        }
                         return tempProp
                     })
                     newChartData.push(weeklyTotal)
+
                     return newChartData.sort((a, b) => (b.dataSet1 < a.dataSet1) ? -1 : ((a.dataSet1 > b.dataSet1) ? 1 : 0));;
                 })
                 setChartData(newChartData)
@@ -185,8 +179,8 @@ export default function RouteManager(props) {
                         highProp.name = c;
                         return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
                     })
-                    const {dataSet0 = 'Game', weekFinished : dataSet1, name: labels } = { ...highProp }
-                    let tempProp = Object.assign({}, {dataSet0, dataSet1,  labels });
+                    const { dataSet0 = 'Game', weekFinished: dataSet1, name: labels } = { ...highProp }
+                    let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
                     return newData0.push(tempProp)
                 })
                 Object.keys(gameProps).map((c, i) => {
@@ -195,8 +189,8 @@ export default function RouteManager(props) {
                         highProp.name = c;
                         return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
                     })
-                    const {dataSet0 = 'Story', weekFinished: dataSet1, name: labels } = { ...highProp }
-                    let tempProp = Object.assign({}, {dataSet0, dataSet1, labels })
+                    const { dataSet0 = 'Story', weekFinished: dataSet1, name: labels } = { ...highProp }
+                    let tempProp = Object.assign({}, { dataSet0, dataSet1, labels })
                     return newData1.push(tempProp)
                 })
                 setData0(newData0)
@@ -235,8 +229,8 @@ export default function RouteManager(props) {
                 })
                 newChartData.reduce((curr, acc) => {
                     curr['dataSet0'] !== "null" ?
-                      curr['dataSet1'] = acc['dataSet1'] :
-                      curr['dataSet0'] = acc['dataSet0'];
+                        curr['dataSet1'] = acc['dataSet1'] :
+                        curr['dataSet0'] = acc['dataSet0'];
                     return acc
                 })
                 for (let i = 0; i < newChartData.length; i++) {
