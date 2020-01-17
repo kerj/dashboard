@@ -12,7 +12,7 @@
   }
 
   //padding top affects text pos margin top moves whole element
-  @each $name in "chutes" "fletcher" "marie" "vortex" {
+  @each $name in "Chutes" "Fletcher" "Marie" "Vortex" {
     .#{$name} {
       .pic {
         background: url(./../Assets/omo/#{$name}.png) no-repeat left top;

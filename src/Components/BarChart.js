@@ -108,13 +108,13 @@ export default class BarChart extends Component {
             .transition()
             .delay(250)
             .duration(500)
-            .ease(d3.easeLinear)
+            .ease(d3.easeCubicIn)
             .attr('width', (d) => {
                 return x((d[1] - d[0]))
             })
             .transition()
             .delay(13250)
-            .ease(d3.easeLinear)
+            .ease(d3.easeCubicOut)
             .attr('width', (d) => {
                 return 0;
             })
