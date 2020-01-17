@@ -20,7 +20,6 @@ export const DonutGraph = ({ data0, data1, title, subtitle }) => {
 
     const lastData = useRef(null)
     useEffect(() => {
-        console.log(lastData.current)
         // This check shouldn't be necessary, but we've temporarily got some
         // issues of potentially getting passed the same props over and over, making dev hard.
         let isChanged = tempNewDataCheck(lastData.current, data0)
@@ -29,13 +28,11 @@ export const DonutGraph = ({ data0, data1, title, subtitle }) => {
         if (lastData.current !== data0) {
             lastData.current = data0
         }
-
         arcRef.current = [
             new Array(data0.length).fill(0),
-            new Array(data0.length).fill(0)
+            new Array(data1.length).fill(0)
         ]
-    }, [data0])
-
+    }, [data0, data1])
 
     useEffect(() => {
         // Pass 1: Enter
@@ -49,7 +46,6 @@ export const DonutGraph = ({ data0, data1, title, subtitle }) => {
         }
     }, [])
 
-
     const STATES = {
         INIT: 'init',
         STARTING: 'st',
@@ -59,7 +55,6 @@ export const DonutGraph = ({ data0, data1, title, subtitle }) => {
     }
     const [currentState, setCurrentState] = useState(STATES.INIT)
     useInterval(() => {
-
         // Pass 2: Display 2nd data (if available)
         if (currentState === STATES.ENTER) {
             if (!data1 || data1.length === 0) {
@@ -88,6 +83,7 @@ export const DonutGraph = ({ data0, data1, title, subtitle }) => {
         if (!data) return
         console.log('before', arcRef.current.toString())
         console.log('shift', arcRef.current.shift().toString())
+
         arcRef.current.push(data.map(c => c.dataSet1));
         console.log('after', arcRef.current.toString())
     }
@@ -215,7 +211,7 @@ export const DonutGraph = ({ data0, data1, title, subtitle }) => {
     }
 
     const transition = () => {
-        let path = d3.selectAll(".arc > path")
+        return d3.selectAll(".arc > path")
             .data(arcs(arcRef.current[0], arcRef.current[1]))
             //Wedges Split into two rings
             .transition()

@@ -147,7 +147,7 @@ export default function RouteManager(props) {
                         let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
                         return tempProp
                     })
-                    newChartData.push(weeklyTotals)
+                    return newChartData.push(weeklyTotals)
                 })
                 const mostReadWeekly = newChartData.reduce((acc, curr) => {
                     return acc.dataSet1 >= curr.dataSet1 ? acc : curr
@@ -174,24 +174,24 @@ export default function RouteManager(props) {
                 const newData0 = []
                 const newData1 = []
                 Object.keys(gameProps).map((c) => {
-                    highProp = gameProps[c].finishedGames.reduce((prev, curr) => {
-                        highProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
-                        highProp.name = c;
-                        return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
+                    highProp = gameProps[c].finishedGames.reduce((acc, curr) => {
+                        let gameName = c
+                        curr.highProp = acc.dataSet1 ? (parseInt(acc.dataSet1) + parseInt(curr.finished)) : curr.finished
+                        const { highProp: dataSet1 = 0, name: dataSet0 = 'Game', name: labels = gameName } = { ...curr }
+                        let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
+                        return tempProp
                     })
-                    const { dataSet0 = 'Game', weekFinished: dataSet1, name: labels } = { ...highProp }
-                    let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newData0.push(tempProp)
+                    return newData0.push(highProp)
                 })
                 Object.keys(gameProps).map((c, i) => {
-                    highProp = gameProps[c].stories.reduce((prev, curr) => {
-                        highProp = (prev.dataSet1 > curr.dataSet1) ? prev : curr;
-                        highProp.name = c;
-                        return (prev.dataSet1 > curr.dataSet1) ? prev : curr;
+                    highProp = gameProps[c].stories.reduce((acc, curr) => {
+                        let gameName = c
+                        curr.highProp = acc.dataSet1 ? (parseInt(acc.dataSet1) + parseInt(curr.finished)) : curr.finished
+                        const { highProp: dataSet1 = 0, name: dataSet0 = 'Story', name: labels = gameName } = { ...curr }
+                        let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
+                        return tempProp
                     })
-                    const { dataSet0 = 'Story', weekFinished: dataSet1, name: labels } = { ...highProp }
-                    let tempProp = Object.assign({}, { dataSet0, dataSet1, labels })
-                    return newData1.push(tempProp)
+                    return newData1.push(highProp)
                 })
                 setData0(newData0)
                 setData1(newData1)
