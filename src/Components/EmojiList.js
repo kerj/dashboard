@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import './../scss/emojiList.scss';
 
+//TODO: new OMOAPIHANDLER broke something fix the addition of most popular
 export default class EmojiList extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
       this.displayList(this.props.dataToGraph);

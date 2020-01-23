@@ -1,11 +1,11 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import { useInterval } from '../Hooks/useInterval'
 import './../scss/donut.scss';
 
 
-export const DonutGraph = ({ data0, data1, title, subtitle }) => {
+export const DonutGraph = ({ data0 = [], data1 = [], title = '', subtitle = '' }) => {
     var width = 1000,
         height = 1000,
         outerRadius = Math.min(width, height) * .5 - 10,
@@ -14,30 +14,26 @@ export const DonutGraph = ({ data0, data1, title, subtitle }) => {
     const donutCanvas = useRef();
     const legend = useRef();
 
-    const arcRef = useRef([[], []]);
 
-    //TODO: add entry fold-out/exit fold-up
+    const init = (data0, data1) => {
+        const empty0 = new Array(data0.length).fill(0)
+        const empty1 = new Array(data1.length).fill(0)
+        return [empty0, empty1]
+    }
 
-    const lastData = useRef(null)
+    const arcRef = useRef(init(data0, data1));
+
+    // return two array with zeros based on data0/1 length 
+    
     useEffect(() => {
-        console.log(lastData.current)
-        // This check shouldn't be necessary, but we've temporarily got some
-        // issues of potentially getting passed the same props over and over, making dev hard.
-        let isChanged = tempNewDataCheck(lastData.current, data0)
-        if (!isChanged) { return }
+        return () => (arcRef.current = init([],[]))
+    }, [])
 
-        if (lastData.current !== data0) {
-            lastData.current = data0
+    useEffect(() => {
+        if (data0.length === 0) return
+        if (arcRef.current[0].length === 0) {
+            return
         }
-
-        arcRef.current = [
-            new Array(data0.length).fill(0),
-            new Array(data0.length).fill(0)
-        ]
-    }, [data0])
-
-
-    useEffect(() => {
         // Pass 1: Enter
         if (currentState === STATES.INIT) {
             pushOntoArcData(data0)
@@ -47,8 +43,9 @@ export const DonutGraph = ({ data0, data1, title, subtitle }) => {
             // Logic here
             setCurrentState(STATES.ENTER)
         }
-    }, [])
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data1])
 
     const STATES = {
         INIT: 'init',
@@ -59,7 +56,6 @@ export const DonutGraph = ({ data0, data1, title, subtitle }) => {
     }
     const [currentState, setCurrentState] = useState(STATES.INIT)
     useInterval(() => {
-
         // Pass 2: Display 2nd data (if available)
         if (currentState === STATES.ENTER) {
             if (!data1 || data1.length === 0) {
@@ -85,11 +81,8 @@ export const DonutGraph = ({ data0, data1, title, subtitle }) => {
     }, 6500)
 
     const pushOntoArcData = (data) => {
-        if (!data) return
-        console.log('before', arcRef.current.toString())
-        console.log('shift', arcRef.current.shift().toString())
+        arcRef.current.shift()
         arcRef.current.push(data.map(c => c.dataSet1));
-        console.log('after', arcRef.current.toString())
     }
 
     const setLegendDisplay = (data = []) => {
@@ -149,7 +142,7 @@ export const DonutGraph = ({ data0, data1, title, subtitle }) => {
     }
 
     const arcs = (dataStart, dataEnd) => {
-        console.warn('arcscall', dataStart, dataEnd)
+        // console.warn('arcscall', dataStart, dataEnd)
         let pie = d3.pie()
             .sort(null);
         let arcs0 = pie(dataStart),
@@ -195,6 +188,7 @@ export const DonutGraph = ({ data0, data1, title, subtitle }) => {
     }
 
     const phaseDonut = (data) => {
+        d3.selectAll('svg').remove()
         let svg = d3.select(donutCanvas.current)
             .append("svg")
             .attr('viewBox', `0 0 ${width} ${height}`)
@@ -215,7 +209,7 @@ export const DonutGraph = ({ data0, data1, title, subtitle }) => {
     }
 
     const transition = () => {
-        let path = d3.selectAll(".arc > path")
+        return d3.selectAll(".arc > path")
             .data(arcs(arcRef.current[0], arcRef.current[1]))
             //Wedges Split into two rings
             .transition()
@@ -266,25 +260,6 @@ export const DonutGraph = ({ data0, data1, title, subtitle }) => {
             </div>
         </div>
     )
-}
-
-function tempNewDataCheck(oldData, newData) {
-    // This check shouldn't be necessary, but we've temporarily got some
-    // issues of potentially getting passed the same props over and over, making dev hard.
-    if (!oldData || oldData.length !== newData.length) return true
-
-    let isChanged = false
-
-    for (let i = 0; i < newData.length; i++) {
-        let lastVals = Object.values(oldData[i])
-        let newVals = Object.values(newData[i])
-
-        for (let j = 0; j < newVals.length; j++) {
-            //console.log(newVals[j], lastVals[j])
-            isChanged = isChanged && newVals[j] !== lastVals[j]
-        }
-    }
-    return isChanged
 }
 
 DonutGraph.propTypes = {
