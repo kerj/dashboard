@@ -203,7 +203,7 @@ export default function RouteManager(props) {
                 break;
             case 'OMHOF TOP AWARDS':
                 omhofProps.weekly.map((c) => {
-                    const { page_path: dataSet0, count: dataSet1 = 0, 'page_title-cleaned': labels } = { ...c }
+                    const { logoName: dataSet0, weeklyTotal: dataSet1 = 0, title: labels } = { ...c }
                     const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     return newChartData.push(propToPass);
                 })
@@ -211,7 +211,7 @@ export default function RouteManager(props) {
                 break;
             case 'OMHOF AWARD OF THE DAY':
                 omhofProps.daily.map((c) => {
-                    const { page_path: dataSet0, count: dataSet1 = 0, 'page_title-cleaned': labels } = { ...c }
+                    const { logoName: dataSet0, weeklyTotal: dataSet1 = 0, title: labels } = { ...c }
                     const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
                     return newChartData.push(propToPass);
                 })
