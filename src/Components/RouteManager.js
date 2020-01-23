@@ -199,7 +199,6 @@ export default function RouteManager(props) {
                     setData0(newData0)
                     setData1(newData1)
                 }
-                console.log(setDonut)
                 setDonut()
                 break;
             case 'OMHOF TOP AWARDS':

@@ -5,7 +5,7 @@ import { useInterval } from '../Hooks/useInterval'
 import './../scss/donut.scss';
 
 
-export const DonutGraph = ({ data0, data1, title = '', subtitle = '' }) => {
+export const DonutGraph = ({ data0 = [], data1 = [], title = '', subtitle = '' }) => {
     var width = 1000,
         height = 1000,
         outerRadius = Math.min(width, height) * .5 - 10,
@@ -263,8 +263,8 @@ export const DonutGraph = ({ data0, data1, title = '', subtitle = '' }) => {
 }
 
 DonutGraph.propTypes = {
-    data0: PropTypes.array.isRequired,
-    data1: PropTypes.array.isRequired,
+    data0: PropTypes.array,
+    data1: PropTypes.array,
     title: PropTypes.any,
     subtitle: PropTypes.any
 }
