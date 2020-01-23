@@ -28,7 +28,7 @@ export default function RouteManager(props) {
         'OHS - FLECTCHER STORY': <BarChart dataToGraph={chartData} title={'OHS - FLECTCHER'} labelOne={' STORY STARTED VS '} labelTwo={' FINISHED'} colorOne={'rgb(255,111,3)'} colorTwo={'rgb(255,172,26)'} />,
         'OHS - VORTEX STORY': <BarChart dataToGraph={chartData} title={'OHS - VORTEX'} labelOne={' STORY STARTED VS '} labelTwo={' FINISHED'} colorOne={'rgb(255,172,6)'} colorTwo={'rgb(128, 207, 154)'} />,
         'OHS - MARIE STORY': <BarChart dataToGraph={chartData} title={'OHS - MARIE'} labelOne={' STORY STARTED VS '} labelTwo={' FINISHED'} colorOne={'rgb(186,206,44)'} colorTwo={'rgb(107,155,45)'} />,
-        'OHS - WEEKLY GAMES VS STORIES': <DonutGraph data0={data0} data1={data1} title={'OHS'} subtitle={'GAMES VS STORIES'} />,
+        'OHS - WEEKLY GAMES VS STORIES': data0.length > 0 && data1.length > 0 ? <DonutGraph data0={data0} data1={data1} title={'OHS'} subtitle={'GAMES VS STORIES'} /> : null,
         'OHS - WEEKLY GAMES FINISHED': <EmojiList dataToGraph={chartData} title={'OHS'} subtitle={'COMPLETED - THIS WEEK'} />,
         'OHS - MOST READ THIS WEEK': <EmojiList dataToGraph={chartData} title={'OHS'} subtitle={'MOST READ STORY - THIS WEEK'} />,
         //omhof
@@ -54,6 +54,7 @@ export default function RouteManager(props) {
         makeNewChartData()
         // Deliberately excluding makeNewChartData because it will cause an infinite loop,
         // and we're probably making it go away eventually, anyway.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [routes])
     //cycles through each route then change to next dataset and repeats
     function updateRoute() {
@@ -73,6 +74,7 @@ export default function RouteManager(props) {
         let gameProps = weeklyData.omoData;
         let timberProps = weeklyData.timberData;
         let omhofProps = weeklyData.omhof;
+
         switch (routes.route) {
             case 'OHS - CHUTES GAME':
                 gameProps.chutes.finishedGames.map((c) => {
@@ -193,8 +195,12 @@ export default function RouteManager(props) {
                     })
                     return newData1.push(highProp)
                 })
-                setData0(newData0)
-                setData1(newData1)
+                   const setDonut =  () => {
+                    setData0(newData0)
+                    setData1(newData1)
+                }
+                console.log(setDonut)
+                setDonut()
                 break;
             case 'OMHOF TOP AWARDS':
                 omhofProps.weekly.map((c) => {
