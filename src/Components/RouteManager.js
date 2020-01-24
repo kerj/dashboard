@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import BarChart from './BarChart';
 import { DonutGraph } from './DonutGraph';
-import EmojiList from './EmojiList';
+import { TopList } from './TopList';
 import { allRoutes } from './DataRoutes';
 import { useInterval } from '../Hooks/useInterval'
 
@@ -29,15 +29,15 @@ export default function RouteManager(props) {
         'OHS - VORTEX STORY': <BarChart dataToGraph={chartData} title={'OHS - VORTEX'} labelOne={' STORY STARTED VS '} labelTwo={' FINISHED'} colorOne={'rgb(255,172,6)'} colorTwo={'rgb(128, 207, 154)'} />,
         'OHS - MARIE STORY': <BarChart dataToGraph={chartData} title={'OHS - MARIE'} labelOne={' STORY STARTED VS '} labelTwo={' FINISHED'} colorOne={'rgb(186,206,44)'} colorTwo={'rgb(107,155,45)'} />,
         'OHS - WEEKLY GAMES VS STORIES': data0.length > 0 && data1.length > 0 ? <DonutGraph data0={data0} data1={data1} title={'OHS'} subtitle={'GAMES VS STORIES'} /> : null,
-        'OHS - WEEKLY GAMES FINISHED': <EmojiList dataToGraph={chartData} title={'OHS'} subtitle={'COMPLETED - THIS WEEK'} />,
-        'OHS - MOST READ THIS WEEK': <EmojiList dataToGraph={chartData} title={'OHS'} subtitle={'MOST READ STORY - THIS WEEK'} />,
+        'OHS - WEEKLY GAMES FINISHED': chartData.length > 0 ? <TopList dataToGraph={chartData} title={'OHS'} subtitle={'COMPLETED - THIS WEEK'} /> : null,
+        'OHS - MOST READ THIS WEEK': chartData.length > 0 ? <TopList dataToGraph={chartData} title={'OHS'} subtitle={'MOST READ STORY - THIS WEEK'} /> : null,
         //omhof
-        'OMHOF TOP AWARDS': <EmojiList dataToGraph={chartData} title={'OMHOF'} subtitle={'Popular Awards - This Week'} />,
-        'OMHOF AWARD OF THE DAY': <EmojiList dataToGraph={chartData} title={'OMHOF'} subtitle={'Most Popular Award - Today'} />,
+        'OMHOF TOP AWARDS': <TopList dataToGraph={chartData} title={'OMHOF'} subtitle={'Popular Awards - This Week'} />,
+        'OMHOF AWARD OF THE DAY': <TopList dataToGraph={chartData} title={'OMHOF'} subtitle={'Most Popular Award - Today'} />,
         //timbers
-        'TIMBERS WEEKLY TOP EMOJIS': <EmojiList dataToGraph={chartData} title={routes.route} />,
+        'TIMBERS WEEKLY TOP EMOJIS': <TopList dataToGraph={chartData} title={routes.route} />,
         'NEW VS. RETURNING VISITORS': <BarChart dataToGraph={chartData} title={routes.route} />,
-        'MOST POPULAR EMOJI TODAY': <EmojiList dataToGraph={chartData} title={routes.route} />,
+        'MOST POPULAR EMOJI TODAY': <TopList dataToGraph={chartData} title={routes.route} />,
         'MOBILE OPERATING SYSTEMS': <DonutGraph dataToGraph={chartData} title={routes.route} />,
     }
 
@@ -195,7 +195,7 @@ export default function RouteManager(props) {
                     })
                     return newData1.push(highProp)
                 })
-                   const setDonut =  () => {
+                const setDonut = () => {
                     setData0(newData0)
                     setData1(newData1)
                 }
