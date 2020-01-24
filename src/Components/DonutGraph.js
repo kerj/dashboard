@@ -26,7 +26,7 @@ export const DonutGraph = ({ data0 = [], data1 = [], title = '', subtitle = '' }
     // return two array with zeros based on data0/1 length 
     
     useEffect(() => {
-        return () => (arcRef.current = init([],[]))
+        return () => arcRef.current = init([],[])
     }, [])
 
     useEffect(() => {

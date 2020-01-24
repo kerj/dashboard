@@ -32,8 +32,8 @@ export default function RouteManager(props) {
         'OHS - WEEKLY GAMES FINISHED': chartData.length > 0 ? <TopList dataToGraph={chartData} title={'OHS'} subtitle={'COMPLETED - THIS WEEK'} /> : null,
         'OHS - MOST READ THIS WEEK': chartData.length > 0 ? <TopList dataToGraph={chartData} title={'OHS'} subtitle={'MOST READ STORY - THIS WEEK'} /> : null,
         //omhof
-        'OMHOF TOP AWARDS': <TopList dataToGraph={chartData} title={'OMHOF'} subtitle={'Popular Awards - This Week'} />,
-        'OMHOF AWARD OF THE DAY': <TopList dataToGraph={chartData} title={'OMHOF'} subtitle={'Most Popular Award - Today'} />,
+        'OMHOF TOP AWARDS': chartData.length > 0 ?  <TopList dataToGraph={chartData} title={'OMHOF'} subtitle={'Popular Awards - This Week'} /> : null,
+        'OMHOF AWARD OF THE DAY': chartData.length > 0 ?  <TopList dataToGraph={chartData} title={'OMHOF'} subtitle={'Most Popular Award - Today'} /> : null,
         //timbers
         'TIMBERS WEEKLY TOP EMOJIS': <TopList dataToGraph={chartData} title={routes.route} />,
         'NEW VS. RETURNING VISITORS': <BarChart dataToGraph={chartData} title={routes.route} />,

@@ -4,15 +4,17 @@ import * as d3 from 'd3';
 import './../scss/topList.scss';
 
 //TODO: new OMOAPIHANDLER broke something fix the addition of most popular
-export const TopList = ({ dataToGraph, title, subtitle }) => {
+export const TopList = ({ dataToGraph = [], title, subtitle }) => {
   const list = useRef()
 
+  useEffect(() => {
+    return () => dataToGraph.length = 0
+  }, [])
   
   useEffect(() => {
+    if (!dataToGraph.length) return
+    console.log(dataToGraph)
     displayList(dataToGraph)
-    return () => {
-      dataToGraph.length = 0;
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataToGraph])
 
@@ -56,7 +58,7 @@ export const TopList = ({ dataToGraph, title, subtitle }) => {
   }
 
   return (
-    <div className={'emoji-list'}>
+    <div className={'top-list'}>
       <div className={'title'}>
         <h1>{title}</h1>
         <h2>{subtitle}</h2>
