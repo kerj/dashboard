@@ -51,6 +51,7 @@ export default function RouteManager(props) {
         if (routes.route !== allRoutes.routes[routes.dataIndex]) {
             console.warn('Display route and data routes are mismatched!', routes.route, allRoutes.routes[routes.dataIndex])
         }
+        setChartData([])
         makeNewChartData()
         // Deliberately excluding makeNewChartData because it will cause an infinite loop,
         // and we're probably making it go away eventually, anyway.
@@ -142,14 +143,14 @@ export default function RouteManager(props) {
                 break;
             case 'OHS - MOST READ THIS WEEK':
                 Object.keys(gameProps).map((c) => {
-                    let weeklyTotals = gameProps[c].stories.reduce((acc, curr) => {
+                    const weeklyTotals = gameProps[c].stories.reduce((acc, curr) => {
                         let gameName = c
                         curr.highProp = acc.dataSet1 ? (parseInt(acc.dataSet1) + parseInt(curr.finished)) : curr.finished
                         const { highProp: dataSet1 = 0, name: dataSet0 = gameName, name: labels = gameName } = { ...curr }
                         let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
                         return tempProp
                     })
-                    return newChartData.push(weeklyTotals)
+                    return newChartData.unshift(weeklyTotals)
                 })
                 const mostReadWeekly = newChartData.reduce((acc, curr) => {
                     return acc.dataSet1 >= curr.dataSet1 ? acc : curr
@@ -157,16 +158,15 @@ export default function RouteManager(props) {
                 setChartData([mostReadWeekly])
                 break;
             case 'OHS - WEEKLY GAMES FINISHED':
-                Object.keys(gameProps).map((c, i) => {
-                    let weeklyTotal = gameProps[c].finishedGames.reduce((acc, curr) => {
+                Object.keys(gameProps).map((c) => {
+                    const weeklyTotals = gameProps[c].finishedGames.reduce((acc, curr) => {
                         let gameName = c
                         curr.highProp = acc.dataSet1 ? (parseInt(acc.dataSet1) + parseInt(curr.finished)) : curr.finished
                         const { highProp: dataSet1 = 0, name: dataSet0 = gameName, name: labels = gameName } = { ...curr }
                         let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
                         return tempProp
                     })
-                    newChartData.push(weeklyTotal)
-
+                    newChartData.unshift(weeklyTotals)
                     return newChartData.sort((a, b) => (b.dataSet1 < a.dataSet1) ? -1 : ((a.dataSet1 > b.dataSet1) ? 1 : 0));;
                 })
                 setChartData(newChartData)
@@ -183,7 +183,7 @@ export default function RouteManager(props) {
                         let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
                         return tempProp
                     })
-                    return newData0.push(highProp)
+                    return newData0.unshift(highProp)
                 })
                 Object.keys(gameProps).map((c, i) => {
                     highProp = gameProps[c].stories.reduce((acc, curr) => {
@@ -193,7 +193,7 @@ export default function RouteManager(props) {
                         let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
                         return tempProp
                     })
-                    return newData1.push(highProp)
+                    return newData1.unshift(highProp)
                 })
                 const setDonut = () => {
                     setData0(newData0)
@@ -205,7 +205,7 @@ export default function RouteManager(props) {
                 omhofProps.weekly.map((c) => {
                     const { logoName: dataSet0, weeklyTotal: dataSet1 = 0, title: labels } = { ...c }
                     const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.push(propToPass);
+                    return newChartData.unshift(propToPass);
                 })
                 setChartData(newChartData)
                 break;
@@ -213,7 +213,7 @@ export default function RouteManager(props) {
                 omhofProps.daily.map((c) => {
                     const { logoName: dataSet0, weeklyTotal: dataSet1 = 0, title: labels } = { ...c }
                     const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.push(propToPass);
+                    return newChartData.unshift(propToPass);
                 })
                 newChartData.splice(1)
                 setChartData(newChartData)
@@ -222,7 +222,7 @@ export default function RouteManager(props) {
                 timberProps.top5Emoji.map((c) => {
                     const { 'ga:eventLabel1': dataSet0, 'ga:eventLabel1': dataSet1, 'ga:totalEvents1': labels = ':D' } = { ...c }
                     const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.push(propToPass);
+                    return newChartData.unshift(propToPass);
                 })
                 setChartData(newChartData)
                 break;
@@ -230,7 +230,7 @@ export default function RouteManager(props) {
                 timberProps.user.map((c) => {
                     const { 'new': dataSet0, 'return': dataSet1, 'ga:dayOfWeekName0': labels } = { ...c }
                     const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.push(propToPass);
+                    return newChartData.unshift(propToPass);
                 })
                 newChartData.reduce((curr, acc) => {
                     curr['dataSet0'] !== "null" ?
@@ -247,7 +247,7 @@ export default function RouteManager(props) {
                 timberProps.mostPopEmoji.map((c) => {
                     const { 'ga:eventLabel2': dataSet0 = 'none used', 'ga:totalEvents2': dataSet1 = "today", 'ga:eventLabel2': labels = ':D' } = { ...c }
                     const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.push(propToPass);
+                    return newChartData.unshift(propToPass);
                 })
                 setChartData(newChartData)
                 break;
@@ -255,7 +255,7 @@ export default function RouteManager(props) {
                 timberProps.operatingSystem.map((c) => {
                     const { 'ga:sessions3': dataSet0, 'ga:operatingSystem3': dataSet1, 'ga:operatingSystemVersion3': labels } = { ...c }
                     const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.push(propToPass);
+                    return newChartData.unshift(propToPass);
                 })
                 setChartData(newChartData)
                 break;

@@ -1,25 +1,26 @@
 export const Timbers = {
   query: 'http://sticky-data.local:8888/projects-dash/?project=timbers',
   dataHandler: (data) => {
-    let allKeys = Object.keys(data);
-    let cleanData = allKeys.map((c) => {
-      let timberData = {}
-      let currentRows = data[`${c}`].rows;
-      let currentCols = data[`${c}`].cols;
-      currentCols.forEach((curr, i) => {
-        timberData[curr] = [];
-        for (let j = 0; j <= currentRows.length - 1; j++) {
-          timberData[curr].push(currentRows[j][i]);
-        }
-        if (currentRows.length === 0) {
-          timberData[curr].push("none")
-        }
-        return timberData
-      })
-      return timberData
-    })
+    // no data coming from endpoint, response comes back with object having empty properties 3/5/2020
+    // let allKeys = Object.keys(data);
+    // let cleanData = allKeys.map((c) => {
+    //   let timberData = {}
+    //   let currentRows = data[`${c}`].rows;
+    //   let currentCols = data[`${c}`].cols;
+    //   currentCols.forEach((curr, i) => {
+    //     timberData[curr] = [];
+    //     for (let j = 0; j <= currentRows.length - 1; j++) {
+    //       timberData[curr].push(currentRows[j][i]);
+    //     }
+    //     if (currentRows.length === 0) {
+    //       timberData[curr].push("none")
+    //     }
+    //     return timberData
+    //   })
+    //   return timberData
+    // })
 
-    return timberData(cleanData)
+    // return timberData(cleanData)
   }
 }
 
