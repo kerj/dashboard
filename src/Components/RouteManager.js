@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { OmoGraphData } from '../ApiHandlers/OmoGames'
 import { BarChart } from './BarChart';
 import { DonutGraph } from './DonutGraph';
 import { TopList } from './TopList';
@@ -78,98 +79,40 @@ export default function RouteManager(props) {
 
         switch (routes.route) {
             case 'OHS - CHUTES GAME':
-                gameProps.chutes.finishedGames.map((c) => {
-                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.unshift(propToPass);
-                })
-                setChartData(newChartData)
+                setChartData(OmoGraphData.omoBarChart(gameProps.chutes.finishedGames))
                 break;
             case 'OHS - FLECTCHER GAME':
-                gameProps.fletcher.finishedGames.map((c) => {
-                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.unshift(propToPass);
-                })
-                setChartData(newChartData)
+                setChartData(OmoGraphData.omoBarChart(gameProps.fletcher.finishedGames))
                 break;
             case 'OHS - VORTEX GAME':
-                gameProps.marie.finishedGames.map((c) => {
-                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.unshift(propToPass);
-                })
-                setChartData(newChartData)
+                setChartData(OmoGraphData.omoBarChart(gameProps.vortex.finishedGames)) 
                 break;
             case 'OHS - MARIE GAME':
-                gameProps.vortex.finishedGames.map((c) => {
-                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.unshift(propToPass);
-                })
-                setChartData(newChartData)
+                setChartData(OmoGraphData.omoBarChart(gameProps.marie.finishedGames))
                 break;
             case 'OHS - CHUTES STORY':
-                gameProps.chutes.stories.map((c) => {
-                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.unshift(propToPass);
-                })
-                setChartData(newChartData)
+                setChartData(OmoGraphData.omoBarChart(gameProps.chutes.stories))
                 break;
             case 'OHS - FLECTCHER STORY':
-                gameProps.fletcher.stories.map((c) => {
-                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.unshift(propToPass);
-                })
-                setChartData(newChartData)
+                setChartData(OmoGraphData.omoBarChart(gameProps.fletcher.stories))
                 break;
             case 'OHS - VORTEX STORY':
-                gameProps.vortex.stories.map((c) => {
-                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.unshift(propToPass);
-                })
-                setChartData(newChartData)
+                setChartData(OmoGraphData.omoBarChart(gameProps.vortex.stories))
                 break;
             case 'OHS - MARIE STORY':
-                gameProps.marie.stories.map((c) => {
-                    const { finished: dataSet1, started: dataSet0 = 0, day: labels } = { ...c }
-                    const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.unshift(propToPass);
-                })
-                setChartData(newChartData)
+                setChartData(OmoGraphData.omoBarChart(gameProps.marie.stories))
                 break;
             case 'OHS - MOST READ THIS WEEK':
-                Object.keys(gameProps).map((c) => {
-                    const weeklyTotals = gameProps[c].stories.reduce((acc, curr) => {
-                        let gameName = c
-                        curr.highProp = acc.dataSet1 ? (parseInt(acc.dataSet1) + parseInt(curr.finished)) : curr.finished
-                        const { highProp: dataSet1 = 0, name: dataSet0 = gameName, name: labels = gameName } = { ...curr }
-                        let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
-                        return tempProp
-                    })
-                    return newChartData.unshift(weeklyTotals)
-                })
-                const mostReadWeekly = newChartData.reduce((acc, curr) => {
+                const storiesRead = OmoGraphData.weeklyCompleted(gameProps, 'stories')
+                const mostReadWeekly = storiesRead.reduce((acc, curr) => {
                     return acc.dataSet1 >= curr.dataSet1 ? acc : curr
                 })
                 setChartData([mostReadWeekly])
                 break;
             case 'OHS - WEEKLY GAMES FINISHED':
-                Object.keys(gameProps).map((c) => {
-                    const weeklyTotals = gameProps[c].finishedGames.reduce((acc, curr) => {
-                        let gameName = c
-                        curr.highProp = acc.dataSet1 ? (parseInt(acc.dataSet1) + parseInt(curr.finished)) : curr.finished
-                        const { highProp: dataSet1 = 0, name: dataSet0 = gameName, name: labels = gameName } = { ...curr }
-                        let tempProp = Object.assign({}, { dataSet0, dataSet1, labels });
-                        return tempProp
-                    })
-                    newChartData.unshift(weeklyTotals)
-                    return newChartData.sort((a, b) => (b.dataSet1 < a.dataSet1) ? -1 : ((a.dataSet1 > b.dataSet1) ? 1 : 0));;
-                })
-                setChartData(newChartData)
+                const gamesFinished = OmoGraphData.weeklyCompleted(gameProps, 'finishedGames')
+                gamesFinished.sort((a, b) => (b.dataSet1 < a.dataSet1) ? -1 : ((a.dataSet1 > b.dataSet1) ? 1 : 0));
+                setChartData(gamesFinished)
                 break;
             case 'OHS - WEEKLY GAMES VS STORIES':
                 let highProp;

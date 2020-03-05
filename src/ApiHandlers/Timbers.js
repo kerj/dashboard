@@ -1,7 +1,7 @@
+// no data coming from endpoint, response comes back with object having empty properties 3/5/2020
 // export const Timbers = {
 //   query: 'http://sticky-data.local:8888/projects-dash/?project=timbers',
 //   dataHandler: (data) => {
-//     // no data coming from endpoint, response comes back with object having empty properties 3/5/2020
 //     let allKeys = Object.keys(data);
 //     let cleanData = allKeys.map((c) => {
 //       let timberData = {}
