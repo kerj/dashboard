@@ -205,7 +205,7 @@ export default function RouteManager(props) {
                 omhofProps.weekly.map((c) => {
                     const { logoName: dataSet0, weeklyTotal: dataSet1 = 0, title: labels } = { ...c }
                     const propToPass = Object.assign({}, { dataSet0, dataSet1, labels });
-                    return newChartData.unshift(propToPass);
+                    return newChartData.push(propToPass);
                 })
                 setChartData(newChartData)
                 break;

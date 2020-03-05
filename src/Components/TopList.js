@@ -13,7 +13,6 @@ export const TopList = ({ dataToGraph = [], title, subtitle }) => {
   
   useEffect(() => {
     if (!dataToGraph.length) return
-    console.log(dataToGraph)
     displayList(dataToGraph)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataToGraph])
