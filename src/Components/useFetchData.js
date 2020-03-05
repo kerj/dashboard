@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 import {OmoGraphData} from '../ApiHandlers/OmoGames'
-import {Timbers} from '../ApiHandlers/Timbers'
+// import {Timbers} from '../ApiHandlers/Timbers'
 import {OmhofKiosks} from '../ApiHandlers/OmhofKiosks'
 
 export default function useFetchData() {
@@ -19,18 +19,18 @@ export default function useFetchData() {
             setIsLoading(true)
             try {
                 const results = await axios.all([
-                    axios.get(Timbers.query),
+                    // axios.get(Timbers.query),
                     axios.get(OmoGraphData.query),
                     axios.get(OmhofKiosks.query)
                 ])
                 
-                let cleanData = Timbers.dataHandler(results[0].data)
-                let omhof = OmhofKiosks.dataHandler(results[2].data)
-                const omoData = OmoGraphData.dataHandler(results[1].data)
+                // let cleanData = Timbers.dataHandler(results[0].data)
+                let omhof = OmhofKiosks.dataHandler(results[1].data)
+                const omoData = OmoGraphData.dataHandler(results[0].data)
 
                 let weeklyData = { omoData };
                 Object.assign(weeklyData, { omhof })
-                Object.assign(weeklyData, cleanData)
+                // Object.assign(weeklyData, cleanData)
                 weeklyData.retrievedOn = Date.now()
                 setData(weeklyData)
                 setIsLoading(false)
