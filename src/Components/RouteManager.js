@@ -79,28 +79,28 @@ export default function RouteManager(props) {
 
         switch (routes.route) {
             case 'OHS - CHUTES GAME':
-                setChartData(OmoGraphData.omoBarChart(gameProps.chutes.finishedGames))
+                setChartData(OmoGraphData.omoBarChart(gameProps.chutes.finishedGames.reverse()))
                 break;
             case 'OHS - FLECTCHER GAME':
-                setChartData(OmoGraphData.omoBarChart(gameProps.fletcher.finishedGames))
+                setChartData(OmoGraphData.omoBarChart(gameProps.fletcher.finishedGames.reverse()))
                 break;
             case 'OHS - VORTEX GAME':
-                setChartData(OmoGraphData.omoBarChart(gameProps.vortex.finishedGames)) 
+                setChartData(OmoGraphData.omoBarChart(gameProps.vortex.finishedGames.reverse())) 
                 break;
             case 'OHS - MARIE GAME':
-                setChartData(OmoGraphData.omoBarChart(gameProps.marie.finishedGames))
+                setChartData(OmoGraphData.omoBarChart(gameProps.marie.finishedGames.reverse()))
                 break;
             case 'OHS - CHUTES STORY':
-                setChartData(OmoGraphData.omoBarChart(gameProps.chutes.stories))
+                setChartData(OmoGraphData.omoBarChart(gameProps.chutes.stories.reverse()))
                 break;
             case 'OHS - FLECTCHER STORY':
-                setChartData(OmoGraphData.omoBarChart(gameProps.fletcher.stories))
+                setChartData(OmoGraphData.omoBarChart(gameProps.fletcher.stories.reverse()))
                 break;
             case 'OHS - VORTEX STORY':
-                setChartData(OmoGraphData.omoBarChart(gameProps.vortex.stories))
+                setChartData(OmoGraphData.omoBarChart(gameProps.vortex.stories.reverse()))
                 break;
             case 'OHS - MARIE STORY':
-                setChartData(OmoGraphData.omoBarChart(gameProps.marie.stories))
+                setChartData(OmoGraphData.omoBarChart(gameProps.marie.stories.reverse()))
                 break;
             case 'OHS - MOST READ THIS WEEK':
                 const storiesRead = OmoGraphData.weeklyCompleted(gameProps, 'stories')
