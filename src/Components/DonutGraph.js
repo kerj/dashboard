@@ -14,7 +14,6 @@ export const DonutGraph = ({ data0 = [], data1 = [], title = '', subtitle = '' }
     const donutCanvas = useRef();
     const legend = useRef();
 
-
     const init = (data0, data1) => {
         const empty0 = new Array(data0.length).fill(0)
         const empty1 = new Array(data1.length).fill(0)

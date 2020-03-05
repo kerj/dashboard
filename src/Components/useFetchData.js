@@ -14,17 +14,17 @@ export default function useFetchData() {
     useEffect(() => {
         const CancelToken = axios.CancelToken;
         const source = CancelToken.source();
-
+        // if this fails we need data to be set to the same object it was and to retry
         const fetchData = async () => {
             setIsLoading(true)
             try {
                 const results = await axios.all([
                     // axios.get(Timbers.query),
                     axios.get(OmoGraphData.query),
-                    axios.get(OmhofKiosks.query)
+                    axios.get(OmhofKiosks.query),
                 ])
                 
-                // let cleanData = Timbers.dataHandler(results[0].data)
+                // let cleanData = Timbers.dataHandler(results[2].data)
                 let omhof = OmhofKiosks.dataHandler(results[1].data)
                 const omoData = OmoGraphData.dataHandler(results[0].data)
 

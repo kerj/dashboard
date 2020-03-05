@@ -67,7 +67,6 @@ export const TopList = ({ dataToGraph = [], title, subtitle }) => {
       </div>
     </div>
   )
-
 }
 
 TopList.propTypes = {

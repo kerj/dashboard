@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import BarChart from './BarChart';
+import { BarChart } from './BarChart';
 import { DonutGraph } from './DonutGraph';
 import { TopList } from './TopList';
 import { allRoutes } from './DataRoutes';
@@ -18,7 +18,7 @@ export default function RouteManager(props) {
     const [data1, setData1] = useState([])
     const weeklyData = props.stateHelper;
 
-    const ROUTES = {
+    const GRAPH = {
         //omoGames
         'OHS - CHUTES GAME': <BarChart dataToGraph={chartData} title={'OHS - CHUTES'} labelOne={' GAME STARTED VS '} labelTwo={' FINISHED'} colorOne={'rgb(255,45,29)'} colorTwo={'rgb(162,54,40)'} />,
         'OHS - FLECTCHER GAME': <BarChart dataToGraph={chartData} title={'OHS - FLECTCHER'} labelOne={' GAME STARTED VS '} labelTwo={' FINISHED'} colorOne={'rgb(255,111,3)'} colorTwo={'rgb(255,172,26)'} />,
@@ -266,7 +266,7 @@ export default function RouteManager(props) {
 
     return (
         <>
-            {ROUTES[routes.route]}
+            {GRAPH[routes.route]}
         </>
     )
 }
