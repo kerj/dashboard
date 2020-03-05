@@ -62,72 +62,71 @@ export const BarChart = ({
       return d.labels
     }))
 
-  const drawBarchart = () => {
-    svgCanvas.append('g')
-      .attr('class', 'x axis')
-      .attr("transform", "translate(0, 1217)")
-      .style('font-family', 'Montserrat')
-      .style('font-weight', 'bold')
-      .style('font-size', 48)
-      .style('letter-spacing', 2)
-      .style("color", "whitesmoke")
-      .call(d3.axisBottom(x)
-        .ticks(3)
-        .tickSize([0]))
-      .select('path.domain').remove()
-
-    //y axis
-    svgCanvas.append('g')
-      .attr('class', 'y axis')
-      .attr("transform", "translate(-60, 0)")
-      .style('font-family', 'Montserrat')
-      .style('font-weight', 'bold')
-      .style('font-size', 48)
-      .style('letter-spacing', 0)
-      .style("color", "whitesmoke")
-      .call(d3.axisLeft(y)
-        .tickSize([0]))
-      .select('path.domain').remove()
-      .select('text')
-
-    g.selectAll('rect')
-      .data((d) => {
-        return d;
-      })
-      .enter().append('rect')
-      .style('fill', (d) => {
-        //when starting data at zero, colorOne
-        return d[0] === 0 ? `${colorOne}` : `${colorTwo}`
-      })
-      .attr('x', (d, i) => {
-        if (title === "NEW VS. RETURNING VISITORS") {
-          return x(d[0])
-        } else {
-          return x(d)
-        }
-      })
-      .attr('y', (d) => {
-        return y(d.data.labels)
-      })
-      .attr('height', y.bandwidth())
-      .transition()
-      .delay(250)
-      .duration(500)
-      .ease(d3.easeCubicIn)
-      .attr('width', (d) => {
-        return x((d[1] - d[0]))
-      })
-      .transition()
-      .delay(13250)
-      .ease(d3.easeCubicOut)
-      .attr('width', (d) => {
-        return 0;
-      })
-  }
-
   useEffect(() => {
+    const drawBarchart = () => {
+      svgCanvas.append('g')
+        .attr('class', 'x axis')
+        .attr("transform", "translate(0, 1217)")
+        .style('font-family', 'Montserrat')
+        .style('font-weight', 'bold')
+        .style('font-size', 48)
+        .style('letter-spacing', 2)
+        .style("color", "whitesmoke")
+        .call(d3.axisBottom(x)
+          .ticks(3)
+          .tickSize([0]))
+        .select('path.domain').remove()
+  
+      //y axis
+      svgCanvas.append('g')
+        .attr('class', 'y axis')
+        .attr("transform", "translate(-60, 0)")
+        .style('font-family', 'Montserrat')
+        .style('font-weight', 'bold')
+        .style('font-size', 48)
+        .style('letter-spacing', 0)
+        .style("color", "whitesmoke")
+        .call(d3.axisLeft(y)
+          .tickSize([0]))
+        .select('path.domain').remove()
+        .select('text')
+  
+      g.selectAll('rect')
+        .data((d) => {
+          return d;
+        })
+        .enter().append('rect')
+        .style('fill', (d) => {
+          //when starting data at zero, colorOne
+          return d[0] === 0 ? `${colorOne}` : `${colorTwo}`
+        })
+        .attr('x', (d, i) => {
+          if (title === "NEW VS. RETURNING VISITORS") {
+            return x(d[0])
+          } else {
+            return x(d)
+          }
+        })
+        .attr('y', (d) => {
+          return y(d.data.labels)
+        })
+        .attr('height', y.bandwidth())
+        .transition()
+        .delay(250)
+        .duration(500)
+        .ease(d3.easeCubicIn)
+        .attr('width', (d) => {
+          return x((d[1] - d[0]))
+        })
+        .transition()
+        .delay(13250)
+        .ease(d3.easeCubicOut)
+        .attr('width', (d) => {
+          return 0;
+        })
+    }
     drawBarchart();
-  }, [dataToGraph])
+  }, [colorOne, colorTwo, g, svgCanvas, title, x, y])
 
   return (
     <>
